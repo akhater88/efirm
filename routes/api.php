@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\ObligationController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\TimeEntryController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
 use Illuminate\Http\Request;
@@ -139,4 +140,9 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::apiResource('tasks', TaskController::class);
     Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])
         ->name('tasks.complete');
+
+    // Time Entries
+    Route::apiResource('time-entries', TimeEntryController::class);
+    Route::get('time-entries-summary', [TimeEntryController::class, 'summary'])
+        ->name('time-entries.summary');
 });
