@@ -1,7 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleOAuthController;
+use App\Http\Controllers\Web\LocaleController;
 use Illuminate\Support\Facades\Route;
+
+// Locale switch — available to all users (auth + guest)
+Route::post('locale/switch', [LocaleController::class, 'switch'])
+    ->name('locale.switch');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', fn () => view('auth.login'))->name('login');

@@ -6,7 +6,19 @@
     <title>{{ __('auth.login') }} — {{ __('common.app_name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex items-center justify-center bg-gray-50">
+<body class="min-h-screen flex items-center justify-center bg-gray-50 relative">
+    <div class="absolute top-4 {{ app()->getLocale() === 'ar' ? 'left-4' : 'right-4' }}">
+        <form method="POST" action="{{ route('locale.switch') }}">
+            @csrf
+            @if (app()->getLocale() === 'ar')
+                <input type="hidden" name="locale" value="en">
+                <button type="submit" class="text-sm text-gray-500 hover:text-gray-700">English</button>
+            @else
+                <input type="hidden" name="locale" value="ar">
+                <button type="submit" class="text-sm text-gray-500 hover:text-gray-700">العربية</button>
+            @endif
+        </form>
+    </div>
     <div class="w-full max-w-md p-8">
         <div class="bg-white rounded-lg shadow-md p-8 text-center">
             <h1 class="text-2xl font-bold mb-2">{{ __('common.app_name') }}</h1>
