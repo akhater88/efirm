@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\ContractMetadataController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
+use App\Http\Controllers\Api\V1\FeedbackController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
@@ -34,6 +35,9 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.invitations.accept');
 
     Route::get('search', SearchController::class)->name('api.v1.search');
+
+    Route::get('feedback', [FeedbackController::class, 'index'])->name('api.v1.feedback.index');
+    Route::post('feedback', [FeedbackController::class, 'store'])->name('api.v1.feedback.store');
 
     Route::apiResource('contacts', ContactController::class);
 
