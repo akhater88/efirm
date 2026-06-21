@@ -13,7 +13,102 @@ servers:
     description: Local development
   - url: https://staging.example.com/api/v1
     description: Staging (Cloudways — URL TBD after D-01)
-paths: {}
+paths:
+  /api/v1/me:
+    get:
+      summary: Get authenticated user
+      description: Returns the authenticated user's profile, current workspace, role, and list of workspaces.
+      operationId: getMe
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Authenticated user data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/workspaces:
+    post:
+      summary: Create a new workspace
+      description: Creates a new workspace and adds the authenticated user as Owner.
+      operationId: createWorkspace
+      tags:
+        - Workspaces
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                  example: "مكتب المحاماة"
+                default_locale:
+                  type: string
+                  enum: [ar, en]
+                  default: ar
+              required:
+                - name
+      responses:
+        '201':
+          description: Workspace created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /api/v1/workspaces/switch:
+    post:
+      summary: Switch current workspace
+      description: Switches the authenticated user's current workspace context.
+      operationId: switchWorkspace
+      tags:
+        - Workspaces
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workspace_id:
+                  type: string
+                  format: ulid
+              required:
+                - workspace_id
+      responses:
+        '200':
+          description: Workspace switched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -62,5 +157,64 @@ components:
           type: string
       required:
         - message
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ulid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+        preferred_locale:
+          type: string
+          enum: [ar, en]
+        current_workspace:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Workspace'
+        current_role:
+          type: string
+          enum: [owner, admin, member]
+          nullable: true
+        workspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - email
+        - preferred_locale
+    Workspace:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ulid
+        name:
+          type: string
+        slug:
+          type: string
+        default_locale:
+          type: string
+          enum: [ar, en]
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - slug
+        - default_locale
 security:
   - bearerAuth: []

@@ -198,6 +198,8 @@ it('redirects to intended URL after sign-in', function () {
 
 it('logs out and invalidates session', function () {
     $user = User::factory()->create();
+    $workspace = Workspace::factory()->create();
+    WorkspaceMember::factory()->create(['user_id' => $user->id, 'workspace_id' => $workspace->id]);
 
     $response = $this->actingAs($user)->post(route('logout'));
 
@@ -207,6 +209,8 @@ it('logs out and invalidates session', function () {
 
 it('regenerates CSRF token on logout', function () {
     $user = User::factory()->create();
+    $workspace = Workspace::factory()->create();
+    WorkspaceMember::factory()->create(['user_id' => $user->id, 'workspace_id' => $workspace->id]);
 
     $oldToken = session()->token();
 
@@ -217,6 +221,8 @@ it('regenerates CSRF token on logout', function () {
 
 it('redirects to login after logout', function () {
     $user = User::factory()->create();
+    $workspace = Workspace::factory()->create();
+    WorkspaceMember::factory()->create(['user_id' => $user->id, 'workspace_id' => $workspace->id]);
 
     $response = $this->actingAs($user)->post(route('logout'));
 

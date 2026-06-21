@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use App\Models\Workspace;
+use App\Models\WorkspaceMember;
 
 it('renders html dir=rtl and lang=ar for arabic locale', function () {
     $response = $this->get(route('login').'?lang=ar');
@@ -36,6 +38,8 @@ it('login page renders correctly in en locale', function () {
 
 it('dashboard renders correctly in ar locale', function () {
     $user = User::factory()->create();
+    $workspace = Workspace::factory()->create();
+    WorkspaceMember::factory()->create(['user_id' => $user->id, 'workspace_id' => $workspace->id]);
 
     $response = $this->actingAs($user)
         ->withSession(['locale' => 'ar'])
@@ -47,6 +51,8 @@ it('dashboard renders correctly in ar locale', function () {
 
 it('dashboard renders correctly in en locale', function () {
     $user = User::factory()->create();
+    $workspace = Workspace::factory()->create();
+    WorkspaceMember::factory()->create(['user_id' => $user->id, 'workspace_id' => $workspace->id]);
 
     $response = $this->actingAs($user)
         ->withSession(['locale' => 'en'])
