@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\ObligationController;
 use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
 use Illuminate\Http\Request;
@@ -133,4 +134,9 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.obligations.complete');
     Route::delete('obligations/{obligation}', [ObligationController::class, 'destroy'])
         ->name('api.v1.obligations.destroy');
+
+    // Tasks
+    Route::apiResource('tasks', TaskController::class);
+    Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])
+        ->name('tasks.complete');
 });
