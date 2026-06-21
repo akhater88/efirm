@@ -53,6 +53,10 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.documents.versions.index');
     Route::get('documents/{document}/versions/{version}', [DocumentController::class, 'showVersion'])
         ->name('api.v1.documents.versions.show');
+    Route::get('documents/{document}/versions/{version}/diff', [DocumentController::class, 'diffVersions'])
+        ->name('api.v1.documents.versions.diff');
+    Route::post('documents/{document}/versions/{version}/restore', [DocumentController::class, 'restoreVersion'])
+        ->name('api.v1.documents.versions.restore');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
         ->name('api.v1.documents.destroy');
 });

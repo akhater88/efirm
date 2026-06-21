@@ -3,8 +3,10 @@
 namespace App\Livewire\Documents;
 
 use App\Models\Document;
+use App\Models\DocumentVersion;
 use App\Models\Matter;
 use App\Services\DocumentService;
+use App\Services\VersionDiffService;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -22,6 +24,22 @@ class DocumentEditor extends Component
     public int $currentVersionNumber;
 
     public string $lastSavedAt;
+
+    public bool $showVersionHistory = false;
+
+    public array $versionList = [];
+
+    public ?string $viewingVersionId = null;
+
+    public bool $showDiff = false;
+
+    public ?string $diffOldVersionId = null;
+
+    public ?string $diffNewVersionId = null;
+
+    public array $diffBlocks = [];
+
+    public array $diffStats = [];
 
     public function mount(Matter $matter, Document $document): void
     {
@@ -128,6 +146,117 @@ class DocumentEditor extends Component
             'updated_by_user_id' => auth()->id(),
         ]);
         $this->documentTitle = $title;
+    }
+
+    // ─── Version History ───────────────────────────────────────────────────
+
+    public function toggleVersionHistory(): void
+    {
+        $this->showVersionHistory = ! $this->showVersionHistory;
+        $this->showDiff = false;
+
+        if ($this->showVersionHistory) {
+            $this->loadVersionList();
+        }
+    }
+
+    public function loadVersionList(): void
+    {
+        $this->versionList = $this->document->versions()
+            ->with('createdBy')
+            ->orderByDesc('version_number')
+            ->get()
+            ->map(fn (DocumentVersion $v) => [
+                'id' => $v->id,
+                'version_number' => $v->version_number,
+                'change_summary' => $v->change_summary,
+                'created_by' => $v->createdBy?->name ?? __('common.unknown'),
+                'created_at' => $v->created_at?->format('d/m/Y H:i'),
+                'is_current' => $v->id === $this->currentVersionId,
+            ])
+            ->toArray();
+    }
+
+    public function viewVersion(string $versionId): void
+    {
+        $version = DocumentVersion::where('document_id', $this->document->id)
+            ->where('id', $versionId)
+            ->firstOrFail();
+
+        $this->viewingVersionId = $versionId;
+
+        $this->dispatch('editor-load-content', [
+            'body' => $version->body,
+            'readOnly' => $version->id !== $this->currentVersionId,
+        ]);
+    }
+
+    public function viewCurrentVersion(): void
+    {
+        $this->viewingVersionId = null;
+        $this->reloadLatest();
+    }
+
+    public function restoreVersion(string $versionId): void
+    {
+        Gate::authorize('update', $this->document);
+
+        $version = DocumentVersion::where('document_id', $this->document->id)
+            ->where('id', $versionId)
+            ->firstOrFail();
+
+        $documentService = app(DocumentService::class);
+        $restoredVersion = $documentService->createVersion(
+            $this->document,
+            $version->body,
+            auth()->user(),
+            __('documents.restored_from_version', ['version' => $version->version_number]),
+        );
+
+        if ($restoredVersion) {
+            $this->currentVersionId = $restoredVersion->id;
+            $this->currentVersionNumber = $restoredVersion->version_number;
+            $this->viewingVersionId = null;
+            $this->showDiff = false;
+
+            $this->dispatch('editor-load-content', ['body' => $restoredVersion->body]);
+            $this->dispatch('editor-saved', [
+                'version_id' => $restoredVersion->id,
+                'version_number' => $restoredVersion->version_number,
+            ]);
+
+            $this->loadVersionList();
+        }
+    }
+
+    // ─── Diff ─────────────────────────────────────────────────────────────────
+
+    public function showDiffBetween(string $oldVersionId, string $newVersionId): void
+    {
+        $oldVersion = DocumentVersion::where('document_id', $this->document->id)
+            ->where('id', $oldVersionId)
+            ->firstOrFail();
+        $newVersion = DocumentVersion::where('document_id', $this->document->id)
+            ->where('id', $newVersionId)
+            ->firstOrFail();
+
+        $diffService = app(VersionDiffService::class);
+        $result = $diffService->diff($oldVersion, $newVersion);
+
+        $this->diffOldVersionId = $oldVersionId;
+        $this->diffNewVersionId = $newVersionId;
+        $this->diffBlocks = $result['blocks'];
+        $this->diffStats = $result['stats'];
+        $this->showDiff = true;
+    }
+
+    public function closeDiff(): void
+    {
+        $this->showDiff = false;
+        $this->diffBlocks = [];
+        $this->diffStats = [];
+        $this->diffOldVersionId = null;
+        $this->diffNewVersionId = null;
     }
 
     public function getEditorContentProperty(): array

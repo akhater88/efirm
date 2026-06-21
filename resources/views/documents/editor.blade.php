@@ -46,6 +46,13 @@
 
         {{-- Action Buttons --}}
         <div class="flex items-center gap-2">
+            <button wire:click="toggleVersionHistory"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 {{ $showVersionHistory ? 'bg-indigo-50 text-indigo-700 border-indigo-300' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {{ __('documents.history') }}
+            </button>
             <button onclick="document.getElementById('save-summary-modal').classList.remove('hidden')"
                     class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -112,15 +119,123 @@
         </button>
     </div>
 
-    {{-- ─── Editor Canvas ───────────────────────────────────────────────────── --}}
-    <main class="flex-1 overflow-y-auto bg-gray-100 flex justify-center py-8">
-        <div class="w-full max-w-[800px] bg-white shadow-sm rounded-lg min-h-[80vh]">
-            <div id="editor-canvas"
-                 data-placeholder="{{ __('documents.editor_placeholder') }}"
-                 wire:ignore>
-            </div>
-        </div>
-    </main>
+    {{-- ─── Editor Canvas + Version History Drawer ─────────────────────────── --}}
+    <div class="flex-1 flex overflow-hidden">
+        {{-- Main editor area --}}
+        <main class="flex-1 overflow-y-auto bg-gray-100 flex justify-center py-8">
+            @if ($showDiff)
+                {{-- ─── Diff View ──────────────────────────────────────────────── --}}
+                <div class="w-full max-w-[800px] bg-white shadow-sm rounded-lg min-h-[80vh] p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-lg font-semibold text-gray-900">
+                            {{ __('documents.comparing_versions', [
+                                'old' => collect($versionList)->firstWhere('id', $diffOldVersionId)['version_number'] ?? '?',
+                                'new' => collect($versionList)->firstWhere('id', $diffNewVersionId)['version_number'] ?? '?',
+                            ]) }}
+                        </h2>
+                        <button wire:click="closeDiff" class="text-sm text-gray-500 hover:text-gray-700">
+                            {{ __('common.close') }}
+                        </button>
+                    </div>
+
+                    @if (!empty($diffStats))
+                        <div class="flex gap-4 mb-4 text-sm">
+                            <span class="text-green-700">+{{ $diffStats['added_words'] ?? 0 }} {{ __('documents.words_added') }}</span>
+                            <span class="text-red-700">-{{ $diffStats['removed_words'] ?? 0 }} {{ __('documents.words_removed') }}</span>
+                        </div>
+                    @endif
+
+                    <div class="prose prose-lg max-w-none leading-relaxed" dir="auto">
+                        @foreach ($diffBlocks as $block)
+                            @if ($block['type'] === 'unchanged')
+                                <span class="text-gray-900">{!! nl2br(e($block['text'])) !!}</span>
+                            @elseif ($block['type'] === 'removed')
+                                <span class="bg-red-100 text-red-800 line-through">{!! nl2br(e($block['text'])) !!}</span>
+                            @elseif ($block['type'] === 'added')
+                                <span class="bg-green-100 text-green-800 underline">{!! nl2br(e($block['text'])) !!}</span>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            @else
+                {{-- ─── Normal Editor ──────────────────────────────────────── --}}
+                <div class="w-full max-w-[800px] bg-white shadow-sm rounded-lg min-h-[80vh]">
+                    @if ($viewingVersionId && $viewingVersionId !== $currentVersionId)
+                        <div class="bg-yellow-50 border-b border-yellow-200 px-6 py-3 flex items-center justify-between">
+                            <span class="text-sm text-yellow-800">
+                                {{ __('documents.viewing_old_version', ['version' => collect($versionList)->firstWhere('id', $viewingVersionId)['version_number'] ?? '?']) }}
+                            </span>
+                            <div class="flex gap-2">
+                                <button wire:click="viewCurrentVersion" class="text-sm text-yellow-700 underline hover:text-yellow-900">
+                                    {{ __('documents.back_to_current') }}
+                                </button>
+                                <button wire:click="restoreVersion('{{ $viewingVersionId }}')"
+                                        class="text-sm text-indigo-700 font-medium hover:text-indigo-900">
+                                    {{ __('documents.restore_this_version') }}
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+                    <div id="editor-canvas"
+                         data-placeholder="{{ __('documents.editor_placeholder') }}"
+                         wire:ignore>
+                    </div>
+                </div>
+            @endif
+        </main>
+
+        {{-- ─── Version History Drawer ──────────────────────────────────────── --}}
+        @if ($showVersionHistory)
+            <aside class="w-[360px] bg-white border-s border-gray-200 flex flex-col shrink-0 overflow-hidden">
+                <div class="h-14 px-4 flex items-center justify-between border-b border-gray-200 shrink-0">
+                    <h3 class="font-semibold text-gray-900">{{ __('documents.version_history') }}</h3>
+                    <button wire:click="toggleVersionHistory" class="text-gray-400 hover:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto">
+                    @forelse ($versionList as $version)
+                        <div class="px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer
+                                    {{ $version['is_current'] ? 'bg-indigo-50 border-s-3 border-s-indigo-500' : '' }}
+                                    {{ $viewingVersionId === $version['id'] ? 'bg-blue-50' : '' }}"
+                             wire:click="viewVersion('{{ $version['id'] }}')">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-sm font-semibold text-gray-900 {{ $version['is_current'] ? 'text-indigo-700' : '' }}">
+                                    V{{ $version['version_number'] }}
+                                </span>
+                                @if ($version['is_current'])
+                                    <span class="text-xs bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">{{ __('documents.current') }}</span>
+                                @endif
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                {{ $version['created_by'] }} &middot; {{ $version['created_at'] }}
+                            </div>
+                            @if ($version['change_summary'])
+                                <div class="text-xs text-gray-600 mt-1 truncate">{{ $version['change_summary'] }}</div>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="px-4 py-8 text-center text-sm text-gray-500">
+                            {{ __('documents.no_versions') }}
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Drawer footer --}}
+                <div class="px-4 py-3 border-t border-gray-200 shrink-0 space-y-2">
+                    @if (count($versionList) >= 2)
+                        <button wire:click="showDiffBetween('{{ $versionList[1]['id'] ?? '' }}', '{{ $versionList[0]['id'] ?? '' }}')"
+                                class="w-full text-sm text-center text-indigo-600 hover:text-indigo-800 font-medium py-1.5">
+                            {{ __('documents.compare_latest_versions') }}
+                        </button>
+                    @endif
+                </div>
+            </aside>
+        @endif
+    </div>
 
     {{-- ─── Conflict Modal ──────────────────────────────────────────────────── --}}
     <div id="conflict-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40">

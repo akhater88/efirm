@@ -75,6 +75,20 @@ return [
     'conflict_keep_mine' => 'Keep My Changes',
     'conflict_discard_mine' => 'Load Latest',
 
+    // Version history
+    'history' => 'History',
+    'version_history' => 'Version History',
+    'current' => 'Current',
+    'no_versions' => 'No versions yet',
+    'viewing_old_version' => 'Viewing version V:version (read-only)',
+    'back_to_current' => 'Back to current',
+    'restore_this_version' => 'Restore this version',
+    'restored_from_version' => 'Restored from V:version',
+    'compare_latest_versions' => 'Compare latest versions',
+    'comparing_versions' => 'Comparing V:old and V:new',
+    'words_added' => 'words added',
+    'words_removed' => 'words removed',
+
     // Toolbar
     'toolbar_bold' => 'Bold',
     'toolbar_italic' => 'Italic',

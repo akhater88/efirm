@@ -75,6 +75,20 @@ return [
     'conflict_keep_mine' => 'الاحتفاظ بتغييراتي',
     'conflict_discard_mine' => 'تحميل الأحدث',
 
+    // Version history
+    'history' => 'السجل',
+    'version_history' => 'سجل الإصدارات',
+    'current' => 'الحالي',
+    'no_versions' => 'لا توجد إصدارات بعد',
+    'viewing_old_version' => 'عرض الإصدار V:version (للقراءة فقط)',
+    'back_to_current' => 'العودة للإصدار الحالي',
+    'restore_this_version' => 'استعادة هذا الإصدار',
+    'restored_from_version' => 'تمت الاستعادة من الإصدار V:version',
+    'compare_latest_versions' => 'مقارنة آخر إصدارين',
+    'comparing_versions' => 'مقارنة V:old و V:new',
+    'words_added' => 'كلمات مضافة',
+    'words_removed' => 'كلمات محذوفة',
+
     // Toolbar
     'toolbar_bold' => 'غامق',
     'toolbar_italic' => 'مائل',

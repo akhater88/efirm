@@ -12,6 +12,7 @@ use App\Models\DocumentVersion;
 use App\Models\Matter;
 use App\Services\DocumentImportService;
 use App\Services\DocumentService;
+use App\Services\VersionDiffService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -111,6 +112,52 @@ class DocumentController extends Controller
         }
 
         return new DocumentVersionResource($version->load('createdBy'));
+    }
+
+    public function diffVersions(Document $document, DocumentVersion $version, Request $request, VersionDiffService $diffService): JsonResponse
+    {
+        $this->authorize('view', $document);
+
+        if ($version->document_id !== $document->id) {
+            abort(404);
+        }
+
+        $againstId = $request->query('against');
+        if (! $againstId) {
+            return response()->json(['error' => 'Missing "against" query parameter'], 422);
+        }
+
+        $againstVersion = DocumentVersion::where('document_id', $document->id)
+            ->where('id', $againstId)
+            ->firstOrFail();
+
+        $diff = $diffService->diff($version, $againstVersion);
+
+        return response()->json(['data' => $diff]);
+    }
+
+    public function restoreVersion(Document $document, DocumentVersion $version, DocumentService $documentService): JsonResponse
+    {
+        $this->authorize('update', $document);
+
+        if ($version->document_id !== $document->id) {
+            abort(404);
+        }
+
+        $restoredVersion = $documentService->createVersion(
+            $document,
+            $version->body,
+            auth()->user(),
+            __('documents.restored_from_version', ['version' => $version->version_number]),
+        );
+
+        if ($restoredVersion === null) {
+            return response()->json(['message' => __('documents.version_skipped')], 200);
+        }
+
+        return (new DocumentVersionResource($restoredVersion))
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function destroy(Document $document): JsonResponse
