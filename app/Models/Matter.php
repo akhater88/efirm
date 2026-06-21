@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Models;
+
+use App\Concerns\BelongsToWorkspace;
+use App\Enums\MatterStatus;
+use App\Enums\PracticeArea;
+use Database\Factories\MatterFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Matter extends Model
+{
+    /** @use HasFactory<MatterFactory> */
+    use BelongsToWorkspace, HasFactory, HasUlids, SoftDeletes;
+
+    protected $fillable = [
+        'workspace_id',
+        'title',
+        'client_id',
+        'practice_area',
+        'status',
+        'stage',
+        'description',
+        'internal_reference',
+        'lead_lawyer_id',
+        'opened_at',
+        'closed_at',
+        'tags',
+        'created_by_user_id',
+        'updated_by_user_id',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'practice_area' => PracticeArea::class,
+            'status' => MatterStatus::class,
+            'opened_at' => 'date',
+            'closed_at' => 'date',
+            'tags' => 'array',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
+    // --- Relationships ---
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Contact::class, 'client_id');
+    }
+
+    public function counterparties(): BelongsToMany
+    {
+        return $this->belongsToMany(Contact::class, 'matter_counterparties')
+            ->withPivot('representing')
+            ->withTimestamps();
+    }
+
+    public function leadLawyer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'lead_lawyer_id');
+    }
+
+    public function lawyers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'matter_lawyers')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
+    }
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by_user_id');
+    }
+
+    // --- Scopes ---
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', MatterStatus::Active);
+    }
+
+    public function scopeByPracticeArea($query, PracticeArea $area)
+    {
+        return $query->where('practice_area', $area);
+    }
+}

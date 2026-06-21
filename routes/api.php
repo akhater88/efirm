@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,4 +15,14 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.workspaces.switch');
 
     Route::apiResource('contacts', ContactController::class);
+
+    Route::apiResource('matters', MatterController::class);
+    Route::post('matters/{matter}/counterparties', [MatterController::class, 'attachCounterparty'])
+        ->name('api.v1.matters.counterparties.attach');
+    Route::delete('matters/{matter}/counterparties/{contact}', [MatterController::class, 'detachCounterparty'])
+        ->name('api.v1.matters.counterparties.detach');
+    Route::post('matters/{matter}/lawyers', [MatterController::class, 'attachLawyer'])
+        ->name('api.v1.matters.lawyers.attach');
+    Route::delete('matters/{matter}/lawyers/{user}', [MatterController::class, 'detachLawyer'])
+        ->name('api.v1.matters.lawyers.detach');
 });

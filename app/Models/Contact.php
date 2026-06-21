@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -85,6 +86,18 @@ class Contact extends Model
     public function peopleInOrganization(): HasMany
     {
         return $this->hasMany(self::class, 'parent_organization_id');
+    }
+
+    public function mattersAsClient(): HasMany
+    {
+        return $this->hasMany(Matter::class, 'client_id');
+    }
+
+    public function mattersAsCounterparty(): BelongsToMany
+    {
+        return $this->belongsToMany(Matter::class, 'matter_counterparties')
+            ->withPivot('representing')
+            ->withTimestamps();
     }
 
     public function createdBy(): BelongsTo
