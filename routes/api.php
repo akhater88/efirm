@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\FeedbackController;
 use App\Http\Controllers\Api\V1\InvitationController;
+use App\Http\Controllers\Api\V1\KycController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\ObligationController;
@@ -145,4 +146,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::apiResource('time-entries', TimeEntryController::class);
     Route::get('time-entries-summary', [TimeEntryController::class, 'summary'])
         ->name('time-entries.summary');
+
+    // KYC
+    Route::get('contacts/{contact}/kyc', [KycController::class, 'show'])
+        ->name('api.v1.contacts.kyc.show');
+    Route::post('contacts/{contact}/kyc/start', [KycController::class, 'start'])
+        ->name('api.v1.contacts.kyc.start');
+    Route::patch('kyc-items/{kycItem}', [KycController::class, 'updateItem'])
+        ->name('api.v1.kyc-items.update');
 });
