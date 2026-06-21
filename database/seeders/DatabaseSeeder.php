@@ -3,23 +3,30 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Workspace;
+use App\Models\WorkspaceMember;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $owner = User::factory()->create([
+            'name' => 'Demo Owner',
+            'email' => 'owner@codejob.test',
+            'preferred_locale' => 'ar',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $workspace = Workspace::factory()->create([
+            'name' => 'Demo Workspace',
+            'slug' => 'demo-workspace',
+            'default_locale' => 'ar',
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        WorkspaceMember::factory()->owner()->create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $owner->id,
         ]);
     }
 }
