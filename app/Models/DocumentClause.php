@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToWorkspace;
 use App\Enums\ClauseLanguage;
+use App\Enums\RiskPosition;
 use Database\Factories\DocumentClauseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,6 +25,7 @@ class DocumentClause extends Model
         'body',
         'language',
         'clause_type',
+        'risk_position',
     ];
 
     protected function casts(): array
@@ -31,6 +33,7 @@ class DocumentClause extends Model
         return [
             'body' => 'array',
             'language' => ClauseLanguage::class,
+            'risk_position' => RiskPosition::class,
             'position' => 'integer',
         ];
     }

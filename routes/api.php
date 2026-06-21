@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
+use App\Models\DocumentClause;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
@@ -88,6 +90,17 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.ai.accept');
     Route::post('ai-interactions/{aiInteraction}/reject', [AiController::class, 'reject'])
         ->name('api.v1.ai.reject');
+
+    // Document clause risk flags
+    Route::patch('document-clauses/{documentClause}/risk', function (Request $request, DocumentClause $documentClause) {
+        $validated = $request->validate([
+            'risk_position' => 'nullable|string|in:favourable,balanced,adverse',
+        ]);
+
+        $documentClause->update(['risk_position' => $validated['risk_position']]);
+
+        return response()->json(['data' => ['risk_position' => $documentClause->fresh()->risk_position]]);
+    })->name('api.v1.document-clauses.risk');
 
     // Library Clauses
     Route::apiResource('library/clauses', LibraryClauseController::class, ['as' => 'api.v1.library'])
