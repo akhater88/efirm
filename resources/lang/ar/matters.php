@@ -34,6 +34,24 @@ return [
     'status_closed' => 'مغلق',
     'status_archived' => 'مؤرشف',
 
+    // Counterparty roles [PROVISIONAL-FOUNDER-DECIDED]
+    'role_buyer' => 'مشتري',
+    'role_seller' => 'بائع',
+    'role_licensor' => 'مرخّص',
+    'role_licensee' => 'مرخّص له',
+    'role_service_provider' => 'مزود خدمة',
+    'role_client' => 'عميل',
+    'role_other' => 'أخرى',
+
+    // Our position
+    'position_we_represent' => 'نمثّله',
+    'position_they_represent' => 'يمثّله الطرف الآخر',
+    'position_no_counsel' => 'بدون تمثيل',
+    'position_mutual' => 'متبادل',
+    'counterparty_role' => 'دور الطرف المقابل',
+    'our_position' => 'موقفنا',
+    'counterparty_notes' => 'ملاحظات',
+
     // Validation
     'client_must_be_client' => 'جهة الاتصال المحددة يجب أن تكون عميلاً',
     'cannot_attach_client_as_counterparty' => 'لا يمكن إضافة العميل كطرف مقابل',

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Document extends Model
@@ -59,6 +60,16 @@ class Document extends Model
     public function versions(): HasMany
     {
         return $this->hasMany(DocumentVersion::class)->orderByDesc('version_number');
+    }
+
+    public function contractMetadata(): HasOne
+    {
+        return $this->hasOne(ContractMetadata::class);
+    }
+
+    public function obligations(): HasMany
+    {
+        return $this->hasMany(Obligation::class);
     }
 
     public function shares(): HasMany
