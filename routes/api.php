@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\InvitationController;
+use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
@@ -68,4 +69,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.documents.shares.destroy');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
         ->name('api.v1.documents.destroy');
+    Route::post('documents/{document}/insert-library-clause', [LibraryClauseController::class, 'insertIntoDocument'])
+        ->name('api.v1.documents.insert-library-clause');
+
+    // Library Clauses
+    Route::apiResource('library/clauses', LibraryClauseController::class, ['as' => 'api.v1.library'])
+        ->parameters(['clauses' => 'libraryClause']);
+    Route::post('library/clauses/from-document-clause/{documentClause}', [LibraryClauseController::class, 'saveFromDocumentClause'])
+        ->name('api.v1.library.clauses.from-document');
 });
