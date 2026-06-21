@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\SearchController;
@@ -38,4 +39,14 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.matters.lawyers.attach');
     Route::delete('matters/{matter}/lawyers/{user}', [MatterController::class, 'detachLawyer'])
         ->name('api.v1.matters.lawyers.detach');
+
+    // Documents
+    Route::get('matters/{matter}/documents', [DocumentController::class, 'index'])
+        ->name('api.v1.matters.documents.index');
+    Route::post('matters/{matter}/documents/import', [DocumentController::class, 'import'])
+        ->name('api.v1.matters.documents.import');
+    Route::get('documents/{document}', [DocumentController::class, 'show'])
+        ->name('api.v1.documents.show');
+    Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
+        ->name('api.v1.documents.destroy');
 });

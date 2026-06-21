@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportDocumentRequest;
+use App\Http\Resources\DocumentResource;
+use App\Models\Document;
+use App\Models\Matter;
+use App\Services\DocumentImportService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+
+class DocumentController extends Controller
+{
+    public function index(Matter $matter, Request $request): AnonymousResourceCollection
+    {
+        $this->authorize('view', $matter);
+
+        $documents = $matter->documents()
+            ->with(['currentVersion', 'createdBy'])
+            ->withCount('versions')
+            ->latest()
+            ->paginate(15);
+
+        return DocumentResource::collection($documents);
+    }
+
+    public function show(Document $document): DocumentResource
+    {
+        $this->authorize('view', $document);
+
+        return new DocumentResource(
+            $document->load(['currentVersion', 'createdBy'])->loadCount('versions')
+        );
+    }
+
+    public function import(ImportDocumentRequest $request, Matter $matter, DocumentImportService $importService): JsonResponse
+    {
+        $this->authorize('view', $matter);
+        $this->authorize('create', Document::class);
+
+        $options = array_filter([
+            'title' => $request->validated('title'),
+            'document_type' => $request->validated('document_type'),
+            'language_primary' => $request->validated('language_primary'),
+        ]);
+
+        $document = $importService->importDocx(
+            $request->file('file'),
+            $matter,
+            $request->user(),
+            $options,
+        );
+
+        return (new DocumentResource($document->load(['currentVersion', 'createdBy'])->loadCount('versions')))
+            ->response()
+            ->setStatusCode(201);
+    }
+
+    public function destroy(Document $document): JsonResponse
+    {
+        $this->authorize('delete', $document);
+
+        $document->delete();
+
+        return response()->json(null, 204);
+    }
+}

@@ -37,6 +37,24 @@ return [
     'language_bilingual' => 'ثنائي اللغة',
     'language_mixed' => 'مختلط',
 
+    // Import
+    'import_docx' => 'استيراد .docx',
+    'import_file' => 'مستند Word',
+    'import_file_required' => 'يرجى اختيار ملف .docx للاستيراد.',
+    'import_file_mimes' => 'يُقبل فقط ملفات .docx.',
+    'import_file_max' => 'يجب ألا يتجاوز حجم الملف 25 ميغابايت.',
+    'import_title_placeholder' => 'اتركه فارغاً للكشف التلقائي من المستند',
+    'import_success' => 'تم استيراد المستند بنجاح',
+    'import_error' => 'فشل الاستيراد',
+    'import_file_not_found' => 'لم يتم العثور على الملف المرفوع.',
+    'imported_from_docx' => 'مستورد من .docx',
+    'create_blank' => 'إنشاء مستند فارغ',
+    'blank_document_created' => 'تم إنشاء مستند فارغ',
+
+    // Empty state
+    'empty_state_heading' => 'لا توجد مستندات بعد',
+    'empty_state_description' => 'استورد مستند Word أو أنشئ مستنداً جديداً من الصفر.',
+
     // Success messages
     'created_success' => 'تم إنشاء المستند بنجاح',
     'updated_success' => 'تم تحديث المستند بنجاح',

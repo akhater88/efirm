@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\InvitationController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 // Locale switch — available to all users (auth + guest)
@@ -34,3 +35,27 @@ Route::get('invitations/{token}', [InvitationController::class, 'accept'])
 
 // Redirect root to dashboard
 Route::get('/', fn () => redirect()->route('dashboard'));
+
+// Dev-only login bypass — NEVER available in production
+if (app()->environment('local')) {
+    Route::get('dev/login/{userId?}', function (?string $userId = null) {
+        $user = $userId
+            ? User::findOrFail($userId)
+            : User::first();
+
+        if (! $user) {
+            abort(404, 'No users in database. Run: php artisan migrate:fresh --seed');
+        }
+
+        auth()->login($user);
+
+        $workspace = $user->workspaces()->first();
+        if ($workspace) {
+            $user->switchWorkspace($workspace);
+
+            return redirect("/admin/workspace/{$workspace->slug}");
+        }
+
+        return redirect()->route('dashboard');
+    })->name('dev.login');
+}
