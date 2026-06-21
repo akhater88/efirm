@@ -24,6 +24,13 @@ class ContactResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
+    protected static ?string $recordTitleAttribute = 'display_name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['display_name', 'email', 'phone'];
+    }
+
     public static function getNavigationLabel(): string
     {
         return __('contacts.contacts');
