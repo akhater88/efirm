@@ -1,0 +1,145 @@
+<?php
+
+return [
+    'document' => 'مستند',
+    'documents' => 'المستندات',
+    'title' => 'العنوان',
+    'document_type' => 'نوع المستند',
+    'language' => 'اللغة',
+    'status' => 'الحالة',
+    'version' => 'الإصدار',
+    'versions' => 'الإصدارات',
+    'current_version' => 'الإصدار الحالي',
+    'change_summary' => 'ملخص التغييرات',
+    'clause' => 'بند',
+    'clauses' => 'البنود',
+    'clause_type' => 'نوع البند',
+    'clause_path' => 'مسار البند',
+    'body' => 'المحتوى',
+
+    // Document types [PROVISIONAL-FOUNDER-DECIDED]
+    'type_contract' => 'عقد',
+    'type_memo' => 'مذكرة',
+    'type_letter' => 'خطاب',
+    'type_amendment' => 'تعديل',
+    'type_other' => 'أخرى',
+
+    // Document statuses
+    'status_draft' => 'مسودة',
+    'status_under_review' => 'قيد المراجعة',
+    'status_with_counterparty' => 'لدى الطرف المقابل',
+    'status_signed' => 'موقّع',
+    'status_archived' => 'مؤرشف',
+
+    // Language options
+    'language_ar' => 'عربي',
+    'language_en' => 'إنجليزي',
+    'language_bilingual' => 'ثنائي اللغة',
+    'language_mixed' => 'مختلط',
+
+    // Import
+    'import_docx' => 'استيراد .docx',
+    'import_file' => 'مستند Word',
+    'import_file_required' => 'يرجى اختيار ملف .docx للاستيراد.',
+    'import_file_mimes' => 'يُقبل فقط ملفات .docx.',
+    'import_file_max' => 'يجب ألا يتجاوز حجم الملف 25 ميغابايت.',
+    'import_title_placeholder' => 'اتركه فارغاً للكشف التلقائي من المستند',
+    'import_success' => 'تم استيراد المستند بنجاح',
+    'import_error' => 'فشل الاستيراد',
+    'import_file_not_found' => 'لم يتم العثور على الملف المرفوع.',
+    'imported_from_docx' => 'مستورد من .docx',
+    'create_blank' => 'إنشاء مستند فارغ',
+    'blank_document_created' => 'تم إنشاء مستند فارغ',
+
+    // Empty state
+    'empty_state_heading' => 'لا توجد مستندات بعد',
+    'empty_state_description' => 'استورد مستند Word أو أنشئ مستنداً جديداً من الصفر.',
+
+    // Editor
+    'open_editor' => 'فتح المحرر',
+    'save' => 'حفظ',
+    'save_with_summary' => 'حفظ مع ملخص',
+    'save_summary_placeholder' => 'صف ما تغيّر (اختياري)...',
+    'save_status_saved' => 'محفوظ',
+    'save_status_saving' => 'جاري الحفظ...',
+    'save_status_unsaved' => 'تغييرات غير محفوظة',
+    'save_status_error' => 'فشل الحفظ',
+    'save_status_conflict' => 'تعارض مكتشف',
+    'save_conflict' => 'يوجد إصدار أحدث. يرجى حل التعارض.',
+    'force_saved_after_conflict' => 'حفظ إجباري بعد حل التعارض',
+    'editor_placeholder' => 'ابدأ كتابة المستند...',
+
+    // Conflict
+    'conflict_title' => 'تعارض في الإصدار',
+    'conflict_description' => 'قام مستخدم آخر بحفظ إصدار أحدث أثناء تحريرك. يمكنك تجاهل تغييراتك وتحميل الإصدار الأحدث، أو الاحتفاظ بتغييراتك وحفظها كإصدار جديد.',
+    'conflict_keep_mine' => 'الاحتفاظ بتغييراتي',
+    'conflict_discard_mine' => 'تحميل الأحدث',
+
+    // Version history
+    'history' => 'السجل',
+    'version_history' => 'سجل الإصدارات',
+    'current' => 'الحالي',
+    'no_versions' => 'لا توجد إصدارات بعد',
+    'viewing_old_version' => 'عرض الإصدار V:version (للقراءة فقط)',
+    'back_to_current' => 'العودة للإصدار الحالي',
+    'restore_this_version' => 'استعادة هذا الإصدار',
+    'restored_from_version' => 'تمت الاستعادة من الإصدار V:version',
+    'compare_latest_versions' => 'مقارنة آخر إصدارين',
+    'comparing_versions' => 'مقارنة V:old و V:new',
+    'words_added' => 'كلمات مضافة',
+    'words_removed' => 'كلمات محذوفة',
+
+    // Toolbar
+    'toolbar_bold' => 'غامق',
+    'toolbar_italic' => 'مائل',
+    'toolbar_underline' => 'تسطير',
+    'toolbar_strikethrough' => 'يتوسطه خط',
+    'toolbar_h1' => 'عنوان 1',
+    'toolbar_h2' => 'عنوان 2',
+    'toolbar_h3' => 'عنوان 3',
+    'toolbar_paragraph' => 'فقرة',
+    'toolbar_bullet_list' => 'قائمة نقطية',
+    'toolbar_ordered_list' => 'قائمة مرقمة',
+    'toolbar_ltr' => 'يسار إلى يمين',
+    'toolbar_rtl' => 'يمين إلى يسار',
+    'toolbar_align_left' => 'محاذاة يسار',
+    'toolbar_align_center' => 'محاذاة وسط',
+    'toolbar_align_right' => 'محاذاة يمين',
+    'toolbar_undo' => 'تراجع',
+    'toolbar_redo' => 'إعادة',
+
+    // Sharing
+    'share' => 'مشاركة',
+    'share_document' => 'مشاركة المستند',
+    'share_recipient' => 'بريد المستلم (اختياري)',
+    'share_recipient_placeholder' => 'name@example.com',
+    'share_format' => 'الصيغة',
+    'share_expiry' => 'تنتهي الصلاحية',
+    'share_no_expiry' => 'بدون تاريخ انتهاء',
+    'share_7_days' => '7 أيام',
+    'share_30_days' => '30 يوم',
+    'create_share_link' => 'إنشاء رابط مشاركة',
+    'share_link_created' => 'تم إنشاء رابط المشاركة!',
+    'copy_link' => 'نسخ',
+    'active_shares' => 'الروابط النشطة',
+    'share_no_recipient' => 'بدون مستلم',
+    'downloads' => 'تحميلات',
+    'last_accessed' => 'آخر وصول',
+    'expires' => 'تنتهي',
+    'revoke' => 'إلغاء',
+    'revoked' => 'ملغى',
+    'share_not_found' => 'رابط المشاركة غير موجود.',
+    'share_revoked' => 'تم إلغاء رابط المشاركة.',
+    'share_expired' => 'انتهت صلاحية رابط المشاركة.',
+
+    // Export
+    'export_docx' => 'تصدير .docx',
+    'export_success' => 'تم تصدير المستند بنجاح',
+
+    // Success messages
+    'created_success' => 'تم إنشاء المستند بنجاح',
+    'updated_success' => 'تم تحديث المستند بنجاح',
+    'deleted_success' => 'تم حذف المستند بنجاح',
+    'version_created' => 'تم حفظ إصدار جديد',
+    'version_skipped' => 'لم يتم اكتشاف تغييرات',
+];

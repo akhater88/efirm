@@ -1,0 +1,199 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": null,
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "اتفاقية شراء أسهم"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "أبرمت هذه الاتفاقية بتاريخ 17 يونيو 2026 بين شركة الأردن للتوريدات (المشار إليها فيما يلي بـ \"البائع\") وشركة Acme MENA Holdings (المشار إليها فيما يلي بـ \"المشتري\")."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": null,
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "1. موضوع الاتفاقية"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "يقوم البائع ببيع جميع الأسهم العادية للشركة محل الصفقة إلى المشتري وفقاً للشروط المنصوص عليها في هذه الاتفاقية."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": null,
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "2. ثمن الشراء"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "يبلغ ثمن الشراء الإجمالي مبلغ 500,000 دولار أمريكي (خمسمائة ألف دولار أمريكي)، يُدفع على النحو التالي:"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "textAlign": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "50% عند التوقيع"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "textAlign": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "25% خلال 30 يوماً من تاريخ الإغلاق"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "textAlign": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "25% خلال 90 يوماً من تاريخ الإغلاق"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": null,
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "3. الضمانات والإقرارات"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "يقر البائع ويضمن أن الشركة "
+        },
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            }
+          ],
+          "text": "ليس عليها أي التزامات مالية غير مفصح عنها"
+        },
+        {
+          "type": "text",
+          "text": " وأنها ملتزمة بجميع القوانين المعمول بها في المملكة الأردنية الهاشمية."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": null,
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "4. القانون الواجب التطبيق"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "تخضع هذه الاتفاقية للقانون الأردني، ويختص بنظر أي نزاع ينشأ عنها محكمة الاستئناف الأردنية في عمّان."
+        }
+      ]
+    }
+  ]
+}

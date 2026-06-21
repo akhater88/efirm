@@ -5,11 +5,11 @@ namespace App\Filament\Resources\Matters\Schemas;
 use App\Enums\MatterStatus;
 use App\Enums\PracticeArea;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class MatterForm

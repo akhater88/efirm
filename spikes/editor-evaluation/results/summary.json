@@ -1,0 +1,25 @@
+{
+  "date": "2026-06-21T15:29:07.281Z",
+  "avgFidelity": 100,
+  "allPass": true,
+  "results": [
+    {
+      "fixture": "Bilateral NDA (AR+EN)",
+      "type": "bilingual",
+      "fidelity": 100,
+      "pass": true
+    },
+    {
+      "fixture": "Share Purchase Agreement (AR)",
+      "type": "arabic",
+      "fidelity": 100,
+      "pass": true
+    },
+    {
+      "fixture": "Supply Agreement (EN)",
+      "type": "english",
+      "fidelity": 100,
+      "pass": true
+    }
+  ]
+}
