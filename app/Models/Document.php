@@ -61,6 +61,11 @@ class Document extends Model
         return $this->hasMany(DocumentVersion::class)->orderByDesc('version_number');
     }
 
+    public function shares(): HasMany
+    {
+        return $this->hasMany(DocumentShare::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');

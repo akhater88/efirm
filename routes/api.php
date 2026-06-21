@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\DocumentController;
+use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\SearchController;
@@ -59,6 +60,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.documents.versions.restore');
     Route::get('documents/{document}/export', [DocumentController::class, 'export'])
         ->name('api.v1.documents.export');
+    Route::get('documents/{document}/shares', [DocumentShareController::class, 'index'])
+        ->name('api.v1.documents.shares.index');
+    Route::post('documents/{document}/shares', [DocumentShareController::class, 'store'])
+        ->name('api.v1.documents.shares.store');
+    Route::delete('documents/{document}/shares/{share}', [DocumentShareController::class, 'destroy'])
+        ->name('api.v1.documents.shares.destroy');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
         ->name('api.v1.documents.destroy');
 });

@@ -3,11 +3,13 @@
 namespace App\Livewire\Documents;
 
 use App\Models\Document;
+use App\Models\DocumentShare;
 use App\Models\DocumentVersion;
 use App\Models\Matter;
 use App\Services\DocumentService;
 use App\Services\VersionDiffService;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -40,6 +42,18 @@ class DocumentEditor extends Component
     public array $diffBlocks = [];
 
     public array $diffStats = [];
+
+    public bool $showShareModal = false;
+
+    public array $shareList = [];
+
+    public string $shareRecipientEmail = '';
+
+    public string $shareFormat = 'docx';
+
+    public string $shareExpiry = '';
+
+    public string $lastCreatedShareUrl = '';
 
     public function mount(Matter $matter, Document $document): void
     {
@@ -257,6 +271,72 @@ class DocumentEditor extends Component
         $this->diffStats = [];
         $this->diffOldVersionId = null;
         $this->diffNewVersionId = null;
+    }
+
+    // ─── Sharing ───────────────────────────────────────────────────────────
+
+    public function toggleShareModal(): void
+    {
+        $this->showShareModal = ! $this->showShareModal;
+        $this->lastCreatedShareUrl = '';
+
+        if ($this->showShareModal) {
+            $this->loadShareList();
+        }
+    }
+
+    public function loadShareList(): void
+    {
+        $this->shareList = $this->document->shares()
+            ->with('createdBy')
+            ->latest()
+            ->get()
+            ->map(fn (DocumentShare $s) => [
+                'id' => $s->id,
+                'url' => $s->getPublicUrl(),
+                'recipient_email' => $s->recipient_email,
+                'format' => $s->format,
+                'download_count' => $s->download_count,
+                'last_accessed_at' => $s->last_accessed_at?->format('d/m/Y H:i'),
+                'expires_at' => $s->expires_at?->format('d/m/Y'),
+                'is_active' => $s->isActive(),
+                'created_by' => $s->createdBy?->name ?? __('common.unknown'),
+                'created_at' => $s->created_at?->format('d/m/Y H:i'),
+            ])
+            ->toArray();
+    }
+
+    public function createShare(): void
+    {
+        Gate::authorize('update', $this->document);
+
+        $share = DocumentShare::create([
+            'workspace_id' => $this->document->workspace_id,
+            'document_id' => $this->document->id,
+            'version_id' => $this->currentVersionId,
+            'token' => Str::random(64),
+            'recipient_email' => $this->shareRecipientEmail ?: null,
+            'format' => $this->shareFormat,
+            'expires_at' => $this->shareExpiry ? now()->addDays((int) $this->shareExpiry) : null,
+            'created_by_user_id' => auth()->id(),
+        ]);
+
+        $this->lastCreatedShareUrl = $share->getPublicUrl();
+        $this->shareRecipientEmail = '';
+        $this->shareExpiry = '';
+        $this->loadShareList();
+    }
+
+    public function revokeShare(string $shareId): void
+    {
+        $share = DocumentShare::where('document_id', $this->document->id)
+            ->where('id', $shareId)
+            ->firstOrFail();
+
+        Gate::authorize('delete', $share);
+
+        $share->delete();
+        $this->loadShareList();
     }
 
     public function getEditorContentProperty(): array

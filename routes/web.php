@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\InvitationController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\ShareDownloadController;
 use App\Livewire\Documents\DocumentEditor;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,11 @@ Route::middleware(['auth', 'workspace'])->group(function () {
 
     Route::post('logout', [GoogleOAuthController::class, 'logout'])->name('logout');
 });
+
+// Public share download — no auth required, rate-limited
+Route::get('share/{token}', ShareDownloadController::class)
+    ->name('share.download')
+    ->middleware('throttle:60,60');
 
 // Invitation acceptance — public (redirects to OAuth if not auth'd)
 Route::get('invitations/{token}', [InvitationController::class, 'accept'])

@@ -46,6 +46,13 @@
 
         {{-- Action Buttons --}}
         <div class="flex items-center gap-2">
+            <button wire:click="toggleShareModal"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+                {{ __('documents.share') }}
+            </button>
             <a href="{{ url('/api/v1/documents/' . $document->id . '/export') }}"
                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                download>
@@ -244,6 +251,103 @@
             </aside>
         @endif
     </div>
+
+    {{-- ─── Share Modal ──────────────────────────────────────────────────────── --}}
+    @if ($showShareModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div class="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 max-h-[80vh] flex flex-col">
+                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between shrink-0">
+                    <h3 class="text-lg font-semibold text-gray-900">{{ __('documents.share_document') }}</h3>
+                    <button wire:click="toggleShareModal" class="text-gray-400 hover:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="px-6 py-4 space-y-4 overflow-y-auto">
+                    {{-- Create new share --}}
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('documents.share_recipient') }}</label>
+                            <input type="email" wire:model="shareRecipientEmail"
+                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                   placeholder="{{ __('documents.share_recipient_placeholder') }}">
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('documents.share_format') }}</label>
+                                <select wire:model="shareFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                    <option value="docx">.docx</option>
+                                </select>
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('documents.share_expiry') }}</label>
+                                <select wire:model="shareExpiry" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                    <option value="">{{ __('documents.share_no_expiry') }}</option>
+                                    <option value="7">{{ __('documents.share_7_days') }}</option>
+                                    <option value="30">{{ __('documents.share_30_days') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button wire:click="createShare"
+                                class="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                            {{ __('documents.create_share_link') }}
+                        </button>
+                    </div>
+
+                    {{-- Newly created share URL --}}
+                    @if ($lastCreatedShareUrl)
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                            <p class="text-sm font-medium text-green-800 mb-1">{{ __('documents.share_link_created') }}</p>
+                            <div class="flex items-center gap-2">
+                                <input type="text" value="{{ $lastCreatedShareUrl }}" readonly
+                                       class="flex-1 text-xs bg-white border border-green-300 rounded px-2 py-1"
+                                       id="share-url-input">
+                                <button onclick="navigator.clipboard.writeText(document.getElementById('share-url-input').value)"
+                                        class="text-xs text-green-700 font-medium hover:text-green-900 px-2 py-1">
+                                    {{ __('documents.copy_link') }}
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Active shares --}}
+                    @if (count($shareList) > 0)
+                        <div class="border-t border-gray-200 pt-4">
+                            <h4 class="text-sm font-medium text-gray-900 mb-2">{{ __('documents.active_shares') }}</h4>
+                            <div class="space-y-2">
+                                @foreach ($shareList as $share)
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg text-sm {{ !$share['is_active'] ? 'opacity-50' : '' }}">
+                                        <div class="flex-1 min-w-0">
+                                            <div class="text-xs text-gray-500 truncate">
+                                                {{ $share['recipient_email'] ?? __('documents.share_no_recipient') }}
+                                                &middot; {{ $share['download_count'] }} {{ __('documents.downloads') }}
+                                                @if ($share['last_accessed_at'])
+                                                    &middot; {{ __('documents.last_accessed') }}: {{ $share['last_accessed_at'] }}
+                                                @endif
+                                            </div>
+                                            @if ($share['expires_at'])
+                                                <div class="text-xs text-gray-400">{{ __('documents.expires') }}: {{ $share['expires_at'] }}</div>
+                                            @endif
+                                        </div>
+                                        @if ($share['is_active'])
+                                            <button wire:click="revokeShare('{{ $share['id'] }}')"
+                                                    class="text-xs text-red-600 hover:text-red-800 font-medium ms-3 shrink-0">
+                                                {{ __('documents.revoke') }}
+                                            </button>
+                                        @else
+                                            <span class="text-xs text-gray-400 ms-3">{{ __('documents.revoked') }}</span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
 
     {{-- ─── Conflict Modal ──────────────────────────────────────────────────── --}}
     <div id="conflict-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40">
