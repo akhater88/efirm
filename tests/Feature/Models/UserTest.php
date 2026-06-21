@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Role;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
@@ -31,7 +32,7 @@ it('has a workspaceMembers relationship', function () {
     ]);
 
     expect($user->workspaceMembers)->toHaveCount(1);
-    expect($user->workspaceMembers->first()->role)->toBe('owner');
+    expect($user->workspaceMembers->first()->role->value)->toBe('owner');
 });
 
 it('returns current workspace from session', function () {
@@ -81,7 +82,7 @@ it('returns role in a specific workspace', function () {
         'workspace_id' => $workspace->id,
     ]);
 
-    expect($user->roleInWorkspace($workspace))->toBe('owner');
+    expect($user->roleInWorkspace($workspace))->toBe(Role::Owner);
 });
 
 it('returns null role for non-member workspace', function () {

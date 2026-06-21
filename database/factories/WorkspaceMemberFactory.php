@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Role;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
@@ -19,18 +20,23 @@ class WorkspaceMemberFactory extends Factory
         return [
             'workspace_id' => Workspace::factory(),
             'user_id' => User::factory(),
-            'role' => 'member',
+            'role' => Role::Member,
             'joined_at' => now(),
         ];
     }
 
     public function owner(): static
     {
-        return $this->state(['role' => 'owner']);
+        return $this->state(['role' => Role::Owner]);
     }
 
     public function admin(): static
     {
-        return $this->state(['role' => 'admin']);
+        return $this->state(['role' => Role::Admin]);
+    }
+
+    public function member(): static
+    {
+        return $this->state(['role' => Role::Member]);
     }
 }

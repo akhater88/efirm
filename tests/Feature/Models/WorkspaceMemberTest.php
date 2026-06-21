@@ -68,5 +68,5 @@ it('defaults role to member', function () {
 
     $member->refresh();
 
-    expect($member->role)->toBe('member');
+    expect($member->role->value)->toBe('member');
 });

@@ -2,15 +2,21 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser, HasTenants
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasUlids, Notifiable;
@@ -71,7 +77,7 @@ class User extends Authenticatable
         session(['current_workspace_id' => $workspace->id]);
     }
 
-    public function roleInWorkspace(Workspace $workspace): ?string
+    public function roleInWorkspace(Workspace $workspace): ?Role
     {
         $member = $this->workspaceMembers()
             ->where('workspace_id', $workspace->id)
@@ -80,10 +86,39 @@ class User extends Authenticatable
         return $member?->role;
     }
 
+    public function currentRole(): ?Role
+    {
+        $workspace = $this->currentWorkspace();
+        if (! $workspace) {
+            return null;
+        }
+
+        return $this->roleInWorkspace($workspace);
+    }
+
     public function belongsToWorkspace(Workspace $workspace): bool
     {
         return $this->workspaceMembers()
             ->where('workspace_id', $workspace->id)
             ->exists();
+    }
+
+    // --- Filament interfaces ---
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->workspaceMembers()
+            ->whereIn('role', [Role::Owner->value, Role::Admin->value])
+            ->exists();
+    }
+
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->workspaces()->get();
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->workspaces()->where('workspaces.id', $tenant->id)->exists();
     }
 }

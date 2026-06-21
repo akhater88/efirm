@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use Database\Factories\WorkspaceMemberFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,7 @@ class WorkspaceMember extends Model
     {
         return [
             'joined_at' => 'datetime',
+            'role' => Role::class,
         ];
     }
 
@@ -55,16 +57,16 @@ class WorkspaceMember extends Model
 
     public function isOwner(): bool
     {
-        return $this->role === 'owner';
+        return $this->role === Role::Owner;
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === Role::Admin;
     }
 
     public function isMember(): bool
     {
-        return $this->role === 'member';
+        return $this->role === Role::Member;
     }
 }

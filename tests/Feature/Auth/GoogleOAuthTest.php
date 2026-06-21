@@ -49,7 +49,7 @@ it('creates workspace member with owner role on first sign-in', function () {
     $user = User::where('email', 'test@example.com')->first();
     $member = WorkspaceMember::where('user_id', $user->id)->first();
 
-    expect($member->role)->toBe('owner');
+    expect($member->role->value)->toBe('owner');
 });
 
 it('sets default locale to ar for new users', function () {

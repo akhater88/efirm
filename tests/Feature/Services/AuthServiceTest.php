@@ -47,7 +47,7 @@ it('creates owner membership for new user', function () {
 
     $member = WorkspaceMember::where('user_id', $user->id)->first();
     expect($member)->not->toBeNull();
-    expect($member->role)->toBe('owner');
+    expect($member->role->value)->toBe('owner');
 });
 
 it('wraps creation in a database transaction', function () {
