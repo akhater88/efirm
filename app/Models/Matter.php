@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Matter extends Model
@@ -62,6 +63,11 @@ class Matter extends Model
             ->withTimestamps();
     }
 
+    public function responsibleTeam(): BelongsTo
+    {
+        return $this->belongsTo(Team::class, 'responsible_team_id');
+    }
+
     public function leadLawyer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lead_lawyer_id');
@@ -77,6 +83,11 @@ class Matter extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function tasks(): MorphMany
+    {
+        return $this->morphMany(Task::class, 'taskable');
     }
 
     public function createdBy(): BelongsTo
