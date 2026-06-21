@@ -55,6 +55,45 @@ return [
     'empty_state_heading' => 'No documents yet',
     'empty_state_description' => 'Import a Word document or create a new one from scratch.',
 
+    // Editor
+    'open_editor' => 'Open Editor',
+    'save' => 'Save',
+    'save_with_summary' => 'Save with Summary',
+    'save_summary_placeholder' => 'Describe what changed (optional)...',
+    'save_status_saved' => 'Saved',
+    'save_status_saving' => 'Saving...',
+    'save_status_unsaved' => 'Unsaved changes',
+    'save_status_error' => 'Save failed',
+    'save_status_conflict' => 'Conflict detected',
+    'save_conflict' => 'A newer version exists. Please resolve the conflict.',
+    'force_saved_after_conflict' => 'Force-saved after conflict resolution',
+    'editor_placeholder' => 'Start writing your document...',
+
+    // Conflict
+    'conflict_title' => 'Version Conflict',
+    'conflict_description' => 'Another user has saved a newer version while you were editing. You can discard your changes and load the latest version, or keep your changes and save as a new version.',
+    'conflict_keep_mine' => 'Keep My Changes',
+    'conflict_discard_mine' => 'Load Latest',
+
+    // Toolbar
+    'toolbar_bold' => 'Bold',
+    'toolbar_italic' => 'Italic',
+    'toolbar_underline' => 'Underline',
+    'toolbar_strikethrough' => 'Strikethrough',
+    'toolbar_h1' => 'Heading 1',
+    'toolbar_h2' => 'Heading 2',
+    'toolbar_h3' => 'Heading 3',
+    'toolbar_paragraph' => 'Paragraph',
+    'toolbar_bullet_list' => 'Bullet List',
+    'toolbar_ordered_list' => 'Numbered List',
+    'toolbar_ltr' => 'Left to Right',
+    'toolbar_rtl' => 'Right to Left',
+    'toolbar_align_left' => 'Align Left',
+    'toolbar_align_center' => 'Align Center',
+    'toolbar_align_right' => 'Align Right',
+    'toolbar_undo' => 'Undo',
+    'toolbar_redo' => 'Redo',
+
     // Success messages
     'created_success' => 'Document created successfully',
     'updated_success' => 'Document updated successfully',

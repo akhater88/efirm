@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportDocumentRequest;
+use App\Http\Requests\SaveDocumentRequest;
 use App\Http\Resources\DocumentResource;
+use App\Http\Resources\DocumentVersionResource;
 use App\Models\Document;
+use App\Models\DocumentVersion;
 use App\Models\Matter;
 use App\Services\DocumentImportService;
+use App\Services\DocumentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -57,6 +61,56 @@ class DocumentController extends Controller
         return (new DocumentResource($document->load(['currentVersion', 'createdBy'])->loadCount('versions')))
             ->response()
             ->setStatusCode(201);
+    }
+
+    public function save(SaveDocumentRequest $request, Document $document, DocumentService $documentService): JsonResponse
+    {
+        // Optimistic locking: reject if current_version_id doesn't match
+        if ($document->current_version_id !== $request->validated('current_version_id')) {
+            return response()->json([
+                'error' => 'conflict',
+                'message' => __('documents.save_conflict'),
+                'server_version_id' => $document->current_version_id,
+            ], 409);
+        }
+
+        $version = $documentService->createVersion(
+            $document,
+            $request->validated('body'),
+            $request->user(),
+            $request->validated('change_summary'),
+        );
+
+        if ($version === null) {
+            return response()->json(['message' => __('documents.version_skipped')], 200);
+        }
+
+        return (new DocumentVersionResource($version))
+            ->response()
+            ->setStatusCode(201);
+    }
+
+    public function versions(Document $document): AnonymousResourceCollection
+    {
+        $this->authorize('view', $document);
+
+        $versions = $document->versions()
+            ->with('createdBy')
+            ->orderByDesc('version_number')
+            ->paginate(20);
+
+        return DocumentVersionResource::collection($versions);
+    }
+
+    public function showVersion(Document $document, DocumentVersion $version): DocumentVersionResource
+    {
+        $this->authorize('view', $document);
+
+        if ($version->document_id !== $document->id) {
+            abort(404);
+        }
+
+        return new DocumentVersionResource($version->load('createdBy'));
     }
 
     public function destroy(Document $document): JsonResponse

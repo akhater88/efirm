@@ -55,6 +55,45 @@ return [
     'empty_state_heading' => 'لا توجد مستندات بعد',
     'empty_state_description' => 'استورد مستند Word أو أنشئ مستنداً جديداً من الصفر.',
 
+    // Editor
+    'open_editor' => 'فتح المحرر',
+    'save' => 'حفظ',
+    'save_with_summary' => 'حفظ مع ملخص',
+    'save_summary_placeholder' => 'صف ما تغيّر (اختياري)...',
+    'save_status_saved' => 'محفوظ',
+    'save_status_saving' => 'جاري الحفظ...',
+    'save_status_unsaved' => 'تغييرات غير محفوظة',
+    'save_status_error' => 'فشل الحفظ',
+    'save_status_conflict' => 'تعارض مكتشف',
+    'save_conflict' => 'يوجد إصدار أحدث. يرجى حل التعارض.',
+    'force_saved_after_conflict' => 'حفظ إجباري بعد حل التعارض',
+    'editor_placeholder' => 'ابدأ كتابة المستند...',
+
+    // Conflict
+    'conflict_title' => 'تعارض في الإصدار',
+    'conflict_description' => 'قام مستخدم آخر بحفظ إصدار أحدث أثناء تحريرك. يمكنك تجاهل تغييراتك وتحميل الإصدار الأحدث، أو الاحتفاظ بتغييراتك وحفظها كإصدار جديد.',
+    'conflict_keep_mine' => 'الاحتفاظ بتغييراتي',
+    'conflict_discard_mine' => 'تحميل الأحدث',
+
+    // Toolbar
+    'toolbar_bold' => 'غامق',
+    'toolbar_italic' => 'مائل',
+    'toolbar_underline' => 'تسطير',
+    'toolbar_strikethrough' => 'يتوسطه خط',
+    'toolbar_h1' => 'عنوان 1',
+    'toolbar_h2' => 'عنوان 2',
+    'toolbar_h3' => 'عنوان 3',
+    'toolbar_paragraph' => 'فقرة',
+    'toolbar_bullet_list' => 'قائمة نقطية',
+    'toolbar_ordered_list' => 'قائمة مرقمة',
+    'toolbar_ltr' => 'يسار إلى يمين',
+    'toolbar_rtl' => 'يمين إلى يسار',
+    'toolbar_align_left' => 'محاذاة يسار',
+    'toolbar_align_center' => 'محاذاة وسط',
+    'toolbar_align_right' => 'محاذاة يمين',
+    'toolbar_undo' => 'تراجع',
+    'toolbar_redo' => 'إعادة',
+
     // Success messages
     'created_success' => 'تم إنشاء المستند بنجاح',
     'updated_success' => 'تم تحديث المستند بنجاح',

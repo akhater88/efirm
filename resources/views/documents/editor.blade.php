@@ -1,0 +1,170 @@
+@php
+    $locale = app()->getLocale();
+    $isRtl = $locale === 'ar';
+    $workspace = auth()->user()->currentWorkspace();
+@endphp
+
+<div class="min-h-screen flex flex-col">
+    {{-- ─── Top Bar ─────────────────────────────────────────────────────────── --}}
+    <header class="h-16 bg-white border-b border-gray-200 flex items-center px-4 gap-4 shrink-0 z-20">
+        {{-- Back / Breadcrumb --}}
+        <a href="{{ $workspace ? url('/admin/workspace/' . $workspace->slug . '/matters/' . $matter->id . '/edit') : '#' }}"
+           class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $isRtl ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7' }}" />
+            </svg>
+            <span>{{ __('matters.matters') }}</span>
+        </a>
+
+        <span class="text-gray-300">/</span>
+        <span class="text-sm text-gray-500 truncate max-w-[200px]">{{ $matter->title }}</span>
+        <span class="text-gray-300">/</span>
+
+        {{-- Document Title (editable) --}}
+        <input type="text"
+               value="{{ $documentTitle }}"
+               class="text-sm font-medium text-gray-900 border-0 bg-transparent focus:ring-0 focus:outline-none px-1 py-0.5 rounded hover:bg-gray-100 focus:bg-gray-100 truncate max-w-[300px]"
+               wire:change="updateTitle($event.target.value)"
+               wire:keydown.enter="updateTitle($event.target.value); $event.target.blur()">
+
+        {{-- Save Status --}}
+        <div class="flex items-center gap-2 ms-auto">
+            <span id="save-status"
+                  class="text-sm text-green-600"
+                  data-text-saved="{{ __('documents.save_status_saved') }}"
+                  data-text-saving="{{ __('documents.save_status_saving') }}"
+                  data-text-unsaved="{{ __('documents.save_status_unsaved') }}"
+                  data-text-error="{{ __('documents.save_status_error') }}"
+                  data-text-conflict="{{ __('documents.save_status_conflict') }}">
+                {{ __('documents.save_status_saved') }}
+            </span>
+
+            <span id="current-version" class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
+                V{{ $currentVersionNumber }}
+            </span>
+        </div>
+
+        {{-- Action Buttons --}}
+        <div class="flex items-center gap-2">
+            <button onclick="document.getElementById('save-summary-modal').classList.remove('hidden')"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                </svg>
+                {{ __('documents.save') }}
+            </button>
+        </div>
+    </header>
+
+    {{-- ─── Toolbar ─────────────────────────────────────────────────────────── --}}
+    <div class="editor-toolbar sticky top-0 z-10 border-b border-gray-200 px-4 py-2 flex items-center gap-1 flex-wrap">
+        {{-- Format group --}}
+        <button data-editor-action="bold" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-sm font-bold" title="{{ __('documents.toolbar_bold') }} (Ctrl+B)">B</button>
+        <button data-editor-action="italic" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-sm italic" title="{{ __('documents.toolbar_italic') }} (Ctrl+I)">I</button>
+        <button data-editor-action="underline" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-sm underline" title="{{ __('documents.toolbar_underline') }} (Ctrl+U)">U</button>
+        <button data-editor-action="strike" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-sm line-through" title="{{ __('documents.toolbar_strikethrough') }}">S</button>
+
+        <div class="divider"></div>
+
+        {{-- Heading group --}}
+        <button data-editor-action="h1" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-xs font-bold" title="{{ __('documents.toolbar_h1') }}">H1</button>
+        <button data-editor-action="h2" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-xs font-bold" title="{{ __('documents.toolbar_h2') }}">H2</button>
+        <button data-editor-action="h3" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-xs font-bold" title="{{ __('documents.toolbar_h3') }}">H3</button>
+        <button data-editor-action="paragraph" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-xs" title="{{ __('documents.toolbar_paragraph') }}">P</button>
+
+        <div class="divider"></div>
+
+        {{-- List group --}}
+        <button data-editor-action="bulletList" class="w-8 h-8 flex items-center justify-center rounded text-gray-600" title="{{ __('documents.toolbar_bullet_list') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" /></svg>
+        </button>
+        <button data-editor-action="orderedList" class="w-8 h-8 flex items-center justify-center rounded text-gray-600" title="{{ __('documents.toolbar_ordered_list') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+        </button>
+
+        <div class="divider"></div>
+
+        {{-- Direction group --}}
+        <button data-editor-action="dirLtr" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-xs" title="{{ __('documents.toolbar_ltr') }}">LTR</button>
+        <button data-editor-action="dirRtl" class="w-8 h-8 flex items-center justify-center rounded text-gray-600 text-xs" title="{{ __('documents.toolbar_rtl') }}">RTL</button>
+
+        <div class="divider"></div>
+
+        {{-- Align group --}}
+        <button data-editor-action="alignLeft" class="w-8 h-8 flex items-center justify-center rounded text-gray-600" title="{{ __('documents.toolbar_align_left') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M3 12h12M3 18h18" /></svg>
+        </button>
+        <button data-editor-action="alignCenter" class="w-8 h-8 flex items-center justify-center rounded text-gray-600" title="{{ __('documents.toolbar_align_center') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M6 12h12M3 18h18" /></svg>
+        </button>
+        <button data-editor-action="alignRight" class="w-8 h-8 flex items-center justify-center rounded text-gray-600" title="{{ __('documents.toolbar_align_right') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M9 12h12M3 18h18" /></svg>
+        </button>
+
+        <div class="divider"></div>
+
+        {{-- Undo/Redo --}}
+        <button data-editor-action="undo" class="w-8 h-8 flex items-center justify-center rounded text-gray-600" title="{{ __('documents.toolbar_undo') }} (Ctrl+Z)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
+        </button>
+        <button data-editor-action="redo" class="w-8 h-8 flex items-center justify-center rounded text-gray-600" title="{{ __('documents.toolbar_redo') }} (Ctrl+Y)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 10H11a5 5 0 00-5 5v2M21 10l-4-4M21 10l-4 4" /></svg>
+        </button>
+    </div>
+
+    {{-- ─── Editor Canvas ───────────────────────────────────────────────────── --}}
+    <main class="flex-1 overflow-y-auto bg-gray-100 flex justify-center py-8">
+        <div class="w-full max-w-[800px] bg-white shadow-sm rounded-lg min-h-[80vh]">
+            <div id="editor-canvas"
+                 data-placeholder="{{ __('documents.editor_placeholder') }}"
+                 wire:ignore>
+            </div>
+        </div>
+    </main>
+
+    {{-- ─── Conflict Modal ──────────────────────────────────────────────────── --}}
+    <div id="conflict-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ __('documents.conflict_title') }}</h3>
+            <p class="text-sm text-gray-600 mb-6">{{ __('documents.conflict_description') }}</p>
+            <div class="flex gap-3 justify-end">
+                <button onclick="Livewire.dispatch('editor-reload-latest'); document.getElementById('conflict-modal').classList.add('hidden')"
+                        wire:click="reloadLatest"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                    {{ __('documents.conflict_discard_mine') }}
+                </button>
+                <button onclick="if(window.__editor) { Livewire.dispatch('editor-force-save', { body: window.__editor.getJSON() }); } document.getElementById('conflict-modal').classList.add('hidden')"
+                        wire:click="forceSave([])"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                    {{ __('documents.conflict_keep_mine') }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- ─── Save Summary Modal ──────────────────────────────────────────────── --}}
+    <div id="save-summary-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ __('documents.save_with_summary') }}</h3>
+            <textarea id="save-summary-input"
+                      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                      rows="3"
+                      placeholder="{{ __('documents.save_summary_placeholder') }}"></textarea>
+            <div class="flex gap-3 justify-end mt-4">
+                <button onclick="document.getElementById('save-summary-modal').classList.add('hidden')"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                    {{ __('common.cancel') }}
+                </button>
+                <button onclick="if(window.__editor) { Livewire.dispatch('editor-save', { body: window.__editor.getJSON(), isAutosave: false }); } document.getElementById('save-summary-modal').classList.add('hidden')"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                    {{ __('documents.save') }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- ─── Pass initial content to JS ──────────────────────────────────────── --}}
+    <script>
+        window.__EDITOR_INITIAL_CONTENT__ = @json($this->editorContent);
+    </script>
+</div>

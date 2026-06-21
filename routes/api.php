@@ -47,6 +47,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.matters.documents.import');
     Route::get('documents/{document}', [DocumentController::class, 'show'])
         ->name('api.v1.documents.show');
+    Route::post('documents/{document}/save', [DocumentController::class, 'save'])
+        ->name('api.v1.documents.save');
+    Route::get('documents/{document}/versions', [DocumentController::class, 'versions'])
+        ->name('api.v1.documents.versions.index');
+    Route::get('documents/{document}/versions/{version}', [DocumentController::class, 'showVersion'])
+        ->name('api.v1.documents.versions.show');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
         ->name('api.v1.documents.destroy');
 });

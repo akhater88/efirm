@@ -188,6 +188,13 @@ class DocumentsRelationManager extends RelationManager
                     }),
             ])
             ->recordActions([
+                Action::make('open_editor')
+                    ->label(__('documents.open_editor'))
+                    ->icon('heroicon-o-pencil-square')
+                    ->url(fn ($record) => route('documents.editor', [
+                        'matter' => $this->getOwnerRecord()->id,
+                        'document' => $record->id,
+                    ])),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

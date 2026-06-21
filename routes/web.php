@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\InvitationController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Livewire\Documents\DocumentEditor;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'workspace'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+
+    // Document editor (custom Livewire+Blade — outside Filament panel)
+    Route::get('matters/{matter}/documents/{document}', DocumentEditor::class)
+        ->name('documents.editor');
 
     Route::get('profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
