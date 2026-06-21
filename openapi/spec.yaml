@@ -1,0 +1,66 @@
+openapi: '3.0.3'
+info:
+  title: Code-Job API
+  description: >
+    Bilingual (Arabic/English) AI-native commercial-contracts workspace API.
+    Default locale: Arabic (RTL). All endpoints require authentication
+    unless explicitly marked otherwise.
+  version: 0.1.0
+  contact:
+    name: Code-Job Engineering
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development
+  - url: https://staging.example.com/api/v1
+    description: Staging (Cloudways — URL TBD after D-01)
+paths: {}
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              errors:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+security:
+  - bearerAuth: []

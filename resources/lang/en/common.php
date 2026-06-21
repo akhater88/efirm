@@ -1,0 +1,17 @@
+<?php
+
+return [
+    'app_name' => 'Code Job',
+    'welcome' => 'Welcome',
+    'loading' => 'Loading...',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'delete' => 'Delete',
+    'edit' => 'Edit',
+    'create' => 'Create',
+    'back' => 'Back',
+    'confirm' => 'Confirm',
+    'search' => 'Search',
+    'no_results' => 'No results found',
+    'error_occurred' => 'An error occurred',
+];
