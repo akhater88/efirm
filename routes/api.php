@@ -57,6 +57,8 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.documents.versions.diff');
     Route::post('documents/{document}/versions/{version}/restore', [DocumentController::class, 'restoreVersion'])
         ->name('api.v1.documents.versions.restore');
+    Route::get('documents/{document}/export', [DocumentController::class, 'export'])
+        ->name('api.v1.documents.export');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
         ->name('api.v1.documents.destroy');
 });

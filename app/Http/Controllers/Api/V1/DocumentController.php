@@ -10,12 +10,14 @@ use App\Http\Resources\DocumentVersionResource;
 use App\Models\Document;
 use App\Models\DocumentVersion;
 use App\Models\Matter;
+use App\Services\DocumentExportService;
 use App\Services\DocumentImportService;
 use App\Services\DocumentService;
 use App\Services\VersionDiffService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 class DocumentController extends Controller
 {
@@ -158,6 +160,27 @@ class DocumentController extends Controller
         return (new DocumentVersionResource($restoredVersion))
             ->response()
             ->setStatusCode(201);
+    }
+
+    public function export(Document $document, Request $request, DocumentExportService $exportService): Response
+    {
+        $this->authorize('view', $document);
+
+        $version = null;
+        if ($request->filled('version_id')) {
+            $version = DocumentVersion::where('document_id', $document->id)
+                ->where('id', $request->query('version_id'))
+                ->firstOrFail();
+        }
+
+        $content = $exportService->exportToDocx($document, $version);
+        $filename = $exportService->getFilename($document, $version);
+
+        return response($content, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Content-Length' => strlen($content),
+        ]);
     }
 
     public function destroy(Document $document): JsonResponse

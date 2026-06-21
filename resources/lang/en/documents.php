@@ -108,6 +108,10 @@ return [
     'toolbar_undo' => 'Undo',
     'toolbar_redo' => 'Redo',
 
+    // Export
+    'export_docx' => 'Export .docx',
+    'export_success' => 'Document exported successfully',
+
     // Success messages
     'created_success' => 'Document created successfully',
     'updated_success' => 'Document updated successfully',

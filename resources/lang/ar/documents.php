@@ -108,6 +108,10 @@ return [
     'toolbar_undo' => 'تراجع',
     'toolbar_redo' => 'إعادة',
 
+    // Export
+    'export_docx' => 'تصدير .docx',
+    'export_success' => 'تم تصدير المستند بنجاح',
+
     // Success messages
     'created_success' => 'تم إنشاء المستند بنجاح',
     'updated_success' => 'تم تحديث المستند بنجاح',
