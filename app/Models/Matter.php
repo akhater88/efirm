@@ -63,6 +63,11 @@ class Matter extends Model
             ->withTimestamps();
     }
 
+    public function responsibleTeam(): BelongsTo
+    {
+        return $this->belongsTo(Team::class, 'responsible_team_id');
+    }
+
     public function leadLawyer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lead_lawyer_id');

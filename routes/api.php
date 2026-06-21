@@ -8,12 +8,15 @@ use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\FeedbackController;
 use App\Http\Controllers\Api\V1\InvitationController;
+use App\Http\Controllers\Api\V1\KpiController;
 use App\Http\Controllers\Api\V1\KycController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\ObligationController;
 use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\Api\V1\SmartListController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\TeamController;
 use App\Http\Controllers\Api\V1\TimeEntryController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
@@ -154,4 +157,23 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.contacts.kyc.start');
     Route::patch('kyc-items/{kycItem}', [KycController::class, 'updateItem'])
         ->name('api.v1.kyc-items.update');
+
+    // Teams
+    Route::apiResource('teams', TeamController::class);
+    Route::post('teams/{team}/members', [TeamController::class, 'attachMember'])
+        ->name('teams.members.attach');
+    Route::delete('teams/{team}/members/{userId}', [TeamController::class, 'detachMember'])
+        ->name('teams.members.detach');
+
+    // KPI
+    Route::get('kpi/my-progress', [KpiController::class, 'myProgress'])
+        ->name('api.v1.kpi.my-progress');
+    Route::get('kpi/team/{team}/progress', [KpiController::class, 'teamProgress'])
+        ->name('api.v1.kpi.team-progress');
+    Route::post('kpi/targets', [KpiController::class, 'store'])
+        ->name('api.v1.kpi.targets.store');
+
+    // Smart Lists
+    Route::apiResource('smart-lists', SmartListController::class)
+        ->parameters(['smart-lists' => 'smartList']);
 });

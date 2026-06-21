@@ -10,6 +10,8 @@ use App\Models\LibraryClause;
 use App\Models\Matter;
 use App\Models\Obligation;
 use App\Models\Task;
+use App\Models\Team;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
             'obligation' => Obligation::class,
             'task' => Task::class,
             'library_clause' => LibraryClause::class,
+            'team' => Team::class,
+            'user' => User::class,
         ]);
     }
 }
