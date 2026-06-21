@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
-it('returns 200 on the welcome page', function () {
+it('redirects root to dashboard', function () {
     $response = $this->get('/');
-    $response->assertStatus(200);
+    $response->assertRedirect(route('dashboard'));
 });
 
 it('can connect to the database', function () {
