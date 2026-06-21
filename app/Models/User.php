@@ -108,9 +108,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->workspaceMembers()
-            ->whereIn('role', [Role::Owner->value, Role::Admin->value])
-            ->exists();
+        return $this->workspaceMembers()->exists();
     }
 
     public function getTenants(Panel $panel): Collection

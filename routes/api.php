@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,4 +12,6 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.workspaces.store');
     Route::post('workspaces/switch', [WorkspaceController::class, 'switch'])
         ->name('api.v1.workspaces.switch');
+
+    Route::apiResource('contacts', ContactController::class);
 });

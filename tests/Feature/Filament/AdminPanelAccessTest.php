@@ -30,7 +30,7 @@ it('allows admin to access filament admin panel', function () {
     $response->assertStatus(200);
 });
 
-it('denies member access to filament admin panel', function () {
+it('allows member to access filament admin panel (Filament-everywhere pivot)', function () {
     $user = User::factory()->create();
     $workspace = Workspace::factory()->create();
     WorkspaceMember::factory()->create([
@@ -40,7 +40,7 @@ it('denies member access to filament admin panel', function () {
 
     $response = $this->actingAs($user)->get("/admin/workspace/{$workspace->id}");
 
-    $response->assertStatus(403);
+    $response->assertStatus(200);
 });
 
 it('denies unauthenticated user access to filament admin panel', function () {

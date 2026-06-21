@@ -73,6 +73,135 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 
+  /api/v1/contacts:
+    get:
+      summary: List contacts
+      operationId: listContacts
+      tags: [Contacts]
+      parameters:
+        - name: type
+          in: query
+          schema: { type: string, enum: [person, organization] }
+        - name: is_client
+          in: query
+          schema: { type: boolean }
+        - name: is_counterparty
+          in: query
+          schema: { type: boolean }
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Paginated list of contacts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Create a contact
+      operationId: createContact
+      tags: [Contacts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '201':
+          description: Contact created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /api/v1/contacts/{contact_id}:
+    get:
+      summary: Get a contact
+      operationId: getContact
+      tags: [Contacts]
+      parameters:
+        - name: contact_id
+          in: path
+          required: true
+          schema: { type: string, format: ulid }
+      responses:
+        '200':
+          description: Contact data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Update a contact
+      operationId: updateContact
+      tags: [Contacts]
+      parameters:
+        - name: contact_id
+          in: path
+          required: true
+          schema: { type: string, format: ulid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '200':
+          description: Contact updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      summary: Delete a contact
+      operationId: deleteContact
+      tags: [Contacts]
+      parameters:
+        - name: contact_id
+          in: path
+          required: true
+          schema: { type: string, format: ulid }
+      responses:
+        '204':
+          description: Contact deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
   /api/v1/workspaces/switch:
     post:
       summary: Switch current workspace
@@ -216,5 +345,53 @@ components:
         - name
         - slug
         - default_locale
+    Contact:
+      type: object
+      properties:
+        id: { type: string, format: ulid }
+        type: { type: string, enum: [person, organization] }
+        first_name: { type: string, nullable: true }
+        middle_name: { type: string, nullable: true }
+        last_name: { type: string, nullable: true }
+        organization_name: { type: string, nullable: true }
+        display_name: { type: string }
+        email: { type: string, format: email, nullable: true }
+        phone: { type: string, nullable: true }
+        nationality: { type: string, nullable: true }
+        tax_registration_number: { type: string, nullable: true }
+        address_line_1: { type: string, nullable: true }
+        address_line_2: { type: string, nullable: true }
+        city: { type: string, nullable: true }
+        country: { type: string, nullable: true }
+        is_client: { type: boolean }
+        is_counterparty: { type: boolean }
+        notes: { type: string, nullable: true }
+        labels: { type: array, items: { type: string }, nullable: true }
+        parent_organization_id: { type: string, format: ulid, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+      required: [id, type, display_name, is_client, is_counterparty]
+    ContactInput:
+      type: object
+      properties:
+        type: { type: string, enum: [person, organization] }
+        first_name: { type: string }
+        middle_name: { type: string }
+        last_name: { type: string }
+        organization_name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        nationality: { type: string }
+        tax_registration_number: { type: string }
+        address_line_1: { type: string }
+        address_line_2: { type: string }
+        city: { type: string }
+        country: { type: string }
+        is_client: { type: boolean }
+        is_counterparty: { type: boolean }
+        notes: { type: string }
+        labels: { type: array, items: { type: string } }
+        parent_organization_id: { type: string, format: ulid }
+      required: [type]
 security:
   - bearerAuth: []
