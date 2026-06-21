@@ -34,6 +34,24 @@ return [
     'status_closed' => 'Closed',
     'status_archived' => 'Archived',
 
+    // Counterparty roles [PROVISIONAL-FOUNDER-DECIDED]
+    'role_buyer' => 'Buyer',
+    'role_seller' => 'Seller',
+    'role_licensor' => 'Licensor',
+    'role_licensee' => 'Licensee',
+    'role_service_provider' => 'Service Provider',
+    'role_client' => 'Client',
+    'role_other' => 'Other',
+
+    // Our position
+    'position_we_represent' => 'We Represent',
+    'position_they_represent' => 'They Represent',
+    'position_no_counsel' => 'No Counsel',
+    'position_mutual' => 'Mutual',
+    'counterparty_role' => 'Counterparty Role',
+    'our_position' => 'Our Position',
+    'counterparty_notes' => 'Notes',
+
     // Validation
     'client_must_be_client' => 'The selected contact must be flagged as a client',
     'cannot_attach_client_as_counterparty' => 'Cannot attach the client as a counterparty',

@@ -58,7 +58,7 @@ class Matter extends Model
     public function counterparties(): BelongsToMany
     {
         return $this->belongsToMany(Contact::class, 'matter_counterparties')
-            ->withPivot('representing')
+            ->withPivot('representing', 'counterparty_role', 'our_position', 'notes')
             ->withTimestamps();
     }
 

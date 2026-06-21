@@ -3,11 +3,13 @@
 use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\ContractMetadataController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
+use App\Http\Controllers\Api\V1\ObligationController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
@@ -107,4 +109,24 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->parameters(['clauses' => 'libraryClause']);
     Route::post('library/clauses/from-document-clause/{documentClause}', [LibraryClauseController::class, 'saveFromDocumentClause'])
         ->name('api.v1.library.clauses.from-document');
+
+    // Contract Metadata
+    Route::get('documents/{document}/contract', [ContractMetadataController::class, 'show'])
+        ->name('api.v1.documents.contract.show');
+    Route::put('documents/{document}/contract', [ContractMetadataController::class, 'upsert'])
+        ->name('api.v1.documents.contract.upsert');
+
+    // Obligations
+    Route::get('documents/{document}/obligations', [ObligationController::class, 'index'])
+        ->name('api.v1.documents.obligations.index');
+    Route::post('documents/{document}/obligations', [ObligationController::class, 'store'])
+        ->name('api.v1.documents.obligations.store');
+    Route::get('obligations/{obligation}', [ObligationController::class, 'show'])
+        ->name('api.v1.obligations.show');
+    Route::patch('obligations/{obligation}', [ObligationController::class, 'update'])
+        ->name('api.v1.obligations.update');
+    Route::post('obligations/{obligation}/complete', [ObligationController::class, 'complete'])
+        ->name('api.v1.obligations.complete');
+    Route::delete('obligations/{obligation}', [ObligationController::class, 'destroy'])
+        ->name('api.v1.obligations.destroy');
 });
