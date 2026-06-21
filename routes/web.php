@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\GoogleOAuthController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\HealthController;
 use App\Http\Controllers\Web\InvitationController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ProfileController;
@@ -43,6 +44,9 @@ Route::get('share/{token}', ShareDownloadController::class)
 // Invitation acceptance — public (redirects to OAuth if not auth'd)
 Route::get('invitations/{token}', [InvitationController::class, 'accept'])
     ->name('invitations.accept');
+
+// Health check — public, no auth
+Route::get('health', HealthController::class)->name('health');
 
 // Redirect root to dashboard
 Route::get('/', fn () => redirect()->route('dashboard'));
