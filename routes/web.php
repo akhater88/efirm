@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\GoogleOAuthController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\InvitationController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ Route::middleware(['auth', 'workspace'])->group(function () {
 
     Route::post('logout', [GoogleOAuthController::class, 'logout'])->name('logout');
 });
+
+// Invitation acceptance — public (redirects to OAuth if not auth'd)
+Route::get('invitations/{token}', [InvitationController::class, 'accept'])
+    ->name('invitations.accept');
 
 // Redirect root to dashboard
 Route::get('/', fn () => redirect()->route('dashboard'));

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
@@ -14,6 +15,15 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.workspaces.store');
     Route::post('workspaces/switch', [WorkspaceController::class, 'switch'])
         ->name('api.v1.workspaces.switch');
+
+    Route::get('workspaces/{workspace}/invitations', [InvitationController::class, 'index'])
+        ->name('api.v1.invitations.index');
+    Route::post('workspaces/{workspace}/invitations', [InvitationController::class, 'store'])
+        ->name('api.v1.invitations.store');
+    Route::delete('workspaces/{workspace}/invitations/{invitation}', [InvitationController::class, 'destroy'])
+        ->name('api.v1.invitations.destroy');
+    Route::post('invitations/accept', [InvitationController::class, 'accept'])
+        ->name('api.v1.invitations.accept');
 
     Route::get('search', SearchController::class)->name('api.v1.search');
 

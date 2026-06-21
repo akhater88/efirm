@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\AuthService;
+use App\Services\InvitationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,7 @@ class GoogleOAuthController extends Controller
 {
     public function __construct(
         private readonly AuthService $authService,
+        private readonly InvitationService $invitationService,
     ) {}
 
     public function redirect(): RedirectResponse
@@ -37,6 +39,21 @@ class GoogleOAuthController extends Controller
         }
 
         Auth::login($result, remember: true);
+
+        // Check for pending invitation token
+        $pendingToken = session()->pull('pending_invitation_token');
+        if ($pendingToken) {
+            try {
+                $invitation = $this->invitationService->accept($pendingToken, $result);
+                $result->switchWorkspace($invitation->workspace);
+
+                return redirect()->route('filament.admin.pages.dashboard', [
+                    'tenant' => $invitation->workspace,
+                ])->with('success', __('invitations.accepted'));
+            } catch (\RuntimeException $e) {
+                // Fall through to normal login flow
+            }
+        }
 
         $workspace = $result->workspaces()->first();
         if ($workspace) {
