@@ -13,6 +13,11 @@ return [
 
     'accept' => 'Accept',
     'reject' => 'Reject',
+    'accepted' => 'Accepted',
+    'rejected' => 'Rejected',
     'ask_placeholder' => 'Ask AI about this document...',
+    'select_clause_hint' => 'Select a clause in the editor, then use this operation.',
+    'generating' => 'Generating...',
+    'no_interactions_yet' => 'No AI interactions yet. Try drafting or reviewing a clause.',
     'rate_limit_exceeded' => 'Daily AI usage limit reached. Please try again tomorrow.',
 ];

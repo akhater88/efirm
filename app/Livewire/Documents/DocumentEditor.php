@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Documents;
 
+use App\Models\AiInteraction;
 use App\Models\Document;
+use App\Models\DocumentClause;
 use App\Models\DocumentShare;
 use App\Models\DocumentVersion;
 use App\Models\Matter;
+use App\Services\AiOrchestrationService;
 use App\Services\DocumentService;
 use App\Services\VersionDiffService;
 use Illuminate\Support\Facades\Gate;
@@ -54,6 +57,21 @@ class DocumentEditor extends Component
     public string $shareExpiry = '';
 
     public string $lastCreatedShareUrl = '';
+
+    // AI Panel
+    public bool $showAiPanel = false;
+
+    public string $aiPrompt = '';
+
+    public ?string $aiLastResponse = null;
+
+    public ?string $aiLastInteractionId = null;
+
+    public ?string $aiLastType = null;
+
+    public bool $aiLoading = false;
+
+    public array $aiHistory = [];
 
     public function mount(Matter $matter, Document $document): void
     {
@@ -337,6 +355,130 @@ class DocumentEditor extends Component
 
         $share->delete();
         $this->loadShareList();
+    }
+
+    // ─── AI Panel ──────────────────────────────────────────────────────────
+
+    public function toggleAiPanel(): void
+    {
+        $this->showAiPanel = ! $this->showAiPanel;
+    }
+
+    public function aiDraft(string $intent, string $language = 'ar'): void
+    {
+        $this->aiLoading = true;
+        $aiService = app(AiOrchestrationService::class);
+
+        $interaction = $aiService->draft($this->document, $intent, $language, auth()->user());
+
+        $this->handleAiResponse($interaction, 'draft');
+    }
+
+    public function aiReview(string $clauseId): void
+    {
+        $this->aiLoading = true;
+        $clause = DocumentClause::where('id', $clauseId)->firstOrFail();
+        $aiService = app(AiOrchestrationService::class);
+
+        $interaction = $aiService->review($clause, auth()->user());
+
+        $this->handleAiResponse($interaction, 'review');
+    }
+
+    public function aiSuggest(string $clauseId, string $instruction): void
+    {
+        $this->aiLoading = true;
+        $clause = DocumentClause::where('id', $clauseId)->firstOrFail();
+        $aiService = app(AiOrchestrationService::class);
+
+        $interaction = $aiService->suggest($clause, $instruction, auth()->user());
+
+        $this->handleAiResponse($interaction, 'suggest');
+    }
+
+    public function aiTranslate(string $clauseId, string $targetLanguage): void
+    {
+        $this->aiLoading = true;
+        $clause = DocumentClause::where('id', $clauseId)->firstOrFail();
+        $aiService = app(AiOrchestrationService::class);
+
+        $interaction = $aiService->translate($clause, $targetLanguage, auth()->user());
+
+        $this->handleAiResponse($interaction, 'translate');
+    }
+
+    public function aiExplain(string $clauseId): void
+    {
+        $this->aiLoading = true;
+        $clause = DocumentClause::where('id', $clauseId)->firstOrFail();
+        $aiService = app(AiOrchestrationService::class);
+
+        $interaction = $aiService->explain($clause, auth()->user());
+
+        $this->handleAiResponse($interaction, 'explain');
+    }
+
+    public function aiSendPrompt(): void
+    {
+        if (empty(trim($this->aiPrompt))) {
+            return;
+        }
+
+        $this->aiDraft($this->aiPrompt, auth()->user()->preferred_locale ?? 'ar');
+        $this->aiPrompt = '';
+    }
+
+    public function aiAccept(string $interactionId): void
+    {
+        $interaction = AiInteraction::findOrFail($interactionId);
+        $aiService = app(AiOrchestrationService::class);
+        $aiService->markAccepted($interaction, true);
+
+        // Update the history entry
+        $this->aiHistory = collect($this->aiHistory)->map(function ($entry) use ($interactionId) {
+            if ($entry['id'] === $interactionId) {
+                $entry['was_accepted'] = true;
+            }
+
+            return $entry;
+        })->toArray();
+    }
+
+    public function aiReject(string $interactionId): void
+    {
+        $interaction = AiInteraction::findOrFail($interactionId);
+        $aiService = app(AiOrchestrationService::class);
+        $aiService->markAccepted($interaction, false);
+
+        $this->aiHistory = collect($this->aiHistory)->map(function ($entry) use ($interactionId) {
+            if ($entry['id'] === $interactionId) {
+                $entry['was_accepted'] = false;
+            }
+
+            return $entry;
+        })->toArray();
+    }
+
+    private function handleAiResponse(AiInteraction $interaction, string $type): void
+    {
+        $this->aiLoading = false;
+        $this->aiLastResponse = $interaction->response;
+        $this->aiLastInteractionId = $interaction->id;
+        $this->aiLastType = $type;
+
+        // Prepend to history
+        array_unshift($this->aiHistory, [
+            'id' => $interaction->id,
+            'type' => $type,
+            'response' => $interaction->response,
+            'model' => $interaction->model,
+            'tokens' => $interaction->input_tokens + $interaction->output_tokens,
+            'latency_ms' => $interaction->latency_ms,
+            'was_accepted' => null,
+        ]);
+
+        // Keep last 10 in history
+        $this->aiHistory = array_slice($this->aiHistory, 0, 10);
     }
 
     public function getEditorContentProperty(): array

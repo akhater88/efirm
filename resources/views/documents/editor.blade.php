@@ -68,6 +68,13 @@
                 </svg>
                 {{ __('documents.history') }}
             </button>
+            <button wire:click="toggleAiPanel"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 {{ $showAiPanel ? 'bg-purple-50 text-purple-700 border-purple-300' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+                </svg>
+                {{ __('ai.ai_assistant') }}
+            </button>
             <button onclick="document.getElementById('save-summary-modal').classList.remove('hidden')"
                     class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -247,6 +254,116 @@
                             {{ __('documents.compare_latest_versions') }}
                         </button>
                     @endif
+                </div>
+            </aside>
+        @endif
+
+        {{-- ─── AI Panel Drawer ─────────────────────────────────────────────── --}}
+        @if ($showAiPanel)
+            <aside class="w-[360px] bg-white border-s border-gray-200 flex flex-col shrink-0 overflow-hidden">
+                {{-- Header --}}
+                <div class="h-14 px-4 flex items-center justify-between border-b border-gray-200 shrink-0">
+                    <h3 class="font-semibold text-gray-900 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                        </svg>
+                        {{ __('ai.ai_assistant') }}
+                    </h3>
+                    <button wire:click="toggleAiPanel" class="text-gray-400 hover:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                {{-- Operation buttons --}}
+                <div class="px-4 py-3 border-b border-gray-200 shrink-0">
+                    <div class="grid grid-cols-5 gap-2">
+                        @foreach (['draft' => 'type_draft', 'review' => 'type_review', 'suggest' => 'type_suggest', 'translate' => 'type_translate', 'explain' => 'type_explain'] as $op => $labelKey)
+                            <button class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-purple-50 text-gray-600 hover:text-purple-700 text-xs"
+                                    onclick="document.getElementById('ai-op-{{ $op }}').classList.remove('hidden'); document.querySelectorAll('.ai-op-form').forEach(f => { if(f.id !== 'ai-op-{{ $op }}') f.classList.add('hidden') })">
+                                <span class="text-lg">{{ ['draft' => '✏️', 'review' => '🔍', 'suggest' => '💡', 'translate' => '🌐', 'explain' => '📖'][$op] }}</span>
+                                <span>{{ __("ai.{$labelKey}") }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Operation-specific forms (hidden by default) --}}
+                <div class="px-4 py-3 border-b border-gray-200 space-y-2 shrink-0">
+                    <div id="ai-op-draft" class="ai-op-form hidden">
+                        <textarea wire:model="aiPrompt" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="{{ __('ai.ask_placeholder') }}"></textarea>
+                        <button wire:click="aiSendPrompt" wire:loading.attr="disabled" class="w-full mt-1 px-3 py-1.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50">
+                            {{ __('ai.type_draft') }}
+                        </button>
+                    </div>
+                    <div id="ai-op-review" class="ai-op-form hidden text-xs text-gray-500 p-2">
+                        {{ __('ai.select_clause_hint') }}
+                    </div>
+                    <div id="ai-op-suggest" class="ai-op-form hidden text-xs text-gray-500 p-2">
+                        {{ __('ai.select_clause_hint') }}
+                    </div>
+                    <div id="ai-op-translate" class="ai-op-form hidden text-xs text-gray-500 p-2">
+                        {{ __('ai.select_clause_hint') }}
+                    </div>
+                    <div id="ai-op-explain" class="ai-op-form hidden text-xs text-gray-500 p-2">
+                        {{ __('ai.select_clause_hint') }}
+                    </div>
+                </div>
+
+                {{-- Results area --}}
+                <div class="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+                    @if ($aiLoading)
+                        <div class="flex items-center justify-center py-8">
+                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                            <span class="ms-2 text-sm text-gray-500">{{ __('ai.generating') }}</span>
+                        </div>
+                    @endif
+
+                    @foreach ($aiHistory as $entry)
+                        <div class="bg-gray-50 rounded-lg p-3 text-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xs font-medium text-purple-600 uppercase">{{ __("ai.type_{$entry['type']}") }}</span>
+                                <span class="text-xs text-gray-400">{{ $entry['model'] }} &middot; {{ $entry['tokens'] }} tok &middot; {{ number_format($entry['latency_ms'] / 1000, 1) }}s</span>
+                            </div>
+                            <div class="text-gray-800 leading-relaxed whitespace-pre-wrap" dir="auto">{{ $entry['response'] }}</div>
+                            <div class="flex items-center justify-between mt-3 pt-2 border-t border-gray-200">
+                                @if ($entry['was_accepted'] === null)
+                                    <div class="flex gap-2">
+                                        <button wire:click="aiAccept('{{ $entry['id'] }}')" class="px-3 py-1 text-xs font-medium text-green-700 bg-green-50 rounded hover:bg-green-100">
+                                            {{ __('ai.accept') }}
+                                        </button>
+                                        <button wire:click="aiReject('{{ $entry['id'] }}')" class="px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded hover:bg-red-100">
+                                            {{ __('ai.reject') }}
+                                        </button>
+                                    </div>
+                                @elseif ($entry['was_accepted'])
+                                    <span class="text-xs text-green-600 font-medium">✓ {{ __('ai.accepted') }}</span>
+                                @else
+                                    <span class="text-xs text-red-600 font-medium">✗ {{ __('ai.rejected') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+
+                    @if (empty($aiHistory) && ! $aiLoading)
+                        <div class="text-center py-8 text-sm text-gray-400">
+                            {{ __('ai.no_interactions_yet') }}
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Prompt input + disclaimer --}}
+                <div class="px-4 py-3 border-t border-gray-200 shrink-0">
+                    <div class="flex gap-2">
+                        <textarea wire:model="aiPrompt" rows="2" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none" placeholder="{{ __('ai.ask_placeholder') }}"></textarea>
+                        <button wire:click="aiSendPrompt" wire:loading.attr="disabled" class="self-end px-3 py-2 text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-400 italic mt-2">{{ __('ai.disclaimer') }}</p>
                 </div>
             </aside>
         @endif

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\DocumentController;
@@ -71,6 +72,22 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.documents.destroy');
     Route::post('documents/{document}/insert-library-clause', [LibraryClauseController::class, 'insertIntoDocument'])
         ->name('api.v1.documents.insert-library-clause');
+
+    // AI Operations
+    Route::post('documents/{document}/ai/draft', [AiController::class, 'draft'])
+        ->name('api.v1.documents.ai.draft');
+    Route::post('documents/{document}/ai/review', [AiController::class, 'review'])
+        ->name('api.v1.documents.ai.review');
+    Route::post('documents/{document}/ai/suggest', [AiController::class, 'suggest'])
+        ->name('api.v1.documents.ai.suggest');
+    Route::post('documents/{document}/ai/translate', [AiController::class, 'translate'])
+        ->name('api.v1.documents.ai.translate');
+    Route::post('documents/{document}/ai/explain', [AiController::class, 'explain'])
+        ->name('api.v1.documents.ai.explain');
+    Route::post('ai-interactions/{aiInteraction}/accept', [AiController::class, 'accept'])
+        ->name('api.v1.ai.accept');
+    Route::post('ai-interactions/{aiInteraction}/reject', [AiController::class, 'reject'])
+        ->name('api.v1.ai.reject');
 
     // Library Clauses
     Route::apiResource('library/clauses', LibraryClauseController::class, ['as' => 'api.v1.library'])
