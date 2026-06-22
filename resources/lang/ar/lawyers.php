@@ -27,4 +27,17 @@ return [
     'created_success' => 'تم إنشاء الملف المهني بنجاح',
     'updated_success' => 'تم تحديث الملف المهني بنجاح',
     'deleted_success' => 'تم حذف الملف المهني بنجاح',
+
+    // Matter Lawyer Assignments (F-13.2)
+    'assign_lawyer' => 'تعيين محامي',
+    'unassign_lawyer' => 'إلغاء تعيين محامي',
+    'change_lead' => 'تغيير المحامي الرئيسي',
+    'lead_lawyer' => 'المحامي الرئيسي',
+    'supporting_lawyer' => 'محامي مساند',
+    'assigned_at' => 'تاريخ التعيين',
+    'unassigned_at' => 'تاريخ إلغاء التعيين',
+    'assigned_by' => 'تم التعيين بواسطة',
+    'lead_changed' => 'تم تغيير المحامي الرئيسي بنجاح',
+    'no_active_lead' => 'لا يوجد محامي رئيسي نشط',
+    'already_assigned' => 'هذا المحامي معيّن بالفعل في هذه القضية',
 ];

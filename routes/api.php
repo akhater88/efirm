@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\V1\LawyerProfileController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
+use App\Http\Controllers\Api\V1\MatterLawyerController;
 use App\Http\Controllers\Api\V1\ObligationController;
 use App\Http\Controllers\Api\V1\OpportunityController;
 use App\Http\Controllers\Api\V1\PipelineController;
@@ -83,6 +84,16 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.matters.lawyers.attach');
     Route::delete('matters/{matter}/lawyers/{user}', [MatterController::class, 'detachLawyer'])
         ->name('api.v1.matters.lawyers.detach');
+
+    // Matter Lawyer Assignments (F-13.2)
+    Route::get('matters/{matter}/lawyer-assignments', [MatterLawyerController::class, 'index'])
+        ->name('api.v1.matters.lawyer-assignments.index');
+    Route::post('matters/{matter}/lawyer-assignments', [MatterLawyerController::class, 'store'])
+        ->name('api.v1.matters.lawyer-assignments.store');
+    Route::delete('matters/{matter}/lawyer-assignments/{user}', [MatterLawyerController::class, 'destroy'])
+        ->name('api.v1.matters.lawyer-assignments.destroy');
+    Route::put('matters/{matter}/lead-lawyer', [MatterLawyerController::class, 'updateLead'])
+        ->name('api.v1.matters.lead-lawyer.update');
 
     // Documents
     Route::get('matters/{matter}/documents', [DocumentController::class, 'index'])

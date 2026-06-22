@@ -27,4 +27,17 @@ return [
     'created_success' => 'Lawyer profile created successfully',
     'updated_success' => 'Lawyer profile updated successfully',
     'deleted_success' => 'Lawyer profile deleted successfully',
+
+    // Matter Lawyer Assignments (F-13.2)
+    'assign_lawyer' => 'Assign Lawyer',
+    'unassign_lawyer' => 'Unassign Lawyer',
+    'change_lead' => 'Change Lead Lawyer',
+    'lead_lawyer' => 'Lead Lawyer',
+    'supporting_lawyer' => 'Supporting Lawyer',
+    'assigned_at' => 'Assigned At',
+    'unassigned_at' => 'Unassigned At',
+    'assigned_by' => 'Assigned By',
+    'lead_changed' => 'Lead lawyer changed successfully',
+    'no_active_lead' => 'No active lead lawyer',
+    'already_assigned' => 'This lawyer is already assigned to this matter',
 ];

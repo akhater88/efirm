@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToWorkspace;
 use App\Enums\LitigationStatus;
+use App\Enums\MatterLawyerRole;
 use App\Enums\MatterStatus;
 use App\Enums\PracticeArea;
 use App\Enums\RepresentationRole;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -123,6 +125,25 @@ class Matter extends Model
         return $this->belongsToMany(User::class, 'matter_lawyers')
             ->withPivot('role')
             ->withTimestamps();
+    }
+
+    public function matterLawyers(): HasMany
+    {
+        return $this->hasMany(MatterLawyer::class)->active();
+    }
+
+    public function activeLead(): HasOne
+    {
+        return $this->hasOne(MatterLawyer::class)
+            ->where('role', MatterLawyerRole::Lead)
+            ->whereNull('unassigned_at');
+    }
+
+    public function activeSupportingLawyers(): HasMany
+    {
+        return $this->hasMany(MatterLawyer::class)
+            ->where('role', MatterLawyerRole::Supporting)
+            ->whereNull('unassigned_at');
     }
 
     public function documents(): HasMany
