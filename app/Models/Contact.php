@@ -36,6 +36,7 @@ class Contact extends Model
         'country',
         'is_client',
         'is_counterparty',
+        'is_opposing_counsel',
         'notes',
         'labels',
         'parent_organization_id',
@@ -48,6 +49,7 @@ class Contact extends Model
         return [
             'is_client' => 'boolean',
             'is_counterparty' => 'boolean',
+            'is_opposing_counsel' => 'boolean',
             'labels' => 'array',
             'deleted_at' => 'datetime',
         ];
@@ -136,5 +138,10 @@ class Contact extends Model
     public function scopeCounterparty($query)
     {
         return $query->where('is_counterparty', true);
+    }
+
+    public function scopeOpposingCounsel($query)
+    {
+        return $query->where('is_opposing_counsel', true);
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Concerns\BelongsToWorkspace;
+use App\Enums\LitigationStatus;
 use App\Enums\MatterStatus;
 use App\Enums\PracticeArea;
+use App\Enums\RepresentationRole;
 use Database\Factories\MatterFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +22,10 @@ class Matter extends Model
     /** @use HasFactory<MatterFactory> */
     use BelongsToWorkspace, HasFactory, HasUlids, SoftDeletes;
 
+    protected $attributes = [
+        'is_litigation' => false,
+    ];
+
     protected $fillable = [
         'workspace_id',
         'title',
@@ -33,6 +39,15 @@ class Matter extends Model
         'opened_at',
         'closed_at',
         'tags',
+        'is_litigation',
+        'court_id',
+        'judge_id',
+        'court_case_number',
+        'case_number_internal',
+        'litigation_status',
+        'filed_date',
+        'next_hearing_date',
+        'representation_role',
         'created_by_user_id',
         'updated_by_user_id',
     ];
@@ -42,6 +57,11 @@ class Matter extends Model
         return [
             'practice_area' => PracticeArea::class,
             'status' => MatterStatus::class,
+            'is_litigation' => 'boolean',
+            'litigation_status' => LitigationStatus::class,
+            'representation_role' => RepresentationRole::class,
+            'filed_date' => 'date',
+            'next_hearing_date' => 'date',
             'opened_at' => 'date',
             'closed_at' => 'date',
             'tags' => 'array',
@@ -56,11 +76,36 @@ class Matter extends Model
         return $this->belongsTo(Contact::class, 'client_id');
     }
 
+    public function court(): BelongsTo
+    {
+        return $this->belongsTo(Court::class);
+    }
+
+    public function judge(): BelongsTo
+    {
+        return $this->belongsTo(Judge::class);
+    }
+
     public function counterparties(): BelongsToMany
     {
         return $this->belongsToMany(Contact::class, 'matter_counterparties')
-            ->withPivot('representing', 'counterparty_role', 'our_position', 'notes')
+            ->withPivot('representing', 'counterparty_role', 'our_position', 'notes', 'opposing_counsel_contact_id')
             ->withTimestamps();
+    }
+
+    public function hearings(): HasMany
+    {
+        return $this->hasMany(Hearing::class);
+    }
+
+    public function courtReviews(): HasMany
+    {
+        return $this->hasMany(CourtReview::class);
+    }
+
+    public function serviceLogEntries(): HasMany
+    {
+        return $this->hasMany(ServiceLogEntry::class);
     }
 
     public function responsibleTeam(): BelongsTo
@@ -110,5 +155,15 @@ class Matter extends Model
     public function scopeByPracticeArea($query, PracticeArea $area)
     {
         return $query->where('practice_area', $area);
+    }
+
+    public function scopeLitigation($query)
+    {
+        return $query->where('is_litigation', true);
+    }
+
+    public function scopeCommercial($query)
+    {
+        return $query->where('is_litigation', false);
     }
 }

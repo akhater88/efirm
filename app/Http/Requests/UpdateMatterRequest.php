@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\LitigationStatus;
 use App\Enums\MatterStatus;
 use App\Enums\PracticeArea;
+use App\Enums\RepresentationRole;
 use App\Models\Contact;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -40,6 +42,15 @@ class UpdateMatterRequest extends FormRequest
             'closed_at' => 'nullable|date|after_or_equal:opened_at',
             'tags' => 'nullable|array',
             'tags.*' => 'string|max:50',
+            'is_litigation' => 'sometimes|boolean',
+            'court_id' => 'nullable|string|exists:courts,id',
+            'judge_id' => 'nullable|string|exists:judges,id',
+            'court_case_number' => 'nullable|string|max:100',
+            'case_number_internal' => 'nullable|string|max:100',
+            'litigation_status' => ['nullable', Rule::enum(LitigationStatus::class)],
+            'filed_date' => 'nullable|date',
+            'next_hearing_date' => 'nullable|date',
+            'representation_role' => ['nullable', Rule::enum(RepresentationRole::class)],
         ];
     }
 }

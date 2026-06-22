@@ -30,6 +30,7 @@ class StoreContactRequest extends FormRequest
             'country' => 'nullable|string|size:2',
             'is_client' => 'boolean',
             'is_counterparty' => 'boolean',
+            'is_opposing_counsel' => 'boolean',
             'notes' => 'nullable|string',
             'labels' => 'nullable|array',
             'labels.*' => 'string|max:50',

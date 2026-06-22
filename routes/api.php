@@ -4,16 +4,21 @@ use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\ContractMetadataController;
+use App\Http\Controllers\Api\V1\CourtController;
+use App\Http\Controllers\Api\V1\CourtReviewController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\FeedbackController;
+use App\Http\Controllers\Api\V1\HearingController;
 use App\Http\Controllers\Api\V1\InvitationController;
+use App\Http\Controllers\Api\V1\JudgeController;
 use App\Http\Controllers\Api\V1\KpiController;
 use App\Http\Controllers\Api\V1\KycController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\ObligationController;
 use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\Api\V1\ServiceLogEntryController;
 use App\Http\Controllers\Api\V1\SmartListController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TeamController;
@@ -176,4 +181,19 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     // Smart Lists
     Route::apiResource('smart-lists', SmartListController::class)
         ->parameters(['smart-lists' => 'smartList']);
+
+    // Litigation — Courts & Judges [HARD-STOP-LAWYER-REQUIRED]
+    Route::apiResource('courts', CourtController::class);
+    Route::apiResource('judges', JudgeController::class);
+
+    // Litigation — Hearings [HARD-STOP-LAWYER-REQUIRED]
+    Route::apiResource('hearings', HearingController::class);
+
+    // Litigation — Court Reviews [HARD-STOP-LAWYER-REQUIRED]
+    Route::apiResource('court-reviews', CourtReviewController::class)
+        ->parameters(['court-reviews' => 'courtReview']);
+
+    // Litigation — Service Log [HARD-STOP-LAWYER-REQUIRED]
+    Route::apiResource('service-log-entries', ServiceLogEntryController::class)
+        ->parameters(['service-log-entries' => 'serviceLogEntry']);
 });
