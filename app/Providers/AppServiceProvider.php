@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Account;
 use App\Models\Contact;
 use App\Models\Court;
 use App\Models\CourtReview;
@@ -9,13 +10,18 @@ use App\Models\Document;
 use App\Models\DocumentClause;
 use App\Models\DocumentVersion;
 use App\Models\Hearing;
+use App\Models\Invoice;
 use App\Models\Judge;
+use App\Models\Lead;
 use App\Models\LibraryClause;
 use App\Models\Matter;
 use App\Models\Obligation;
+use App\Models\Opportunity;
+use App\Models\Pipeline;
 use App\Models\ServiceLogEntry;
 use App\Models\Task;
 use App\Models\Team;
+use App\Models\TrustAccount;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -47,6 +53,12 @@ class AppServiceProvider extends ServiceProvider
             'service_log_entry' => ServiceLogEntry::class,
             'team' => Team::class,
             'user' => User::class,
+            'account' => Account::class,
+            'trust_account' => TrustAccount::class,
+            'invoice' => Invoice::class,
+            'lead' => Lead::class,
+            'opportunity' => Opportunity::class,
+            'pipeline' => Pipeline::class,
         ]);
     }
 }

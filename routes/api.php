@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
@@ -11,18 +12,25 @@ use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\FeedbackController;
 use App\Http\Controllers\Api\V1\HearingController;
 use App\Http\Controllers\Api\V1\InvitationController;
+use App\Http\Controllers\Api\V1\InvoiceController;
+use App\Http\Controllers\Api\V1\JournalEntryController;
 use App\Http\Controllers\Api\V1\JudgeController;
 use App\Http\Controllers\Api\V1\KpiController;
 use App\Http\Controllers\Api\V1\KycController;
+use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
 use App\Http\Controllers\Api\V1\ObligationController;
+use App\Http\Controllers\Api\V1\OpportunityController;
+use App\Http\Controllers\Api\V1\PipelineController;
+use App\Http\Controllers\Api\V1\ReceiptController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\ServiceLogEntryController;
 use App\Http\Controllers\Api\V1\SmartListController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TeamController;
 use App\Http\Controllers\Api\V1\TimeEntryController;
+use App\Http\Controllers\Api\V1\TrustAccountController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
 use Illuminate\Http\Request;
@@ -196,4 +204,40 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     // Litigation — Service Log [HARD-STOP-LAWYER-REQUIRED]
     Route::apiResource('service-log-entries', ServiceLogEntryController::class)
         ->parameters(['service-log-entries' => 'serviceLogEntry']);
+
+    // Financial — Chart of Accounts
+    Route::apiResource('accounts', AccountController::class);
+
+    // Financial — Trust Accounts
+    Route::apiResource('trust-accounts', TrustAccountController::class)
+        ->parameters(['trust-accounts' => 'trustAccount']);
+    Route::post('trust-accounts/{trustAccount}/deposit', [TrustAccountController::class, 'deposit'])
+        ->name('trust-accounts.deposit');
+    Route::post('trust-accounts/{trustAccount}/withdraw', [TrustAccountController::class, 'withdraw'])
+        ->name('trust-accounts.withdraw');
+
+    // Financial — Journal Entries
+    Route::apiResource('journal-entries', JournalEntryController::class)
+        ->parameters(['journal-entries' => 'journalEntry']);
+    Route::post('journal-entries/{journalEntry}/post', [JournalEntryController::class, 'post'])
+        ->name('journal-entries.post');
+
+    // Financial — Invoices
+    Route::apiResource('invoices', InvoiceController::class);
+
+    // Financial — Receipts
+    Route::apiResource('receipts', ReceiptController::class);
+
+    // CRM — Pipelines
+    Route::apiResource('pipelines', PipelineController::class);
+
+    // CRM — Leads
+    Route::apiResource('leads', LeadController::class);
+    Route::post('leads/{lead}/convert', [LeadController::class, 'convert'])
+        ->name('leads.convert');
+
+    // CRM — Opportunities
+    Route::apiResource('opportunities', OpportunityController::class);
+    Route::post('opportunities/{opportunity}/convert', [OpportunityController::class, 'convert'])
+        ->name('opportunities.convert');
 });
