@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Account;
 use App\Models\AiDocumentGeneration;
+use App\Models\AuditLog;
 use App\Models\Automation;
 use App\Models\AutomationRun;
+use App\Models\CalendarIntegration;
 use App\Models\Contact;
 use App\Models\Court;
 use App\Models\CourtReview;
@@ -13,6 +15,9 @@ use App\Models\Document;
 use App\Models\DocumentClause;
 use App\Models\DocumentTemplate;
 use App\Models\DocumentVersion;
+use App\Models\EmailAttachment;
+use App\Models\EmailIntegration;
+use App\Models\ExternalCalendarEvent;
 use App\Models\FormSubmission;
 use App\Models\FormTemplate;
 use App\Models\Hearing;
@@ -79,6 +84,11 @@ class AppServiceProvider extends ServiceProvider
             'automation' => Automation::class,
             'automation_run' => AutomationRun::class,
             'document_template' => DocumentTemplate::class,
+            'email_integration' => EmailIntegration::class,
+            'email_attachment' => EmailAttachment::class,
+            'calendar_integration' => CalendarIntegration::class,
+            'external_calendar_event' => ExternalCalendarEvent::class,
+            'audit_log' => AuditLog::class,
         ]);
     }
 }

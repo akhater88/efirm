@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\InvitationController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ShareDownloadController;
+use App\Http\Controllers\Web\SsoController;
 use App\Livewire\Documents\DocumentEditor;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,10 @@ Route::get('share/{token}', ShareDownloadController::class)
 // Invitation acceptance — public (redirects to OAuth if not auth'd)
 Route::get('invitations/{token}', [InvitationController::class, 'accept'])
     ->name('invitations.accept');
+
+// SSO routes — public (pre-auth)
+Route::get('sso/{workspaceSlug}/login', [SsoController::class, 'login'])->name('sso.login');
+Route::post('sso/{workspaceSlug}/acs', [SsoController::class, 'acs'])->name('sso.acs');
 
 // Health check — public, no auth
 Route::get('health', HealthController::class)->name('health');

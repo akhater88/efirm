@@ -3,8 +3,10 @@
 use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\AiGenerationTemplateController;
+use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\AutomationController;
+use App\Http\Controllers\Api\V1\CalendarIntegrationController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\ContractMetadataController;
 use App\Http\Controllers\Api\V1\CourtController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Api\V1\CourtReviewController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\DocumentTemplateController;
+use App\Http\Controllers\Api\V1\EmailIntegrationController;
 use App\Http\Controllers\Api\V1\FeedbackController;
 use App\Http\Controllers\Api\V1\FormSubmissionController;
 use App\Http\Controllers\Api\V1\FormTemplateController;
@@ -32,6 +35,7 @@ use App\Http\Controllers\Api\V1\ReceiptController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\ServiceLogEntryController;
 use App\Http\Controllers\Api\V1\SmartListController;
+use App\Http\Controllers\Api\V1\SsoConfigController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TaskWorkflowController;
 use App\Http\Controllers\Api\V1\TeamController;
@@ -297,4 +301,32 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('workflow-bundles.index');
     Route::post('workflow-bundles/{key}/activate', [WorkflowBundleController::class, 'activate'])
         ->name('workflow-bundles.activate');
+
+    // Email Integrations (S-12 F-12.1)
+    Route::apiResource('email-integrations', EmailIntegrationController::class)
+        ->parameters(['email-integrations' => 'emailIntegration']);
+    Route::post('email-integrations/{emailIntegration}/fetch', [EmailIntegrationController::class, 'fetchEmails'])
+        ->name('email-integrations.fetch');
+    Route::post('email-integrations/{emailIntegration}/send', [EmailIntegrationController::class, 'sendEmail'])
+        ->name('email-integrations.send');
+    Route::post('email-attachments', [EmailIntegrationController::class, 'attachEmail'])
+        ->name('email-attachments.store');
+
+    // Calendar Integrations (S-12 F-12.2)
+    Route::apiResource('calendar-integrations', CalendarIntegrationController::class)
+        ->parameters(['calendar-integrations' => 'calendarIntegration']);
+    Route::post('calendar-integrations/{calendarIntegration}/events', [CalendarIntegrationController::class, 'upsertEvents'])
+        ->name('calendar-integrations.events.upsert');
+    Route::get('calendar-integrations/{calendarIntegration}/events', [CalendarIntegrationController::class, 'events'])
+        ->name('calendar-integrations.events.index');
+
+    // SSO Configuration (S-12 F-12.3)
+    Route::apiResource('sso-configs', SsoConfigController::class)
+        ->parameters(['sso-configs' => 'ssoConfig']);
+
+    // Audit Logs (S-12 F-12.5)
+    Route::get('audit-logs', [AuditLogController::class, 'index'])
+        ->name('audit-logs.index');
+    Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show'])
+        ->name('audit-logs.show');
 });
