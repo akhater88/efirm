@@ -34,6 +34,8 @@ use App\Http\Controllers\Api\V1\TimeEntryController;
 use App\Http\Controllers\Api\V1\TrustAccountController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
+use App\Models\Matter;
+use App\Services\AiDocumentGenerationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -112,6 +114,18 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.documents.ai.translate');
     Route::post('documents/{document}/ai/explain', [AiController::class, 'explain'])
         ->name('api.v1.documents.ai.explain');
+    Route::post('matters/{matter}/ai/generate-document', function (Request $request, Matter $matter) {
+        $request->user()->can('update', $matter) || abort(403);
+        $validated = $request->validate([
+            'template_key' => 'required|string|max:100',
+            'intent_payload' => 'required|array',
+        ]);
+        $generation = app(AiDocumentGenerationService::class)->generate(
+            $validated['template_key'], $validated['intent_payload'], $matter, $request->user()
+        );
+
+        return response()->json(['data' => $generation->load('generatedDocument')], 201);
+    })->name('api.v1.matters.ai.generate-document');
     Route::post('ai-interactions/{aiInteraction}/accept', [AiController::class, 'accept'])
         ->name('api.v1.ai.accept');
     Route::post('ai-interactions/{aiInteraction}/reject', [AiController::class, 'reject'])

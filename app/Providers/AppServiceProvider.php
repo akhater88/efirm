@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Account;
+use App\Models\AiDocumentGeneration;
 use App\Models\Contact;
 use App\Models\Court;
 use App\Models\CourtReview;
@@ -67,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
             'lead' => Lead::class,
             'opportunity' => Opportunity::class,
             'pipeline' => Pipeline::class,
+            'ai_document_generation' => AiDocumentGeneration::class,
         ]);
     }
 }
