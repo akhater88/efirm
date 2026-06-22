@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\ServiceLogEntryController;
 use App\Http\Controllers\Api\V1\SmartListController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\TaskWorkflowController;
 use App\Http\Controllers\Api\V1\TeamController;
 use App\Http\Controllers\Api\V1\TimeEntryController;
 use App\Http\Controllers\Api\V1\TrustAccountController;
@@ -157,6 +158,13 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::apiResource('tasks', TaskController::class);
     Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])
         ->name('tasks.complete');
+
+    // Task Workflows
+    Route::apiResource('task-workflows', TaskWorkflowController::class);
+    Route::post('tasks/{task}/transitions', [TaskWorkflowController::class, 'transition'])
+        ->name('tasks.transitions');
+    Route::post('task-approvals/{taskWorkflowApproval}/respond', [TaskWorkflowController::class, 'respondToApproval'])
+        ->name('task-approvals.respond');
 
     // Time Entries
     Route::apiResource('time-entries', TimeEntryController::class);
