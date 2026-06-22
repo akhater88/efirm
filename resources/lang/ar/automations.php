@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'automation' => 'أتمتة',
+    'automations' => 'الأتمتة',
+    'name' => 'الاسم',
+    'description' => 'الوصف',
+    'trigger_event' => 'حدث التشغيل',
+    'conditions' => 'الشروط',
+    'is_active' => 'نشط',
+    'run_count' => 'عدد التشغيلات',
+    'last_run_at' => 'آخر تشغيل',
+    'actions' => 'الإجراءات',
+    'action_type' => 'نوع الإجراء',
+    'action_payload' => 'بيانات الإجراء',
+    'stop_on_error' => 'التوقف عند الخطأ',
+    'sort_order' => 'ترتيب العرض',
+    'runs' => 'سجل التشغيلات',
+    'status' => 'الحالة',
+    'duration_ms' => 'المدة (مللي ثانية)',
+    'error_message' => 'رسالة الخطأ',
+    'test_mode' => 'وضع الاختبار',
+    'bundle_activated' => 'تم تفعيل حزمة سير العمل بنجاح.',
+    'created_success' => 'تم إنشاء الأتمتة بنجاح.',
+    'updated_success' => 'تم تحديث الأتمتة بنجاح.',
+    'deleted_success' => 'تم حذف الأتمتة بنجاح.',
+];

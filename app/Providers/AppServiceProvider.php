@@ -4,12 +4,17 @@ namespace App\Providers;
 
 use App\Models\Account;
 use App\Models\AiDocumentGeneration;
+use App\Models\Automation;
+use App\Models\AutomationRun;
 use App\Models\Contact;
 use App\Models\Court;
 use App\Models\CourtReview;
 use App\Models\Document;
 use App\Models\DocumentClause;
+use App\Models\DocumentTemplate;
 use App\Models\DocumentVersion;
+use App\Models\FormSubmission;
+use App\Models\FormTemplate;
 use App\Models\Hearing;
 use App\Models\Invoice;
 use App\Models\Judge;
@@ -69,6 +74,11 @@ class AppServiceProvider extends ServiceProvider
             'opportunity' => Opportunity::class,
             'pipeline' => Pipeline::class,
             'ai_document_generation' => AiDocumentGeneration::class,
+            'form_template' => FormTemplate::class,
+            'form_submission' => FormSubmission::class,
+            'automation' => Automation::class,
+            'automation_run' => AutomationRun::class,
+            'document_template' => DocumentTemplate::class,
         ]);
     }
 }

@@ -1,0 +1,102 @@
+{
+    "name_ar": "حزمة مراجعة العقود",
+    "name_en": "Contract Review Bundle",
+    "description": "Automation and templates for standard contract review workflow.",
+    "form_templates": [
+        {
+            "name_ar": "قائمة مراجعة العقد",
+            "name_en": "Contract Review Checklist",
+            "description": "Standard checklist for reviewing incoming contracts.",
+            "applies_to_entity_type": "document",
+            "fields": [
+                {
+                    "key": "parties_verified",
+                    "label_ar": "تم التحقق من الأطراف",
+                    "label_en": "Parties Verified",
+                    "field_type": "boolean",
+                    "is_required": true,
+                    "sort_order": 0
+                },
+                {
+                    "key": "terms_acceptable",
+                    "label_ar": "الشروط مقبولة",
+                    "label_en": "Terms Acceptable",
+                    "field_type": "boolean",
+                    "is_required": true,
+                    "sort_order": 1
+                },
+                {
+                    "key": "risk_notes",
+                    "label_ar": "ملاحظات المخاطر",
+                    "label_en": "Risk Notes",
+                    "field_type": "textarea",
+                    "is_required": false,
+                    "sort_order": 2
+                },
+                {
+                    "key": "review_outcome",
+                    "label_ar": "نتيجة المراجعة",
+                    "label_en": "Review Outcome",
+                    "field_type": "select",
+                    "is_required": true,
+                    "options": ["approved", "approved_with_changes", "rejected"],
+                    "sort_order": 3
+                }
+            ]
+        }
+    ],
+    "automations": [
+        {
+            "name_ar": "إشعار عند اكتمال المراجعة",
+            "name_en": "Notify on review complete",
+            "trigger_event": "document.reviewed",
+            "conditions": {},
+            "actions": [
+                {
+                    "action_type": "notify_user",
+                    "action_payload": {
+                        "message": "Contract review has been completed."
+                    },
+                    "sort_order": 0,
+                    "stop_on_error": false
+                }
+            ]
+        }
+    ],
+    "document_templates": [
+        {
+            "name_ar": "عقد خدمات",
+            "name_en": "Service Agreement",
+            "document_type": "contract",
+            "language": "bilingual",
+            "body": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "heading",
+                        "attrs": {"level": 1},
+                        "content": [{"type": "text", "text": "Service Agreement"}]
+                    },
+                    {
+                        "type": "paragraph",
+                        "content": [{"type": "text", "text": "This Service Agreement (the Agreement) is entered into by {{provider}} and {{client}}."}]
+                    },
+                    {
+                        "type": "heading",
+                        "attrs": {"level": 2},
+                        "content": [{"type": "text", "text": "1. Scope of Services"}]
+                    },
+                    {
+                        "type": "paragraph",
+                        "content": [{"type": "text", "text": "{{scope_of_services}}"}]
+                    }
+                ]
+            },
+            "placeholder_schema": {
+                "provider": {"type": "text", "required": true},
+                "client": {"type": "text", "required": true},
+                "scope_of_services": {"type": "textarea", "required": true}
+            }
+        }
+    ]
+}
