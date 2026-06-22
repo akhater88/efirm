@@ -1,0 +1,111 @@
+{
+    "name_ar": "حزمة تأهيل القضية الجديدة",
+    "name_en": "New Matter Onboarding Bundle",
+    "description": "Sets up intake form, task automation, and engagement letter template for new matters.",
+    "form_templates": [
+        {
+            "name_ar": "نموذج استلام القضية",
+            "name_en": "Matter Intake Form",
+            "description": "Standard intake form for new commercial matters.",
+            "applies_to_entity_type": "matter",
+            "fields": [
+                {
+                    "key": "client_goals",
+                    "label_ar": "أهداف العميل",
+                    "label_en": "Client Goals",
+                    "field_type": "textarea",
+                    "is_required": true,
+                    "sort_order": 0
+                },
+                {
+                    "key": "estimated_value",
+                    "label_ar": "القيمة التقديرية",
+                    "label_en": "Estimated Value",
+                    "field_type": "currency",
+                    "is_required": false,
+                    "sort_order": 1
+                },
+                {
+                    "key": "urgency",
+                    "label_ar": "درجة الاستعجال",
+                    "label_en": "Urgency Level",
+                    "field_type": "select",
+                    "is_required": true,
+                    "options": ["low", "medium", "high", "critical"],
+                    "sort_order": 2
+                },
+                {
+                    "key": "conflict_check_done",
+                    "label_ar": "تم فحص تعارض المصالح",
+                    "label_en": "Conflict Check Completed",
+                    "field_type": "boolean",
+                    "is_required": true,
+                    "sort_order": 3
+                }
+            ]
+        }
+    ],
+    "automations": [
+        {
+            "name_ar": "إنشاء مهمة عند فتح قضية",
+            "name_en": "Create task on matter open",
+            "trigger_event": "matter.created",
+            "conditions": {
+                "operator": "eq",
+                "field": "status",
+                "value": "active"
+            },
+            "actions": [
+                {
+                    "action_type": "create_task",
+                    "action_payload": {
+                        "title": "Complete intake form for new matter",
+                        "due_in_days": 3,
+                        "priority": "high"
+                    },
+                    "sort_order": 0,
+                    "stop_on_error": true
+                },
+                {
+                    "action_type": "notify_user",
+                    "action_payload": {
+                        "message": "New matter opened — please complete intake."
+                    },
+                    "sort_order": 1,
+                    "stop_on_error": false
+                }
+            ]
+        }
+    ],
+    "document_templates": [
+        {
+            "name_ar": "خطاب تكليف",
+            "name_en": "Engagement Letter",
+            "document_type": "letter",
+            "language": "bilingual",
+            "body": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "heading",
+                        "attrs": {"level": 1},
+                        "content": [{"type": "text", "text": "Engagement Letter"}]
+                    },
+                    {
+                        "type": "paragraph",
+                        "content": [{"type": "text", "text": "This engagement letter is between {{firm_name}} and {{client_name}}."}]
+                    },
+                    {
+                        "type": "paragraph",
+                        "content": [{"type": "text", "text": "Scope of work: {{scope}}"}]
+                    }
+                ]
+            },
+            "placeholder_schema": {
+                "firm_name": {"type": "text", "required": true},
+                "client_name": {"type": "text", "required": true},
+                "scope": {"type": "textarea", "required": true}
+            }
+        }
+    ]
+}

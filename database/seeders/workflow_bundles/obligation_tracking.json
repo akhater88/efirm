@@ -1,0 +1,73 @@
+{
+    "name_ar": "حزمة تتبع الالتزامات",
+    "name_en": "Obligation Tracking Bundle",
+    "description": "Automates obligation reminders and provides tracking forms.",
+    "form_templates": [
+        {
+            "name_ar": "نموذج تأكيد الالتزام",
+            "name_en": "Obligation Confirmation Form",
+            "description": "Form to confirm obligation completion with evidence.",
+            "applies_to_entity_type": "obligation",
+            "fields": [
+                {
+                    "key": "completed_date",
+                    "label_ar": "تاريخ الإنجاز",
+                    "label_en": "Completion Date",
+                    "field_type": "date",
+                    "is_required": true,
+                    "sort_order": 0
+                },
+                {
+                    "key": "evidence_description",
+                    "label_ar": "وصف الإثبات",
+                    "label_en": "Evidence Description",
+                    "field_type": "textarea",
+                    "is_required": true,
+                    "sort_order": 1
+                },
+                {
+                    "key": "confirmed_by_client",
+                    "label_ar": "تأكيد العميل",
+                    "label_en": "Confirmed by Client",
+                    "field_type": "boolean",
+                    "is_required": false,
+                    "sort_order": 2
+                }
+            ]
+        }
+    ],
+    "automations": [
+        {
+            "name_ar": "تذكير بالالتزام المستحق",
+            "name_en": "Obligation due reminder",
+            "trigger_event": "obligation.approaching_due",
+            "conditions": {
+                "operator": "neq",
+                "field": "status",
+                "value": "completed"
+            },
+            "actions": [
+                {
+                    "action_type": "create_task",
+                    "action_payload": {
+                        "title": "Obligation approaching due date — review required",
+                        "due_in_days": 1,
+                        "priority": "urgent"
+                    },
+                    "sort_order": 0,
+                    "stop_on_error": true
+                },
+                {
+                    "action_type": "send_email",
+                    "action_payload": {
+                        "to": "assigned_lawyer",
+                        "subject": "Obligation due reminder"
+                    },
+                    "sort_order": 1,
+                    "stop_on_error": false
+                }
+            ]
+        }
+    ],
+    "document_templates": []
+}

@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'automation' => 'Automation',
+    'automations' => 'Automations',
+    'name' => 'Name',
+    'description' => 'Description',
+    'trigger_event' => 'Trigger Event',
+    'conditions' => 'Conditions',
+    'is_active' => 'Active',
+    'run_count' => 'Run Count',
+    'last_run_at' => 'Last Run',
+    'actions' => 'Actions',
+    'action_type' => 'Action Type',
+    'action_payload' => 'Action Payload',
+    'stop_on_error' => 'Stop on Error',
+    'sort_order' => 'Sort Order',
+    'runs' => 'Automation Runs',
+    'status' => 'Status',
+    'duration_ms' => 'Duration (ms)',
+    'error_message' => 'Error Message',
+    'test_mode' => 'Test Mode',
+    'bundle_activated' => 'Workflow bundle activated successfully.',
+    'created_success' => 'Automation created successfully.',
+    'updated_success' => 'Automation updated successfully.',
+    'deleted_success' => 'Automation deleted successfully.',
+];

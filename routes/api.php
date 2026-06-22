@@ -4,13 +4,17 @@ use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\AiGenerationTemplateController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\AutomationController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\ContractMetadataController;
 use App\Http\Controllers\Api\V1\CourtController;
 use App\Http\Controllers\Api\V1\CourtReviewController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
+use App\Http\Controllers\Api\V1\DocumentTemplateController;
 use App\Http\Controllers\Api\V1\FeedbackController;
+use App\Http\Controllers\Api\V1\FormSubmissionController;
+use App\Http\Controllers\Api\V1\FormTemplateController;
 use App\Http\Controllers\Api\V1\HearingController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\InvoiceController;
@@ -33,6 +37,7 @@ use App\Http\Controllers\Api\V1\TaskWorkflowController;
 use App\Http\Controllers\Api\V1\TeamController;
 use App\Http\Controllers\Api\V1\TimeEntryController;
 use App\Http\Controllers\Api\V1\TrustAccountController;
+use App\Http\Controllers\Api\V1\WorkflowBundleController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
 use App\Models\Matter;
@@ -268,4 +273,28 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::apiResource('opportunities', OpportunityController::class);
     Route::post('opportunities/{opportunity}/convert', [OpportunityController::class, 'convert'])
         ->name('opportunities.convert');
+
+    // Form Templates (S-11 F-11.1)
+    Route::apiResource('form-templates', FormTemplateController::class)
+        ->parameters(['form-templates' => 'formTemplate']);
+    Route::apiResource('form-submissions', FormSubmissionController::class)
+        ->parameters(['form-submissions' => 'formSubmission'])
+        ->only(['index', 'store', 'show', 'destroy']);
+
+    // Automations (S-11 F-11.2)
+    Route::apiResource('automations', AutomationController::class);
+    Route::post('automations/{automation}/test', [AutomationController::class, 'test'])
+        ->name('automations.test');
+
+    // Document Templates (S-11 F-11.3)
+    Route::apiResource('document-templates', DocumentTemplateController::class)
+        ->parameters(['document-templates' => 'documentTemplate']);
+    Route::post('matters/{matter}/documents/from-template', [DocumentTemplateController::class, 'createFromTemplate'])
+        ->name('api.v1.matters.documents.from-template');
+
+    // Workflow Bundles (S-11 F-11.4)
+    Route::get('workflow-bundles', [WorkflowBundleController::class, 'index'])
+        ->name('workflow-bundles.index');
+    Route::post('workflow-bundles/{key}/activate', [WorkflowBundleController::class, 'activate'])
+        ->name('workflow-bundles.activate');
 });
