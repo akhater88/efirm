@@ -27,6 +27,7 @@ class ContactResource extends JsonResource
             'country' => $this->country,
             'is_client' => $this->is_client,
             'is_counterparty' => $this->is_counterparty,
+            'is_opposing_counsel' => $this->is_opposing_counsel,
             'notes' => $this->notes,
             'labels' => $this->labels,
             'parent_organization_id' => $this->parent_organization_id,
