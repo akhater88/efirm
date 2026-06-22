@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -31,6 +32,8 @@ class Task extends Model
         'completed_at',
         'completed_by_user_id',
         'tags',
+        'task_workflow_id',
+        'current_stage_id',
         'created_by_user_id',
         'updated_by_user_id',
     ];
@@ -72,6 +75,21 @@ class Task extends Model
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by_user_id');
+    }
+
+    public function workflow(): BelongsTo
+    {
+        return $this->belongsTo(TaskWorkflow::class, 'task_workflow_id');
+    }
+
+    public function currentStage(): BelongsTo
+    {
+        return $this->belongsTo(TaskWorkflowStage::class, 'current_stage_id');
+    }
+
+    public function approvals(): HasMany
+    {
+        return $this->hasMany(TaskWorkflowApproval::class);
     }
 
     // --- Helpers ---

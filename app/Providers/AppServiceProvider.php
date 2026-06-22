@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Account;
+use App\Models\AiDocumentGeneration;
 use App\Models\Contact;
 use App\Models\Court;
 use App\Models\CourtReview;
@@ -20,9 +21,13 @@ use App\Models\Opportunity;
 use App\Models\Pipeline;
 use App\Models\ServiceLogEntry;
 use App\Models\Task;
+use App\Models\TaskWorkflow;
+use App\Models\TaskWorkflowApproval;
 use App\Models\Team;
 use App\Models\TrustAccount;
 use App\Models\User;
+use App\Models\Workspace;
+use App\Observers\WorkspaceObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -35,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Workspace::observe(WorkspaceObserver::class);
+
         // Polymorphic morph map — short stable keys for all polymorphic relationships.
         // New entities added here when their Surge builds (S-08 litigation, S-09 financial).
         Relation::enforceMorphMap([
@@ -45,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
             'document_clause' => DocumentClause::class,
             'obligation' => Obligation::class,
             'task' => Task::class,
+            'task_workflow' => TaskWorkflow::class,
+            'task_workflow_approval' => TaskWorkflowApproval::class,
             'library_clause' => LibraryClause::class,
             'court' => Court::class,
             'judge' => Judge::class,
@@ -59,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
             'lead' => Lead::class,
             'opportunity' => Opportunity::class,
             'pipeline' => Pipeline::class,
+            'ai_document_generation' => AiDocumentGeneration::class,
         ]);
     }
 }

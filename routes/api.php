@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AiController;
+use App\Http\Controllers\Api\V1\AiGenerationTemplateController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\ContractMetadataController;
@@ -28,11 +29,14 @@ use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\ServiceLogEntryController;
 use App\Http\Controllers\Api\V1\SmartListController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\TaskWorkflowController;
 use App\Http\Controllers\Api\V1\TeamController;
 use App\Http\Controllers\Api\V1\TimeEntryController;
 use App\Http\Controllers\Api\V1\TrustAccountController;
 use App\Http\Controllers\Api\V1\WorkspaceController;
 use App\Models\DocumentClause;
+use App\Models\Matter;
+use App\Services\AiDocumentGenerationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -111,6 +115,23 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         ->name('api.v1.documents.ai.translate');
     Route::post('documents/{document}/ai/explain', [AiController::class, 'explain'])
         ->name('api.v1.documents.ai.explain');
+    Route::post('matters/{matter}/ai/generate-document', function (Request $request, Matter $matter) {
+        $request->user()->can('update', $matter) || abort(403);
+        $validated = $request->validate([
+            'template_key' => 'required|string|max:100',
+            'intent_payload' => 'required|array',
+        ]);
+        $generation = app(AiDocumentGenerationService::class)->generate(
+            $validated['template_key'], $validated['intent_payload'], $matter, $request->user()
+        );
+
+        return response()->json(['data' => $generation->load('generatedDocument')], 201);
+    })->name('api.v1.matters.ai.generate-document');
+
+    // AI Generation Templates (F-10.5)
+    Route::apiResource('ai-generation-templates', AiGenerationTemplateController::class)
+        ->parameters(['ai-generation-templates' => 'aiGenerationTemplate']);
+
     Route::post('ai-interactions/{aiInteraction}/accept', [AiController::class, 'accept'])
         ->name('api.v1.ai.accept');
     Route::post('ai-interactions/{aiInteraction}/reject', [AiController::class, 'reject'])
@@ -157,6 +178,13 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::apiResource('tasks', TaskController::class);
     Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])
         ->name('tasks.complete');
+
+    // Task Workflows
+    Route::apiResource('task-workflows', TaskWorkflowController::class);
+    Route::post('tasks/{task}/transitions', [TaskWorkflowController::class, 'transition'])
+        ->name('tasks.transitions');
+    Route::post('task-approvals/{taskWorkflowApproval}/respond', [TaskWorkflowController::class, 'respondToApproval'])
+        ->name('task-approvals.respond');
 
     // Time Entries
     Route::apiResource('time-entries', TimeEntryController::class);
