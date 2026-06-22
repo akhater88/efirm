@@ -47,4 +47,13 @@ return [
     'error_not_designated_approver' => 'لست الشخص المعيّن للموافقة على هذا الطلب',
     'error_approval_not_pending' => 'تم الرد على هذه الموافقة مسبقاً',
     'error_has_active_tasks' => 'لا يمكن حذف سير العمل مع وجود مهام نشطة',
+
+    // Board UI (F-10.2)
+    'task_board' => 'لوحة المهام',
+    'select_workflow' => 'اختر سير العمل',
+    'all_priorities' => 'جميع الأولويات',
+    'no_tasks_in_stage' => 'لا توجد مهام في هذه المرحلة',
+    'select_workflow_to_view_board' => 'اختر سير عمل لعرض اللوحة',
+    'pending_approval' => 'بانتظار الموافقة',
+    'transition_rejected' => 'الانتقال غير مسموح',
 ];

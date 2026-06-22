@@ -47,4 +47,13 @@ return [
     'error_not_designated_approver' => 'You are not the designated approver for this request',
     'error_approval_not_pending' => 'This approval has already been responded to',
     'error_has_active_tasks' => 'Cannot delete workflow with active tasks',
+
+    // Board UI (F-10.2)
+    'task_board' => 'Task Board',
+    'select_workflow' => 'Select Workflow',
+    'all_priorities' => 'All Priorities',
+    'no_tasks_in_stage' => 'No tasks in this stage',
+    'select_workflow_to_view_board' => 'Select a workflow to view the board',
+    'pending_approval' => 'Pending Approval',
+    'transition_rejected' => 'Transition not allowed',
 ];
