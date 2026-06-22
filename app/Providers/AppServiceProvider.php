@@ -23,6 +23,7 @@ use App\Models\FormTemplate;
 use App\Models\Hearing;
 use App\Models\Invoice;
 use App\Models\Judge;
+use App\Models\LawyerProfile;
 use App\Models\Lead;
 use App\Models\LibraryClause;
 use App\Models\Matter;
@@ -75,6 +76,7 @@ class AppServiceProvider extends ServiceProvider
             'account' => Account::class,
             'trust_account' => TrustAccount::class,
             'invoice' => Invoice::class,
+            'lawyer_profile' => LawyerProfile::class,
             'lead' => Lead::class,
             'opportunity' => Opportunity::class,
             'pipeline' => Pipeline::class,

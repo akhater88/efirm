@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -51,6 +52,11 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function workspaceMembers(): HasMany
     {
         return $this->hasMany(WorkspaceMember::class);
+    }
+
+    public function lawyerProfile(): HasOne
+    {
+        return $this->hasOne(LawyerProfile::class);
     }
 
     public function workspaces(): BelongsToMany
@@ -102,6 +108,16 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $this->workspaceMembers()
             ->where('workspace_id', $workspace->id)
             ->exists();
+    }
+
+    public function isLawyer(): bool
+    {
+        return $this->lawyerProfile()->where('status', 'active')->exists();
+    }
+
+    public function scopeLawyers($query)
+    {
+        return $query->whereHas('lawyerProfile', fn ($q) => $q->where('status', 'active'));
     }
 
     // --- Filament interfaces ---

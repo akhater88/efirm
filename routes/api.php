@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\JournalEntryController;
 use App\Http\Controllers\Api\V1\JudgeController;
 use App\Http\Controllers\Api\V1\KpiController;
 use App\Http\Controllers\Api\V1\KycController;
+use App\Http\Controllers\Api\V1\LawyerProfileController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\LibraryClauseController;
 use App\Http\Controllers\Api\V1\MatterController;
@@ -323,6 +324,10 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     // SSO Configuration (S-12 F-12.3)
     Route::apiResource('sso-configs', SsoConfigController::class)
         ->parameters(['sso-configs' => 'ssoConfig']);
+
+    // Lawyer Profiles (F-13.1)
+    Route::apiResource('lawyer-profiles', LawyerProfileController::class)
+        ->parameters(['lawyer-profiles' => 'lawyerProfile']);
 
     // Audit Logs (S-12 F-12.5)
     Route::get('audit-logs', [AuditLogController::class, 'index'])
