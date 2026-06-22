@@ -65,6 +65,7 @@ class MatterResource extends Resource
     {
         return [
             RelationManagers\DocumentsRelationManager::class,
+            RelationManagers\TasksRelationManager::class,
         ];
     }
 
