@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AiController;
+use App\Http\Controllers\Api\V1\AiGenerationTemplateController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\ContractMetadataController;
@@ -126,6 +127,11 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 
         return response()->json(['data' => $generation->load('generatedDocument')], 201);
     })->name('api.v1.matters.ai.generate-document');
+
+    // AI Generation Templates (F-10.5)
+    Route::apiResource('ai-generation-templates', AiGenerationTemplateController::class)
+        ->parameters(['ai-generation-templates' => 'aiGenerationTemplate']);
+
     Route::post('ai-interactions/{aiInteraction}/accept', [AiController::class, 'accept'])
         ->name('api.v1.ai.accept');
     Route::post('ai-interactions/{aiInteraction}/reject', [AiController::class, 'reject'])

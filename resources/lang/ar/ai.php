@@ -31,4 +31,18 @@ return [
     'gen_status_cancelled' => 'ملغى',
     'generation_complete' => 'تم توليد المستند بنجاح',
     'generation_failed' => 'فشل توليد المستند',
+
+    // Templates (F-10.5)
+    'template' => 'قالب',
+    'templates' => 'القوالب',
+    'review_pending' => 'بانتظار المراجعة',
+    'review_approved' => 'معتمد',
+    'review_revoked' => 'ملغى',
+
+    // Generation History (F-10.6)
+    'ai_generations' => 'التوليدات الذكية',
+    'requested_by' => 'طُلب بواسطة',
+    'status' => 'الحالة',
+    'tokens' => 'الرموز',
+    'cost' => 'التكلفة',
 ];

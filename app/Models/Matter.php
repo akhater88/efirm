@@ -130,6 +130,11 @@ class Matter extends Model
         return $this->hasMany(Document::class);
     }
 
+    public function aiDocumentGenerations(): HasMany
+    {
+        return $this->hasMany(AiDocumentGeneration::class);
+    }
+
     public function tasks(): MorphMany
     {
         return $this->morphMany(Task::class, 'taskable');

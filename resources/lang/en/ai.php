@@ -31,4 +31,18 @@ return [
     'gen_status_cancelled' => 'Cancelled',
     'generation_complete' => 'Document generated successfully',
     'generation_failed' => 'Document generation failed',
+
+    // Templates (F-10.5)
+    'template' => 'Template',
+    'templates' => 'Templates',
+    'review_pending' => 'Pending Review',
+    'review_approved' => 'Approved',
+    'review_revoked' => 'Revoked',
+
+    // Generation History (F-10.6)
+    'ai_generations' => 'AI Generations',
+    'requested_by' => 'Requested By',
+    'status' => 'Status',
+    'tokens' => 'Tokens',
+    'cost' => 'Cost',
 ];
