@@ -40,4 +40,9 @@ return [
     'lead_changed' => 'Lead lawyer changed successfully',
     'no_active_lead' => 'No active lead lawyer',
     'already_assigned' => 'This lawyer is already assigned to this matter',
+
+    // F-13.6 Team tab
+    'team' => 'Team',
+    'role' => 'Role',
+    'show_history' => 'Show History',
 ];

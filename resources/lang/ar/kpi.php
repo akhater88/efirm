@@ -16,6 +16,9 @@ return [
     'metric_matters_opened' => 'ملفات مفتوحة (شهري)',
     'metric_matters_closed' => 'ملفات مغلقة (شهري)',
     'metric_revenue' => 'الإيرادات (شهري)',
+    'metric_matters_as_lead' => 'ملفات نشطة كمحامي رئيسي',
+    'metric_matters_as_supporting' => 'ملفات نشطة كمحامي مساند',
+    'metric_matters_closed_as_lead' => 'ملفات مغلقة كمحامي رئيسي',
 
     'period_monthly' => 'شهري',
     'period_quarterly' => 'ربع سنوي',
