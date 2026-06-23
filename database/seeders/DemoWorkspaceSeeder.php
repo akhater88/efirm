@@ -548,6 +548,54 @@ class DemoWorkspaceSeeder extends Seeder
             ],
         );
 
+        // ─── Tasks with Workflow Assignments ──────────────────────────────────
+
+        $genericWorkflow = \App\Models\TaskWorkflow::where('workspace_id', $workspace->id)
+            ->where('is_default', true)
+            ->first();
+
+        if ($genericWorkflow) {
+            $todoStage = $genericWorkflow->stages->firstWhere('key', 'todo');
+            $inProgressStage = $genericWorkflow->stages->firstWhere('key', 'in_progress');
+            $doneStage = $genericWorkflow->stages->firstWhere('key', 'done');
+
+            $tasks = [
+                // To Do tasks
+                ['title' => 'مراجعة مسودة اتفاقية الشراء', 'matter' => $spaMatter, 'stage' => $todoStage, 'assignee' => $admin, 'priority' => 'high', 'due' => now()->addDays(3)],
+                ['title' => 'إعداد قائمة الضمانات المطلوبة', 'matter' => $spaMatter, 'stage' => $todoStage, 'assignee' => $member, 'priority' => 'normal', 'due' => now()->addDays(5)],
+                ['title' => 'Prepare NDA for counterparty review', 'matter' => $ndaMatter, 'stage' => $todoStage, 'assignee' => $member, 'priority' => 'urgent', 'due' => now()->addDay()],
+                ['title' => 'تحديث بيانات العميل في النظام', 'matter' => $ndaMatter, 'stage' => $todoStage, 'assignee' => $member2, 'priority' => 'low', 'due' => now()->addWeek()],
+
+                // In Progress tasks
+                ['title' => 'التفاوض على بند المسؤولية', 'matter' => $spaMatter, 'stage' => $inProgressStage, 'assignee' => $admin, 'priority' => 'high', 'due' => now()->addDays(2)],
+                ['title' => 'Draft supply agreement terms', 'matter' => $supplyMatter, 'stage' => $inProgressStage, 'assignee' => $admin, 'priority' => 'normal', 'due' => now()->addDays(4)],
+                ['title' => 'مراجعة تقرير الفحص النافي للجهالة', 'matter' => $spaMatter, 'stage' => $inProgressStage, 'assignee' => $member, 'priority' => 'urgent', 'due' => now()->addDay()],
+
+                // Done tasks
+                ['title' => 'إرسال خطاب التكليف للعميل', 'matter' => $spaMatter, 'stage' => $doneStage, 'assignee' => $owner, 'priority' => 'normal', 'due' => now()->subDays(3)],
+                ['title' => 'Collect counterparty contact details', 'matter' => $ndaMatter, 'stage' => $doneStage, 'assignee' => $member, 'priority' => 'normal', 'due' => now()->subDays(5)],
+                ['title' => 'تسجيل بيانات الطرف المقابل', 'matter' => $supplyMatter, 'stage' => $doneStage, 'assignee' => $member2, 'priority' => 'low', 'due' => now()->subWeek()],
+            ];
+
+            foreach ($tasks as $taskData) {
+                \App\Models\Task::create([
+                    'workspace_id' => $workspace->id,
+                    'title' => $taskData['title'],
+                    'taskable_type' => 'matter',
+                    'taskable_id' => $taskData['matter']->id,
+                    'task_workflow_id' => $genericWorkflow->id,
+                    'current_stage_id' => $taskData['stage']->id,
+                    'assigned_to_user_id' => $taskData['assignee']->id,
+                    'priority' => $taskData['priority'],
+                    'due_date' => $taskData['due'],
+                    'status' => $taskData['stage'] === $doneStage ? 'done' : 'todo',
+                    'completed_at' => $taskData['stage'] === $doneStage ? now() : null,
+                    'created_by_user_id' => $owner->id,
+                    'updated_by_user_id' => $owner->id,
+                ]);
+            }
+        }
+
         // ─── Summary ──────────────────────────────────────────────────────────
 
         $this->command->info('');
@@ -563,6 +611,7 @@ class DemoWorkspaceSeeder extends Seeder
                 ['Matters', '4 (3 active, 1 closed)'],
                 ['Documents', '5 (SPA, NDA, Supply, License, Memo)'],
                 ['Document Versions', '7 (SPA has 3 versions)'],
+                ['Tasks', '10 (4 To Do, 3 In Progress, 3 Done)'],
             ],
         );
         $this->command->info('');
