@@ -1,4 +1,30 @@
-@php $isRtl = app()->getLocale() === 'ar'; @endphp
+@php
+    $isRtl = app()->getLocale() === 'ar';
+
+    // Map color names to actual Tailwind classes (dynamic classes get purged)
+    $colorMap = [
+        'gray' => 'bg-gray-500',
+        'blue' => 'bg-blue-500',
+        'green' => 'bg-green-500',
+        'red' => 'bg-red-500',
+        'yellow' => 'bg-yellow-500',
+        'indigo' => 'bg-indigo-500',
+        'purple' => 'bg-purple-500',
+        'pink' => 'bg-pink-500',
+        'orange' => 'bg-orange-500',
+        'info' => 'bg-blue-500',
+        'success' => 'bg-green-500',
+        'warning' => 'bg-yellow-500',
+        'danger' => 'bg-red-500',
+    ];
+
+    $priorityColorMap = [
+        'gray' => ['bg' => 'bg-gray-100', 'text' => 'text-gray-700'],
+        'info' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-700'],
+        'warning' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-700'],
+        'danger' => ['bg' => 'bg-red-100', 'text' => 'text-red-700'],
+    ];
+@endphp
 
 <div>
     {{-- Toolbar --}}
@@ -22,20 +48,20 @@
     @if (count($columns) > 0)
         <div class="flex gap-4 overflow-x-auto pb-4 {{ $isRtl ? 'flex-row-reverse' : '' }}" style="min-height: 60vh;">
             @foreach ($columns as $column)
-                <div class="flex-shrink-0 w-72 bg-gray-50 rounded-lg flex flex-col"
+                <div class="flex-shrink-0 w-72 bg-gray-50 rounded-lg flex flex-col border border-gray-200"
                      id="column-{{ $column['id'] }}"
                      data-stage-id="{{ $column['id'] }}">
                     {{-- Column header --}}
-                    <div class="px-3 py-2 border-b border-gray-200 flex items-center justify-between">
+                    <div class="px-3 py-2.5 border-b border-gray-200 flex items-center justify-between bg-white rounded-t-lg">
                         <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-{{ $column['color'] }}-500"></span>
+                            <span class="w-3 h-3 rounded-full {{ $colorMap[$column['color']] ?? 'bg-gray-500' }}"></span>
                             <span class="text-sm font-semibold text-gray-900">{{ $column['name'] }}</span>
                         </div>
-                        <span class="text-xs text-gray-400 bg-gray-200 rounded-full px-2 py-0.5">{{ $column['task_count'] }}</span>
+                        <span class="text-xs text-gray-500 bg-gray-100 rounded-full px-2 py-0.5 font-medium">{{ $column['task_count'] }}</span>
                     </div>
 
                     {{-- Cards --}}
-                    <div class="flex-1 p-2 space-y-2 overflow-y-auto task-column"
+                    <div class="flex-1 p-2 space-y-2 overflow-y-auto task-column min-h-[100px]"
                          data-stage-id="{{ $column['id'] }}">
                         @forelse ($column['tasks'] as $task)
                             <div class="bg-white rounded-lg border border-gray-200 p-3 shadow-sm cursor-grab active:cursor-grabbing task-card hover:shadow-md transition-shadow"
@@ -58,7 +84,8 @@
                                     </div>
                                     <div class="flex items-center gap-1">
                                         @if ($task['priority'] && $task['priority'] !== 'normal')
-                                            <span class="text-xs px-1.5 py-0.5 rounded bg-{{ $task['priority_color'] }}-100 text-{{ $task['priority_color'] }}-700">
+                                            @php $pc = $priorityColorMap[$task['priority_color']] ?? $priorityColorMap['gray']; @endphp
+                                            <span class="text-xs px-1.5 py-0.5 rounded {{ $pc['bg'] }} {{ $pc['text'] }}">
                                                 {{ $task['priority'] }}
                                             </span>
                                         @endif
@@ -85,7 +112,7 @@
         </div>
     @endif
 
-    {{-- Drag-drop JS — SortableJS loaded from CDN (cannot use ES import in @script) --}}
+    {{-- Drag-drop JS — SortableJS loaded from CDN --}}
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
     @script
     <script>

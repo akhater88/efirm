@@ -14,6 +14,8 @@ class TasksBoardPage extends Page
 
     protected static ?string $slug = 'tasks-board';
 
+    protected ?string $maxContentWidth = 'full';
+
     public static function getNavigationLabel(): string
     {
         return __('task_workflows.task_board');
