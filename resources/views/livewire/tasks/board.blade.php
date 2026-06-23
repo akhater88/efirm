@@ -85,11 +85,10 @@
         </div>
     @endif
 
-    {{-- Drag-drop JS --}}
+    {{-- Drag-drop JS — SortableJS loaded from CDN (cannot use ES import in @script) --}}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
     @script
     <script>
-        import Sortable from 'sortablejs';
-
         document.querySelectorAll('.task-column').forEach(column => {
             Sortable.create(column, {
                 group: 'tasks',
