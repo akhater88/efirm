@@ -64,6 +64,7 @@ class MatterResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\MatterLawyersRelationManager::class,
             RelationManagers\DocumentsRelationManager::class,
             RelationManagers\TasksRelationManager::class,
             RelationManagers\AiGenerationsRelationManager::class,

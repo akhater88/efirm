@@ -6,6 +6,7 @@ use App\Enums\KpiMetric;
 use App\Enums\MatterStatus;
 use App\Models\KpiTarget;
 use App\Models\Matter;
+use App\Models\MatterLawyer;
 use App\Models\Team;
 use App\Models\TimeEntry;
 use App\Models\User;
@@ -25,6 +26,9 @@ class KpiService
             KpiMetric::MattersOpenedMonthly => $this->mattersOpened($userIds, $start, $end),
             KpiMetric::MattersClosedMonthly => $this->mattersClosed($userIds, $start, $end),
             KpiMetric::RevenueMonthly => $this->revenue($userIds, $start, $end),
+            KpiMetric::MattersAsLeadActive => $this->mattersAsLead($userIds),
+            KpiMetric::MattersAsSupportingActive => $this->mattersAsSupporting($userIds),
+            KpiMetric::MattersClosedAsLeadPeriod => $this->mattersClosedAsLead($userIds, $start, $end),
         };
     }
 
@@ -113,5 +117,33 @@ class KpiService
         }
 
         return $total;
+    }
+
+    private function mattersAsLead(array $userIds): string
+    {
+        return (string) MatterLawyer::whereIn('user_id', $userIds)
+            ->where('role', 'lead')
+            ->whereNull('unassigned_at')
+            ->whereHas('matter', fn ($q) => $q->whereNotIn('status', [MatterStatus::Closed, MatterStatus::Archived]))
+            ->count();
+    }
+
+    private function mattersAsSupporting(array $userIds): string
+    {
+        return (string) MatterLawyer::whereIn('user_id', $userIds)
+            ->where('role', 'supporting')
+            ->whereNull('unassigned_at')
+            ->whereHas('matter', fn ($q) => $q->whereNotIn('status', [MatterStatus::Closed, MatterStatus::Archived]))
+            ->count();
+    }
+
+    private function mattersClosedAsLead(array $userIds, Carbon $start, Carbon $end): string
+    {
+        return (string) MatterLawyer::whereIn('user_id', $userIds)
+            ->where('role', 'lead')
+            ->whereHas('matter', fn ($q) => $q->where('status', MatterStatus::Closed)
+                ->where('closed_at', '>=', $start)
+                ->where('closed_at', '<=', $end))
+            ->count();
     }
 }

@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'lawyer' => 'محامي',
+    'lawyers' => 'المحامون',
+    'profile' => 'الملف المهني',
+    'profiles' => 'الملفات المهنية',
+    'bar_admission_number' => 'رقم القيد',
+    'bar_admission_country' => 'بلد القيد',
+    'bar_admission_date' => 'تاريخ القيد',
+    'jurisdictions' => 'الاختصاصات',
+    'practice_areas' => 'مجالات الممارسة',
+    'languages_spoken' => 'اللغات',
+    'default_hourly_rate' => 'المعدل بالساعة',
+    'default_currency' => 'العملة الافتراضية',
+    'position_title' => 'المسمى الوظيفي',
+    'position_title_ar' => 'المسمى الوظيفي (عربي)',
+    'position_title_en' => 'المسمى الوظيفي (إنجليزي)',
+    'bio' => 'السيرة',
+    'bio_ar' => 'السيرة (عربي)',
+    'bio_en' => 'السيرة (إنجليزي)',
+    'joined_firm_date' => 'تاريخ الانضمام',
+    'status' => 'الحالة',
+    'status_active' => 'نشط',
+    'status_inactive' => 'غير نشط',
+    'status_on_leave' => 'في إجازة',
+    'created_success' => 'تم إنشاء الملف المهني بنجاح',
+    'updated_success' => 'تم تحديث الملف المهني بنجاح',
+    'deleted_success' => 'تم حذف الملف المهني بنجاح',
+
+    // Matter Lawyer Assignments (F-13.2)
+    'assign_lawyer' => 'تعيين محامي',
+    'unassign_lawyer' => 'إلغاء تعيين محامي',
+    'change_lead' => 'تغيير المحامي الرئيسي',
+    'lead_lawyer' => 'المحامي الرئيسي',
+    'supporting_lawyer' => 'محامي مساند',
+    'assigned_at' => 'تاريخ التعيين',
+    'unassigned_at' => 'تاريخ إلغاء التعيين',
+    'assigned_by' => 'تم التعيين بواسطة',
+    'lead_changed' => 'تم تغيير المحامي الرئيسي بنجاح',
+    'no_active_lead' => 'لا يوجد محامي رئيسي نشط',
+    'already_assigned' => 'هذا المحامي معيّن بالفعل في هذه القضية',
+
+    // F-13.6 Team tab
+    'team' => 'الفريق',
+    'role' => 'الدور',
+    'show_history' => 'عرض السجل',
+];

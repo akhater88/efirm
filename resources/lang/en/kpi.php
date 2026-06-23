@@ -16,6 +16,9 @@ return [
     'metric_matters_opened' => 'Matters Opened (Monthly)',
     'metric_matters_closed' => 'Matters Closed (Monthly)',
     'metric_revenue' => 'Revenue (Monthly)',
+    'metric_matters_as_lead' => 'Active Matters as Lead',
+    'metric_matters_as_supporting' => 'Active Matters as Supporting',
+    'metric_matters_closed_as_lead' => 'Matters Closed as Lead',
 
     'period_monthly' => 'Monthly',
     'period_quarterly' => 'Quarterly',

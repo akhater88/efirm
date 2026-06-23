@@ -32,6 +32,9 @@ class Hearing extends Model
         'next_action_required',
         'postponed_to_hearing_id',
         'our_attendee_user_id',
+        'assigned_lawyer_user_id',
+        'lawyer_assigned_at',
+        'lawyer_assigned_by_user_id',
         'created_by_user_id',
         'updated_by_user_id',
     ];
@@ -43,8 +46,27 @@ class Hearing extends Model
             'status' => HearingStatus::class,
             'hearing_date' => 'datetime',
             'held_at' => 'datetime',
+            'lawyer_assigned_at' => 'datetime',
             'deleted_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // Auto-default assigned_lawyer to Matter's Lead Lawyer on creation
+        static::creating(function (self $hearing) {
+            if (empty($hearing->assigned_lawyer_user_id) && $hearing->matter_id) {
+                $lead = MatterLawyer::where('matter_id', $hearing->matter_id)
+                    ->active()
+                    ->lead()
+                    ->first();
+
+                if ($lead) {
+                    $hearing->assigned_lawyer_user_id = $lead->user_id;
+                    $hearing->lawyer_assigned_at = now();
+                }
+            }
+        });
     }
 
     // --- Relationships ---
@@ -67,6 +89,16 @@ class Hearing extends Model
     public function attendee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'our_attendee_user_id');
+    }
+
+    public function assignedLawyer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_lawyer_user_id');
+    }
+
+    public function lawyerAssignedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'lawyer_assigned_by_user_id');
     }
 
     public function postponedTo(): BelongsTo
