@@ -157,6 +157,26 @@ return [
     'opposing_counsel' => 'محامي الخصم',
     'is_opposing_counsel' => 'محامي خصم',
 
+    // --- Court levels (per matter) [PROVISIONAL-FOUNDER-DECIDED] ---
+    'court_level_magistrate' => 'محكمة الصلح',
+    'court_level_first_instance' => 'محكمة البداية',
+    'court_level_appeal' => 'محكمة الاستئناف',
+    'court_level_cassation' => 'محكمة التمييز',
+    'court_level_specialized_commercial' => 'المحكمة التجارية المتخصصة',
+    'court_level_specialized_labor' => 'محكمة العمل المتخصصة',
+    'court_level_administrative' => 'المحكمة الإدارية',
+    'court_level_sharia' => 'المحكمة الشرعية',
+    'court_level_arbitration' => 'التحكيم',
+
+    // --- Judgment presence types [PROVISIONAL-FOUNDER-DECIDED] ---
+    'judgment_wijahi' => 'وجاهي',
+    'judgment_mithla_wijahi' => 'بمثابة الوجاهي',
+    'judgment_ghyabi' => 'غيابي',
+
+    // --- Appeal deadline ---
+    'appeal_deadline' => 'موعد الاستئناف',
+    'requires_input' => 'يتطلب إدخال يدوي',
+
     // --- Success messages ---
     'court_created_success' => 'تم إنشاء المحكمة بنجاح',
     'court_updated_success' => 'تم تحديث المحكمة بنجاح',

@@ -1,0 +1,21 @@
+id,court_tier,court_name_ar,court_name_en,governorate,jurisdiction_type
+1,Cassation,محكمة التمييز,Court of Cassation,Amman,National
+2,High Court,محكمة العدل العليا,High Court of Justice,Amman,National
+3,Appeal,محكمة استئناف عمان,Amman Court of Appeal,Amman,Regional
+4,Appeal,محكمة استئناف إربد,Irbid Court of Appeal,Irbid,Regional
+5,Appeal,محكمة استئناف معان,Ma'an Court of Appeal,Ma'an,Regional
+6,First Instance,محكمة بداية عمان (قصر العدل),Amman First Instance Court (Palace of Justice),Amman,Commercial & Civil
+7,First Instance,محكمة بداية غرب عمان,West Amman First Instance Court,Amman,Civil & Criminal
+8,First Instance,محكمة بداية شرق عمان,East Amman First Instance Court,Amman,Civil & Criminal
+9,First Instance,محكمة بداية جنوب عمان,South Amman First Instance Court,Amman,Civil & Criminal
+10,First Instance,محكمة بداية شمال عمان,North Amman First Instance Court,Amman,Civil & Criminal
+11,First Instance,محكمة بداية الزرقاء,Zarqa First Instance Court,Zarqa,Commercial & Civil
+12,First Instance,محكمة بداية إربد,Irbid First Instance Court,Irbid,Commercial & Civil
+13,First Instance,محكمة بداية العقبة,Aqaba First Instance Court,Aqaba,Commercial & Civil
+14,First Instance,محكمة بداية السلط,Salt First Instance Court,Balqa,Civil & Criminal
+15,First Instance,محكمة بداية الكرك,Karak First Instance Court,Karak,Civil & Criminal
+16,Magistrate,محكمة صلح عمان,Amman Magistrate Court,Amman,Small Claims
+17,Magistrate,محكمة صلح غرب عمان,West Amman Magistrate Court,Amman,Small Claims
+18,Magistrate,محكمة صلح الزرقاء,Zarqa Magistrate Court,Zarqa,Small Claims
+19,Magistrate,محكمة صلح إربد,Irbid Magistrate Court,Irbid,Small Claims
+20,Magistrate,محكمة صلح العقبة,Aqaba Magistrate Court,Aqaba,Small Claims

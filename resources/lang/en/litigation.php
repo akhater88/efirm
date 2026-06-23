@@ -157,6 +157,26 @@ return [
     'opposing_counsel' => 'Opposing Counsel',
     'is_opposing_counsel' => 'Is Opposing Counsel',
 
+    // --- Court levels (per matter) [PROVISIONAL-FOUNDER-DECIDED] ---
+    'court_level_magistrate' => 'Magistrate Court',
+    'court_level_first_instance' => 'First Instance Court',
+    'court_level_appeal' => 'Appeal Court',
+    'court_level_cassation' => 'Cassation Court',
+    'court_level_specialized_commercial' => 'Specialized Commercial Court',
+    'court_level_specialized_labor' => 'Specialized Labor Court',
+    'court_level_administrative' => 'Administrative Court',
+    'court_level_sharia' => 'Sharia Court',
+    'court_level_arbitration' => 'Arbitration',
+
+    // --- Judgment presence types [PROVISIONAL-FOUNDER-DECIDED] ---
+    'judgment_wijahi' => 'In-Presence',
+    'judgment_mithla_wijahi' => 'Deemed In-Presence',
+    'judgment_ghyabi' => 'Pure Default',
+
+    // --- Appeal deadline ---
+    'appeal_deadline' => 'Appeal Deadline',
+    'requires_input' => 'Requires Manual Input',
+
     // --- Success messages ---
     'court_created_success' => 'Court created successfully',
     'court_updated_success' => 'Court updated successfully',

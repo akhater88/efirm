@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\BelongsToWorkspace;
 use App\Enums\DecisionOutcome;
 use App\Enums\DecisionType;
+use App\Enums\JudgmentPresence;
 use Database\Factories\CourtReviewFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +28,8 @@ class CourtReview extends Model
         'summary_ar',
         'summary_en',
         'decision_document_id',
+        'judgment_presence',
+        'notified_date',
         'appealable',
         'appeal_deadline_date',
         'appeal_filed',
@@ -40,7 +43,9 @@ class CourtReview extends Model
         return [
             'decision_type' => DecisionType::class,
             'outcome' => DecisionOutcome::class,
+            'judgment_presence' => JudgmentPresence::class,
             'decision_date' => 'date',
+            'notified_date' => 'date',
             'appealable' => 'boolean',
             'appeal_deadline_date' => 'date',
             'appeal_filed' => 'boolean',
