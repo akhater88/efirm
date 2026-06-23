@@ -29,6 +29,15 @@ class Hearing extends Model
         'status',
         'held_at',
         'outcome',
+        'judge_statement_ar',
+        'judge_statement_en',
+        'outcome_summary_ar',
+        'outcome_summary_en',
+        'our_submissions_made',
+        'opposing_submissions_made',
+        'next_session_required_actions_ar',
+        'next_session_required_actions_en',
+        'session_attended_by',
         'next_action_required',
         'postponed_to_hearing_id',
         'our_attendee_user_id',
@@ -47,6 +56,7 @@ class Hearing extends Model
             'hearing_date' => 'datetime',
             'held_at' => 'datetime',
             'lawyer_assigned_at' => 'datetime',
+            'session_attended_by' => 'array',
             'deleted_at' => 'datetime',
         ];
     }
@@ -121,6 +131,11 @@ class Hearing extends Model
         return $this->hasMany(CourtReview::class);
     }
 
+    public function actionItems(): HasMany
+    {
+        return $this->hasMany(HearingActionItem::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
@@ -129,6 +144,13 @@ class Hearing extends Model
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by_user_id');
+    }
+
+    // --- Accessors ---
+
+    public function isHeld(): bool
+    {
+        return $this->status === HearingStatus::Held;
     }
 
     // --- Scopes ---

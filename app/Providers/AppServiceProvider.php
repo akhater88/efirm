@@ -22,6 +22,7 @@ use App\Models\ExternalCalendarEvent;
 use App\Models\FormSubmission;
 use App\Models\FormTemplate;
 use App\Models\Hearing;
+use App\Models\HearingActionItem;
 use App\Models\Invoice;
 use App\Models\Judge;
 use App\Models\LawyerProfile;
@@ -39,6 +40,7 @@ use App\Models\Team;
 use App\Models\TrustAccount;
 use App\Models\User;
 use App\Models\Workspace;
+use App\Observers\HearingActionItemObserver;
 use App\Observers\WorkspaceObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -53,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Workspace::observe(WorkspaceObserver::class);
+        HearingActionItem::observe(HearingActionItemObserver::class);
 
         // Polymorphic morph map — short stable keys for all polymorphic relationships.
         // New entities added here when their Surge builds (S-08 litigation, S-09 financial).
@@ -93,6 +96,7 @@ class AppServiceProvider extends ServiceProvider
             'external_calendar_event' => ExternalCalendarEvent::class,
             'audit_log' => AuditLog::class,
             'expert_report' => ExpertReport::class,
+            'hearing_action_item' => HearingActionItem::class,
         ]);
     }
 }

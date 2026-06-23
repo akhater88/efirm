@@ -249,9 +249,31 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     // Litigation — Hearings [HARD-STOP-LAWYER-REQUIRED]
     Route::apiResource('hearings', HearingController::class);
 
+    // Hearing Session History (F-FIX-02.1, Decision #28)
+    Route::put('hearings/{hearing}/session', [HearingController::class, 'recordSession'])
+        ->name('hearings.session.record');
+    Route::get('matters/{matter}/sessions-timeline', [HearingController::class, 'sessionsTimeline'])
+        ->name('matters.sessions-timeline');
+    Route::post('hearings/{hearing}/action-items', [HearingController::class, 'storeActionItem'])
+        ->name('hearings.action-items.store');
+    Route::put('hearing-action-items/{hearingActionItem}', [HearingController::class, 'updateActionItem'])
+        ->name('hearing-action-items.update');
+    Route::delete('hearing-action-items/{hearingActionItem}', [HearingController::class, 'destroyActionItem'])
+        ->name('hearing-action-items.destroy');
+
+    // Court Review Trainee Dispatch (F-FIX-02.2, Decision #29) — must be before apiResource
+    Route::get('court-reviews/dispatched-to-me', [CourtReviewController::class, 'dispatchedToMe'])
+        ->name('court-reviews.dispatched-to-me');
+
     // Litigation — Court Reviews [HARD-STOP-LAWYER-REQUIRED]
     Route::apiResource('court-reviews', CourtReviewController::class)
         ->parameters(['court-reviews' => 'courtReview']);
+
+    // Court Review Trainee Dispatch actions (F-FIX-02.2, Decision #29)
+    Route::post('court-reviews/{courtReview}/dispatch', [CourtReviewController::class, 'dispatch'])
+        ->name('court-reviews.dispatch');
+    Route::post('court-reviews/{courtReview}/complete', [CourtReviewController::class, 'complete'])
+        ->name('court-reviews.complete');
 
     // Litigation — Service Log [HARD-STOP-LAWYER-REQUIRED]
     Route::apiResource('service-log-entries', ServiceLogEntryController::class)
