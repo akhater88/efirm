@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\BelongsToWorkspace;
+use App\Enums\CourtLevel;
 use App\Enums\LitigationStatus;
 use App\Enums\MatterLawyerRole;
 use App\Enums\MatterStatus;
@@ -47,6 +48,7 @@ class Matter extends Model
         'court_case_number',
         'case_number_internal',
         'litigation_status',
+        'court_level',
         'filed_date',
         'next_hearing_date',
         'representation_role',
@@ -61,6 +63,7 @@ class Matter extends Model
             'status' => MatterStatus::class,
             'is_litigation' => 'boolean',
             'litigation_status' => LitigationStatus::class,
+            'court_level' => CourtLevel::class,
             'representation_role' => RepresentationRole::class,
             'filed_date' => 'date',
             'next_hearing_date' => 'date',

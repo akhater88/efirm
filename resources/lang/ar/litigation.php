@@ -20,9 +20,13 @@ return [
     'representation_role' => 'صفة التمثيل',
 
     // --- Litigation statuses [PROVISIONAL-FOUNDER-DECIDED] ---
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #1
     'status_pre_filing' => 'قبل رفع الدعوى',
+    'status_fee_payment_and_registration' => 'قيد الدعوى ودفع الرسوم',
     'status_filed' => 'مرفوعة',
+    'status_notification_pending' => 'بانتظار التبليغ',
     'status_in_evidence' => 'في مرحلة الإثبات',
+    'status_referred_to_expert' => 'الإحالة للخبرة',
     'status_in_judgment' => 'في مرحلة الحكم',
     'status_appealed' => 'مستأنفة',
     'status_closed_won' => 'مغلقة (ربح)',
@@ -79,8 +83,12 @@ return [
     'our_attendee' => 'الحاضر عنّا',
 
     // --- Hearing types [PROVISIONAL-FOUNDER-DECIDED] ---
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #2
     'hearing_type_first_session' => 'الجلسة الأولى',
-    'hearing_type_evidence' => 'إثبات',
+    'hearing_type_evidence' => 'إثبات', // [DEPRECATED] — تم تقسيمه إلى بينات المدعي/المدعى عليه
+    'hearing_type_plaintiff_evidence' => 'بينات المدعي',
+    'hearing_type_defendant_evidence' => 'بينات المدعى عليه',
+    'hearing_type_notification_session' => 'جلسة تبليغ',
     'hearing_type_expert_witness' => 'شاهد خبير',
     'hearing_type_witness_testimony' => 'شهادة شهود',
     'hearing_type_final_arguments' => 'المرافعات الختامية',
@@ -156,6 +164,26 @@ return [
     // --- Opposing Counsel ---
     'opposing_counsel' => 'محامي الخصم',
     'is_opposing_counsel' => 'محامي خصم',
+
+    // --- Court levels (per matter) [PROVISIONAL-FOUNDER-DECIDED] ---
+    'court_level_magistrate' => 'محكمة الصلح',
+    'court_level_first_instance' => 'محكمة البداية',
+    'court_level_appeal' => 'محكمة الاستئناف',
+    'court_level_cassation' => 'محكمة التمييز',
+    'court_level_specialized_commercial' => 'المحكمة التجارية المتخصصة',
+    'court_level_specialized_labor' => 'محكمة العمل المتخصصة',
+    'court_level_administrative' => 'المحكمة الإدارية',
+    'court_level_sharia' => 'المحكمة الشرعية',
+    'court_level_arbitration' => 'التحكيم',
+
+    // --- Judgment presence types [PROVISIONAL-FOUNDER-DECIDED] ---
+    'judgment_wijahi' => 'وجاهي',
+    'judgment_mithla_wijahi' => 'بمثابة الوجاهي',
+    'judgment_ghyabi' => 'غيابي',
+
+    // --- Appeal deadline ---
+    'appeal_deadline' => 'موعد الاستئناف',
+    'requires_input' => 'يتطلب إدخال يدوي',
 
     // --- Success messages ---
     'court_created_success' => 'تم إنشاء المحكمة بنجاح',

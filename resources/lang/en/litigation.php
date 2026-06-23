@@ -20,9 +20,13 @@ return [
     'representation_role' => 'Representation Role',
 
     // --- Litigation statuses [PROVISIONAL-FOUNDER-DECIDED] ---
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #1
     'status_pre_filing' => 'Pre-Filing',
+    'status_fee_payment_and_registration' => 'Fee Payment & Registration',
     'status_filed' => 'Filed',
+    'status_notification_pending' => 'Notification Pending',
     'status_in_evidence' => 'In Evidence',
+    'status_referred_to_expert' => 'Referred to Expert',
     'status_in_judgment' => 'In Judgment',
     'status_appealed' => 'Appealed',
     'status_closed_won' => 'Closed (Won)',
@@ -79,8 +83,12 @@ return [
     'our_attendee' => 'Our Attendee',
 
     // --- Hearing types [PROVISIONAL-FOUNDER-DECIDED] ---
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #2
     'hearing_type_first_session' => 'First Session',
-    'hearing_type_evidence' => 'Evidence',
+    'hearing_type_evidence' => 'Evidence', // [DEPRECATED] — split into plaintiff/defendant per Decision #2
+    'hearing_type_plaintiff_evidence' => 'Plaintiff Evidence',
+    'hearing_type_defendant_evidence' => 'Defendant Evidence',
+    'hearing_type_notification_session' => 'Notification Session',
     'hearing_type_expert_witness' => 'Expert Witness',
     'hearing_type_witness_testimony' => 'Witness Testimony',
     'hearing_type_final_arguments' => 'Final Arguments',
@@ -156,6 +164,26 @@ return [
     // --- Opposing Counsel ---
     'opposing_counsel' => 'Opposing Counsel',
     'is_opposing_counsel' => 'Is Opposing Counsel',
+
+    // --- Court levels (per matter) [PROVISIONAL-FOUNDER-DECIDED] ---
+    'court_level_magistrate' => 'Magistrate Court',
+    'court_level_first_instance' => 'First Instance Court',
+    'court_level_appeal' => 'Appeal Court',
+    'court_level_cassation' => 'Cassation Court',
+    'court_level_specialized_commercial' => 'Specialized Commercial Court',
+    'court_level_specialized_labor' => 'Specialized Labor Court',
+    'court_level_administrative' => 'Administrative Court',
+    'court_level_sharia' => 'Sharia Court',
+    'court_level_arbitration' => 'Arbitration',
+
+    // --- Judgment presence types [PROVISIONAL-FOUNDER-DECIDED] ---
+    'judgment_wijahi' => 'In-Presence',
+    'judgment_mithla_wijahi' => 'Deemed In-Presence',
+    'judgment_ghyabi' => 'Pure Default',
+
+    // --- Appeal deadline ---
+    'appeal_deadline' => 'Appeal Deadline',
+    'requires_input' => 'Requires Manual Input',
 
     // --- Success messages ---
     'court_created_success' => 'Court created successfully',

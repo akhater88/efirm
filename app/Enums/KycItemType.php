@@ -2,6 +2,12 @@
 
 namespace App\Enums;
 
+/**
+ * KYC item types for person and organization contacts.
+ *
+ * Corporate items extended per advisor input: docs/02_advisor_meeting_log.md
+ * Conversation 1, Decision #12 (add Company Registration Certificate and Signatory Authority Document).
+ */
 // [ADVISOR-REVIEW-RECOMMENDED] — item types should be reviewed by legal advisor
 // for Levant regulatory alignment
 enum KycItemType: string
@@ -21,6 +27,8 @@ enum KycItemType: string
     case BeneficialOwnerDeclaration = 'beneficial_owner_declaration';
     case BankCertificate = 'bank_certificate';
     case AuthorizedSignatoriesList = 'authorized_signatories_list';
+    case CompanyRegistrationCertificate = 'company_registration_certificate'; // Decision #12 — شهادة تسجيل الشركة
+    case SignatoryAuthorityDocument = 'signatory_authority_document'; // Decision #12 — شهادة مفوضين بالتوقيع
 
     public function label(): string
     {
@@ -35,7 +43,9 @@ enum KycItemType: string
             self::SourceOfFundsDeclaration => 'person',
             self::CommercialRegistration, self::ArticlesOfAssociation,
             self::BeneficialOwnerDeclaration, self::BankCertificate,
-            self::AuthorizedSignatoriesList => 'organization',
+            self::AuthorizedSignatoriesList,
+            self::CompanyRegistrationCertificate,
+            self::SignatoryAuthorityDocument => 'organization',
         };
     }
 

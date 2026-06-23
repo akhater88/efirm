@@ -17,6 +17,7 @@ use App\Models\DocumentTemplate;
 use App\Models\DocumentVersion;
 use App\Models\EmailAttachment;
 use App\Models\EmailIntegration;
+use App\Models\ExpertReport;
 use App\Models\ExternalCalendarEvent;
 use App\Models\FormSubmission;
 use App\Models\FormTemplate;
@@ -91,6 +92,7 @@ class AppServiceProvider extends ServiceProvider
             'calendar_integration' => CalendarIntegration::class,
             'external_calendar_event' => ExternalCalendarEvent::class,
             'audit_log' => AuditLog::class,
+            'expert_report' => ExpertReport::class,
         ]);
     }
 }
