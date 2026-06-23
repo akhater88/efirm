@@ -17,18 +17,28 @@ class Workspace extends Model
     /** @use HasFactory<WorkspaceFactory> */
     use HasFactory, HasUlids, SoftDeletes;
 
+    protected $attributes = [
+        'pdpl_consent_obtained' => false,
+    ];
+
     protected $fillable = [
         'name',
         'slug',
         'default_locale',
         'created_by_user_id',
         'updated_by_user_id',
+        // PDPL consent fields — per docs/02_advisor_meeting_log.md Decision #8, #21
+        'pdpl_consent_obtained',
+        'pdpl_consent_date',
+        'pdpl_consent_text_version',
     ];
 
     protected function casts(): array
     {
         return [
             'deleted_at' => 'datetime',
+            'pdpl_consent_obtained' => 'boolean',
+            'pdpl_consent_date' => 'datetime',
         ];
     }
 

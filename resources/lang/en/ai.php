@@ -8,8 +8,8 @@ return [
     'type_translate' => 'Translate',
     'type_explain' => 'Explain',
 
-    // [PROVISIONAL-FOUNDER-DECIDED] — must be replaced by lawyer-drafted text
-    'disclaimer' => 'AI-generated text. Review before use. Not legal advice. This product does not establish an attorney-client relationship.',
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #10
+    'disclaimer' => 'This is an internal drafting aid for qualified legal professionals. It does not replace independent legal analysis.',
 
     'accept' => 'Accept',
     'reject' => 'Reject',

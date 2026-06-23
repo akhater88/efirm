@@ -50,7 +50,7 @@ it('starts a KYC checklist for an organization and seeds org items', function ()
     $response->assertCreated();
 
     $checklist = KycChecklist::where('contact_id', $org->id)->first();
-    expect($checklist->items)->toHaveCount(5); // 5 org items
+    expect($checklist->items)->toHaveCount(7); // 7 org items (5 original + 2 from Decision #12)
 });
 
 it('prevents starting a second checklist while one is active', function () {

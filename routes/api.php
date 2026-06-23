@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\DocumentShareController;
 use App\Http\Controllers\Api\V1\DocumentTemplateController;
 use App\Http\Controllers\Api\V1\EmailIntegrationController;
+use App\Http\Controllers\Api\V1\ExpertReportController;
 use App\Http\Controllers\Api\V1\FeedbackController;
 use App\Http\Controllers\Api\V1\FormSubmissionController;
 use App\Http\Controllers\Api\V1\FormTemplateController;
@@ -253,6 +254,10 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     // Litigation — Service Log [HARD-STOP-LAWYER-REQUIRED]
     Route::apiResource('service-log-entries', ServiceLogEntryController::class)
         ->parameters(['service-log-entries' => 'serviceLogEntry']);
+
+    // Litigation — Expert Reports [HARD-STOP-LAWYER-REQUIRED] (F-FIX-01.2, Decisions #3, #19)
+    Route::apiResource('expert-reports', ExpertReportController::class)
+        ->parameters(['expert-reports' => 'expert_report']);
 
     // Financial — Chart of Accounts
     Route::apiResource('accounts', AccountController::class);

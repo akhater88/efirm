@@ -24,11 +24,16 @@ return [
     'trust_bank_account_number' => 'رقم الحساب البنكي',
     'trust_entry_deposit' => 'إيداع',
     'trust_entry_withdrawal' => 'سحب',
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decisions #6, #7
+    'trust_entry_adjustment' => 'قيد تسوية',
     'trust_amount_must_be_positive' => 'يجب أن يكون المبلغ أكبر من صفر.',
+    'trust_adjustment_amount_non_zero' => 'مبلغ التسوية يجب ألا يكون صفراً.',
+    'trust_adjustment_description_required' => 'قيود التسوية تتطلب وصفاً لا يقل عن 10 أحرف يوضح سبب التصحيح.',
     'trust_insufficient_balance' => 'رصيد حساب الأمانة غير كافٍ.',
     'trust_ledger_entry_immutable' => 'لا يمكن تعديل أو حذف قيود دفتر الأمانات.',
     'trust_deposit_success' => 'تم تسجيل الإيداع بنجاح.',
     'trust_withdrawal_success' => 'تم تسجيل السحب بنجاح.',
+    'trust_adjustment_success' => 'تم تسجيل قيد التسوية بنجاح.',
 
     // Journal Entries
     'journal_entry' => 'قيد يومية',

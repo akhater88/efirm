@@ -8,8 +8,8 @@ return [
     'type_translate' => 'ترجمة',
     'type_explain' => 'شرح',
 
-    // [PROVISIONAL-FOUNDER-DECIDED] — must be replaced by lawyer-drafted text
-    'disclaimer' => 'نص مولّد بالذكاء الاصطناعي. راجعه قبل الاستخدام. ليس مشورة قانونية. هذا المنتج لا ينشئ علاقة محامٍ-موكل.',
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #10
+    'disclaimer' => 'هذه أداة صياغة داخلية للمحامين المؤهلين. لا تغني عن التحليل القانوني المستقل.',
 
     'accept' => 'قبول',
     'reject' => 'رفض',

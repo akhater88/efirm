@@ -36,6 +36,9 @@ return [
     'item_type_beneficial_owner_declaration' => 'Beneficial Owner Declaration',
     'item_type_bank_certificate' => 'Bank Certificate',
     'item_type_authorized_signatories_list' => 'Authorized Signatories List',
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #12
+    'item_type_company_registration_certificate' => 'Company Registration Certificate',
+    'item_type_signatory_authority_document' => 'Signatory Authority Document',
 
     'created_success' => 'KYC checklist started',
     'item_updated' => 'KYC item updated',

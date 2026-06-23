@@ -24,11 +24,16 @@ return [
     'trust_bank_account_number' => 'Bank Account Number',
     'trust_entry_deposit' => 'Deposit',
     'trust_entry_withdrawal' => 'Withdrawal',
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decisions #6, #7
+    'trust_entry_adjustment' => 'Adjustment',
     'trust_amount_must_be_positive' => 'Amount must be greater than zero.',
+    'trust_adjustment_amount_non_zero' => 'Adjustment amount must not be zero.',
+    'trust_adjustment_description_required' => 'Adjustment entries require a description of at least 10 characters explaining the reason for the correction.',
     'trust_insufficient_balance' => 'Insufficient trust account balance.',
     'trust_ledger_entry_immutable' => 'Trust ledger entries cannot be modified or deleted.',
     'trust_deposit_success' => 'Deposit recorded successfully.',
     'trust_withdrawal_success' => 'Withdrawal recorded successfully.',
+    'trust_adjustment_success' => 'Adjustment recorded successfully.',
 
     // Journal Entries
     'journal_entry' => 'Journal Entry',

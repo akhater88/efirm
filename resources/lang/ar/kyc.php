@@ -36,6 +36,9 @@ return [
     'item_type_beneficial_owner_declaration' => 'إقرار المستفيد الحقيقي',
     'item_type_bank_certificate' => 'شهادة مصرفية',
     'item_type_authorized_signatories_list' => 'قائمة المفوضين بالتوقيع',
+    // Per advisor input: docs/02_advisor_meeting_log.md Conversation 1, Decision #12
+    'item_type_company_registration_certificate' => 'شهادة تسجيل الشركة',
+    'item_type_signatory_authority_document' => 'شهادة مفوضين بالتوقيع',
 
     'created_success' => 'تم بدء التحقق من العميل',
     'item_updated' => 'تم تحديث بند التحقق',
