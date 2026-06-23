@@ -24,6 +24,8 @@ class HearingResource extends JsonResource
             'next_action_required' => $this->next_action_required,
             'postponed_to_hearing_id' => $this->postponed_to_hearing_id,
             'our_attendee_user_id' => $this->our_attendee_user_id,
+            'assigned_lawyer_user_id' => $this->assigned_lawyer_user_id,
+            'lawyer_assigned_at' => $this->lawyer_assigned_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
