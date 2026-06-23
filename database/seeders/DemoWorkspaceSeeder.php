@@ -11,6 +11,8 @@ use App\Enums\Role;
 use App\Models\Contact;
 use App\Models\Document;
 use App\Models\Matter;
+use App\Models\Task;
+use App\Models\TaskWorkflow;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
@@ -550,7 +552,7 @@ class DemoWorkspaceSeeder extends Seeder
 
         // ─── Tasks with Workflow Assignments ──────────────────────────────────
 
-        $genericWorkflow = \App\Models\TaskWorkflow::where('workspace_id', $workspace->id)
+        $genericWorkflow = TaskWorkflow::where('workspace_id', $workspace->id)
             ->where('is_default', true)
             ->first();
 
@@ -578,7 +580,7 @@ class DemoWorkspaceSeeder extends Seeder
             ];
 
             foreach ($tasks as $taskData) {
-                \App\Models\Task::create([
+                Task::create([
                     'workspace_id' => $workspace->id,
                     'title' => $taskData['title'],
                     'taskable_type' => 'matter',

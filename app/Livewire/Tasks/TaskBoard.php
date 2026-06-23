@@ -71,9 +71,29 @@ class TaskBoard extends Component
         $stages = $workflow->stages->sortBy('sort_order');
 
         $this->columns = $stages->map(function (TaskWorkflowStage $stage) {
-            $query = Task::where('task_workflow_id', $this->workflowId)
-                ->where('current_stage_id', $stage->id)
-                ->with(['assignedTo', 'taskable']);
+            // Show tasks assigned to this workflow+stage,
+            // PLUS legacy tasks (no workflow) mapped by status → stage key
+            $query = Task::where(function ($q) use ($stage) {
+                // Tasks explicitly in this workflow + stage
+                $q->where('task_workflow_id', $this->workflowId)
+                    ->where('current_stage_id', $stage->id);
+
+                // Also include legacy tasks (no workflow) mapped by status to stage key
+                $legacyStatusMap = [
+                    'todo' => 'todo',
+                    'in_progress' => 'in_progress',
+                    'blocked' => 'in_progress',
+                    'done' => 'done',
+                    'cancelled' => 'done',
+                ];
+                $matchingStatuses = array_keys(array_filter($legacyStatusMap, fn ($v) => $v === $stage->key));
+                if (! empty($matchingStatuses)) {
+                    $q->orWhere(function ($q2) use ($matchingStatuses) {
+                        $q2->whereNull('task_workflow_id')
+                            ->whereIn('status', $matchingStatuses);
+                    });
+                }
+            })->with(['assignedTo', 'taskable']);
 
             if ($this->taskableType && $this->taskableId) {
                 $query->where('taskable_type', $this->taskableType)
