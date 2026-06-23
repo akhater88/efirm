@@ -2,21 +2,38 @@
 
 namespace Database\Seeders;
 
+use App\Enums\CourtLevel;
+use App\Enums\CourtType;
 use App\Enums\DocumentLanguage;
 use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
+use App\Enums\HearingStatus;
+use App\Enums\HearingType;
+use App\Enums\LawyerProfileStatus;
+use App\Enums\LitigationStatus;
 use App\Enums\MatterStatus;
+use App\Enums\MatterTypeEnum;
+use App\Enums\ObligationStatus;
+use App\Enums\ObligationType;
 use App\Enums\PracticeArea;
+use App\Enums\RepresentationRole;
+use App\Enums\ResponsibleParty;
 use App\Enums\Role;
 use App\Models\Contact;
+use App\Models\Court;
 use App\Models\Document;
+use App\Models\Hearing;
+use App\Models\LawyerProfile;
 use App\Models\Matter;
+use App\Models\Obligation;
 use App\Models\Task;
 use App\Models\TaskWorkflow;
+use App\Models\TimeEntry;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
 use App\Services\DocumentService;
+use App\Services\KycService;
 use Illuminate\Database\Seeder;
 
 class DemoWorkspaceSeeder extends Seeder
@@ -598,6 +615,298 @@ class DemoWorkspaceSeeder extends Seeder
             }
         }
 
+        // ─── Lawyer Profiles ──────────────────────────────────────────────────
+
+        LawyerProfile::create([
+            'user_id' => $owner->id,
+            'bar_admission_number' => 'JBA-2015-1234',
+            'bar_admission_country' => 'JO',
+            'bar_admission_date' => '2015-03-15',
+            'jurisdictions' => [['country' => 'JO'], ['country' => 'AE']],
+            'practice_areas' => ['commercial_contracts', 'mna'],
+            'languages_spoken' => ['ar', 'en'],
+            'default_hourly_rate' => '200.00',
+            'default_currency' => 'USD',
+            'position_title_ar' => 'محامي شريك',
+            'position_title_en' => 'Managing Partner',
+            'status' => LawyerProfileStatus::Active,
+            'joined_firm_date' => '2015-03-01',
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        LawyerProfile::create([
+            'user_id' => $admin->id,
+            'bar_admission_number' => 'JBA-2018-5678',
+            'bar_admission_country' => 'JO',
+            'bar_admission_date' => '2018-09-01',
+            'jurisdictions' => [['country' => 'JO']],
+            'practice_areas' => ['commercial_contracts', 'corporate_governance'],
+            'languages_spoken' => ['ar', 'en'],
+            'default_hourly_rate' => '150.00',
+            'default_currency' => 'USD',
+            'position_title_ar' => 'محامية أولى',
+            'position_title_en' => 'Senior Associate',
+            'status' => LawyerProfileStatus::Active,
+            'joined_firm_date' => '2018-09-01',
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        LawyerProfile::create([
+            'user_id' => $member->id,
+            'bar_admission_number' => 'JBA-2021-9012',
+            'bar_admission_country' => 'JO',
+            'bar_admission_date' => '2021-06-15',
+            'jurisdictions' => [['country' => 'JO']],
+            'practice_areas' => ['commercial_contracts'],
+            'languages_spoken' => ['ar', 'en', 'fr'],
+            'default_hourly_rate' => '100.00',
+            'default_currency' => 'USD',
+            'position_title_ar' => 'محامية',
+            'position_title_en' => 'Associate',
+            'status' => LawyerProfileStatus::Active,
+            'joined_firm_date' => '2021-06-15',
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        // ─── Litigation Matter with Court + Hearings ─────────────────────────
+
+        $litigationMatter = Matter::create([
+            'workspace_id' => $workspace->id,
+            'title' => 'قضية تجارية — شركة الأردن ضد شركة النور',
+            'client_id' => $jordanSupplies->id,
+            'practice_area' => PracticeArea::CommercialContracts,
+            'status' => MatterStatus::Active,
+            'stage' => 'بينات',
+            'description' => 'نزاع تجاري حول عقد توريد بين شركة الأردن للتوريدات وشركة النور للتكنولوجيا. قيمة المطالبة JOD 75,000.',
+            'internal_reference' => 'MAT-2026-005',
+            'lead_lawyer_id' => $admin->id,
+            'opened_at' => now()->subMonths(2),
+            'is_litigation' => true,
+            'matter_type' => MatterTypeEnum::CommercialLitigation,
+            'litigation_status' => LitigationStatus::InEvidence,
+            'court_level' => CourtLevel::FirstInstance,
+            'court_case_number' => '2026/أساس/1234',
+            'filed_date' => now()->subMonths(2),
+            'representation_role' => RepresentationRole::Plaintiff,
+            'tags' => ['نزاع', 'توريد', 'أردن'],
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $admin->id,
+        ]);
+
+        $litigationMatter->counterparties()->attach($alNoorTech->id, ['representing' => 'they_represent']);
+        $litigationMatter->lawyers()->attach($admin->id, ['role' => 'lead']);
+        $litigationMatter->lawyers()->attach($member->id, ['role' => 'associate']);
+
+        $ammanCourt = Court::create([
+            'workspace_id' => $workspace->id,
+            'name_ar' => 'محكمة بداية عمّان',
+            'name_en' => 'Amman First Instance Court',
+            'court_type' => CourtType::FirstInstance,
+            'jurisdiction_country' => 'JO',
+            'city' => 'Amman',
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        // Hearing 1: Held (past)
+        $hearing1 = Hearing::create([
+            'workspace_id' => $workspace->id,
+            'matter_id' => $litigationMatter->id,
+            'hearing_date' => now()->subWeeks(3),
+            'court_id' => $ammanCourt->id,
+            'hearing_type' => HearingType::FirstSession,
+            'status' => HearingStatus::Held,
+            'held_at' => now()->subWeeks(3),
+            'outcome' => 'تم تحديد جلسة بينات المدعي',
+            'assigned_lawyer_user_id' => $admin->id,
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        // Hearing 2: Scheduled (future)
+        $hearing2 = Hearing::create([
+            'workspace_id' => $workspace->id,
+            'matter_id' => $litigationMatter->id,
+            'hearing_date' => now()->addWeeks(2),
+            'court_id' => $ammanCourt->id,
+            'hearing_type' => HearingType::PlaintiffEvidence,
+            'status' => HearingStatus::Scheduled,
+            'assigned_lawyer_user_id' => $admin->id,
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        // Hearing 3: Postponed (linked to hearing 2)
+        Hearing::create([
+            'workspace_id' => $workspace->id,
+            'matter_id' => $litigationMatter->id,
+            'hearing_date' => now()->subWeek(),
+            'court_id' => $ammanCourt->id,
+            'hearing_type' => HearingType::NotificationSession,
+            'status' => HearingStatus::Postponed,
+            'postponed_to_hearing_id' => $hearing2->id,
+            'postponement_reason_ar' => 'عدم حضور الطرف المدعى عليه رغم تبليغه حسب الأصول',
+            'postponement_initiated_by' => 'court',
+            'assigned_lawyer_user_id' => $admin->id,
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        // ─── Obligations ─────────────────────────────────────────────────────
+
+        Obligation::create([
+            'workspace_id' => $workspace->id,
+            'document_id' => $spaDoc->id,
+            'title' => 'دفعة أولى — 50% من ثمن الشراء',
+            'obligation_type' => ObligationType::Payment,
+            'responsible_party' => ResponsibleParty::Counterparty,
+            'due_date' => now()->addDays(15),
+            'status' => ObligationStatus::Pending,
+            'monetary_amount' => 250000,
+            'monetary_currency' => 'USD',
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        Obligation::create([
+            'workspace_id' => $workspace->id,
+            'document_id' => $spaDoc->id,
+            'title' => 'تسليم مستندات الفحص النافي للجهالة',
+            'obligation_type' => ObligationType::Delivery,
+            'responsible_party' => ResponsibleParty::Us,
+            'due_date' => now()->subDays(5),
+            'status' => ObligationStatus::Overdue,
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        Obligation::create([
+            'workspace_id' => $workspace->id,
+            'document_id' => $licenseDoc->id,
+            'title' => 'دفع رسوم الترخيص السنوية',
+            'obligation_type' => ObligationType::Payment,
+            'responsible_party' => ResponsibleParty::Us,
+            'due_date' => now()->subWeeks(2),
+            'status' => ObligationStatus::Completed,
+            'completed_at' => now()->subWeeks(2),
+            'completed_by_id' => $owner->id,
+            'monetary_amount' => 15000,
+            'monetary_currency' => 'USD',
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        Obligation::create([
+            'workspace_id' => $workspace->id,
+            'document_id' => $supplyDoc->id,
+            'title' => 'إخطار المورد بجدول التسليم ربع السنوي',
+            'obligation_type' => ObligationType::Notification,
+            'responsible_party' => ResponsibleParty::Mutual,
+            'due_date' => now()->addDays(30),
+            'status' => ObligationStatus::Pending,
+            'created_by_user_id' => $admin->id,
+            'updated_by_user_id' => $admin->id,
+        ]);
+
+        // ─── Time Entries ────────────────────────────────────────────────────
+
+        TimeEntry::create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $admin->id,
+            'matter_id' => $spaMatter->id,
+            'description' => 'مراجعة مسودة اتفاقية شراء الأسهم',
+            'duration_minutes' => 120,
+            'started_at' => now()->subDays(2)->setHour(9)->setMinute(0),
+            'ended_at' => now()->subDays(2)->setHour(11)->setMinute(0),
+            'is_billable' => true,
+            'billing_rate_per_hour' => '150.00',
+            'currency' => 'USD',
+            'created_by_user_id' => $admin->id,
+            'updated_by_user_id' => $admin->id,
+        ]);
+
+        TimeEntry::create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $member->id,
+            'matter_id' => $ndaMatter->id,
+            'description' => 'Drafting mutual NDA — first pass',
+            'duration_minutes' => 90,
+            'started_at' => now()->subDays(3)->setHour(14)->setMinute(0),
+            'ended_at' => now()->subDays(3)->setHour(15)->setMinute(30),
+            'is_billable' => true,
+            'billing_rate_per_hour' => '100.00',
+            'currency' => 'USD',
+            'created_by_user_id' => $member->id,
+            'updated_by_user_id' => $member->id,
+        ]);
+
+        TimeEntry::create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $owner->id,
+            'matter_id' => $spaMatter->id,
+            'description' => 'اجتماع مع العميل لمناقشة شروط الصفقة',
+            'duration_minutes' => 60,
+            'started_at' => now()->subDays(1)->setHour(10)->setMinute(0),
+            'ended_at' => now()->subDays(1)->setHour(11)->setMinute(0),
+            'is_billable' => true,
+            'billing_rate_per_hour' => '200.00',
+            'currency' => 'USD',
+            'created_by_user_id' => $owner->id,
+            'updated_by_user_id' => $owner->id,
+        ]);
+
+        TimeEntry::create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $admin->id,
+            'matter_id' => $supplyMatter->id,
+            'description' => 'Review supply agreement pricing schedule',
+            'duration_minutes' => 45,
+            'started_at' => now()->subDays(1)->setHour(14)->setMinute(0),
+            'ended_at' => now()->subDays(1)->setHour(14)->setMinute(45),
+            'is_billable' => true,
+            'billing_rate_per_hour' => '150.00',
+            'currency' => 'USD',
+            'created_by_user_id' => $admin->id,
+            'updated_by_user_id' => $admin->id,
+        ]);
+
+        TimeEntry::create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $member2->id,
+            'matter_id' => $supplyMatter->id,
+            'description' => 'بحث قانوني حول شروط الضمانات في عقود التوريد',
+            'duration_minutes' => 180,
+            'started_at' => now()->subDays(4)->setHour(9)->setMinute(0),
+            'ended_at' => now()->subDays(4)->setHour(12)->setMinute(0),
+            'is_billable' => true,
+            'billing_rate_per_hour' => '100.00',
+            'currency' => 'USD',
+            'created_by_user_id' => $member2->id,
+            'updated_by_user_id' => $member2->id,
+        ]);
+
+        TimeEntry::create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $admin->id,
+            'matter_id' => $litigationMatter->id,
+            'description' => 'إعداد لائحة الدعوى وتقديمها للمحكمة',
+            'duration_minutes' => 240,
+            'started_at' => now()->subWeeks(6)->setHour(8)->setMinute(0),
+            'ended_at' => now()->subWeeks(6)->setHour(12)->setMinute(0),
+            'is_billable' => true,
+            'billing_rate_per_hour' => '150.00',
+            'currency' => 'USD',
+            'created_by_user_id' => $admin->id,
+            'updated_by_user_id' => $admin->id,
+        ]);
+
+        // ─── KYC Checklist ───────────────────────────────────────────────────
+
+        app(KycService::class)->start($jordanSupplies, $owner);
+
         // ─── Summary ──────────────────────────────────────────────────────────
 
         $this->command->info('');
@@ -610,10 +919,16 @@ class DemoWorkspaceSeeder extends Seeder
                 ['Workspace', '1 (مكتب القاضي للمحاماة)'],
                 ['Contacts (Organizations)', '4'],
                 ['Contacts (Persons)', '3'],
-                ['Matters', '4 (3 active, 1 closed)'],
+                ['Matters', '5 (3 active transactional, 1 active litigation, 1 closed)'],
                 ['Documents', '5 (SPA, NDA, Supply, License, Memo)'],
                 ['Document Versions', '7 (SPA has 3 versions)'],
                 ['Tasks', '10 (4 To Do, 3 In Progress, 3 Done)'],
+                ['Lawyer Profiles', '3 (Owner, Admin, Member)'],
+                ['Courts', '1 (محكمة بداية عمّان)'],
+                ['Hearings', '3 (1 held, 1 scheduled, 1 postponed)'],
+                ['Obligations', '4 (1 pending, 1 overdue, 1 completed, 1 upcoming)'],
+                ['Time Entries', '6 (across 4 matters)'],
+                ['KYC Checklists', '1 (شركة الأردن للتوريدات)'],
             ],
         );
         $this->command->info('');
