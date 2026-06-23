@@ -45,6 +45,7 @@ class DemoWorkspaceSeeder extends Seeder
         $owner = User::create([
             'name' => 'عبدالله القاضي',
             'email' => 'abdullah@demo.test',
+            'password' => bcrypt('password'),
             'preferred_locale' => 'ar',
             'email_verified_at' => now(),
         ]);
@@ -52,6 +53,7 @@ class DemoWorkspaceSeeder extends Seeder
         $admin = User::create([
             'name' => 'لمى الخطيب',
             'email' => 'lama@demo.test',
+            'password' => bcrypt('password'),
             'preferred_locale' => 'ar',
             'email_verified_at' => now(),
         ]);
@@ -59,6 +61,7 @@ class DemoWorkspaceSeeder extends Seeder
         $member = User::create([
             'name' => 'Sara Mansour',
             'email' => 'sara@demo.test',
+            'password' => bcrypt('password'),
             'preferred_locale' => 'en',
             'email_verified_at' => now(),
         ]);
@@ -66,6 +69,7 @@ class DemoWorkspaceSeeder extends Seeder
         $member2 = User::create([
             'name' => 'فادي بدر',
             'email' => 'fadi@demo.test',
+            'password' => bcrypt('password'),
             'preferred_locale' => 'ar',
             'email_verified_at' => now(),
         ]);

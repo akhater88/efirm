@@ -18,6 +18,31 @@ Route::post('locale/switch', [LocaleController::class, 'switch'])
 
 Route::middleware('guest')->group(function () {
     Route::get('login', fn () => view('auth.login'))->name('login');
+
+    // Email/password login
+    Route::post('login', function (\Illuminate\Http\Request $request) {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (auth()->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
+            $user = auth()->user();
+            $workspace = $user->workspaces()->first();
+            if ($workspace) {
+                $user->switchWorkspace($workspace);
+
+                return redirect("/admin/workspace/{$workspace->slug}");
+            }
+
+            return redirect()->route('dashboard');
+        }
+
+        return back()->withErrors(['email' => __('auth.failed')])->onlyInput('email');
+    })->name('login.submit');
+
     Route::get('auth/google/redirect', [GoogleOAuthController::class, 'redirect'])
         ->name('auth.google.redirect');
     Route::get('auth/google/callback', [GoogleOAuthController::class, 'callback'])
