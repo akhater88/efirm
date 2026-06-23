@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\LitigationStatus;
 use App\Enums\MatterStatus;
+use App\Enums\MatterTypeEnum;
 use App\Enums\PracticeArea;
 use App\Enums\RepresentationRole;
 use App\Models\Contact;
@@ -57,6 +58,7 @@ class MatterFactory extends Factory
     {
         return $this->state([
             'is_litigation' => true,
+            'matter_type' => MatterTypeEnum::CommercialLitigation,
             'litigation_status' => LitigationStatus::Filed,
             'representation_role' => RepresentationRole::Plaintiff,
             'filed_date' => now()->subDays(30),

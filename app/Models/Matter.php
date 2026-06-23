@@ -7,6 +7,7 @@ use App\Enums\CourtLevel;
 use App\Enums\LitigationStatus;
 use App\Enums\MatterLawyerRole;
 use App\Enums\MatterStatus;
+use App\Enums\MatterTypeEnum;
 use App\Enums\PracticeArea;
 use App\Enums\RepresentationRole;
 use Database\Factories\MatterFactory;
@@ -43,6 +44,11 @@ class Matter extends Model
         'closed_at',
         'tags',
         'is_litigation',
+        'matter_type',
+        'target_closing_date',
+        'deal_value_currency',
+        'deal_value_amount',
+        'expected_document_types',
         'court_id',
         'judge_id',
         'court_case_number',
@@ -62,6 +68,10 @@ class Matter extends Model
             'practice_area' => PracticeArea::class,
             'status' => MatterStatus::class,
             'is_litigation' => 'boolean',
+            'matter_type' => MatterTypeEnum::class,
+            'target_closing_date' => 'date',
+            'deal_value_amount' => 'decimal:2',
+            'expected_document_types' => 'array',
             'litigation_status' => LitigationStatus::class,
             'court_level' => CourtLevel::class,
             'representation_role' => RepresentationRole::class,
@@ -186,9 +196,24 @@ class Matter extends Model
         return $query->where('practice_area', $area);
     }
 
+    public function scopeTransactional($query)
+    {
+        $transactionalValues = array_map(
+            fn (MatterTypeEnum $case) => $case->value,
+            array_filter(MatterTypeEnum::cases(), fn (MatterTypeEnum $case) => $case->isTransactional())
+        );
+
+        return $query->whereIn('matter_type', $transactionalValues);
+    }
+
     public function scopeLitigation($query)
     {
-        return $query->where('is_litigation', true);
+        $litigationValues = array_map(
+            fn (MatterTypeEnum $case) => $case->value,
+            array_filter(MatterTypeEnum::cases(), fn (MatterTypeEnum $case) => $case->isLitigation())
+        );
+
+        return $query->whereIn('matter_type', $litigationValues);
     }
 
     public function scopeCommercial($query)

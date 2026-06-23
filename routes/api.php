@@ -76,6 +76,8 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 
     Route::apiResource('contacts', ContactController::class);
 
+    Route::get('matters/types', [MatterController::class, 'types'])
+        ->name('api.v1.matters.types');
     Route::apiResource('matters', MatterController::class);
     Route::post('matters/{matter}/counterparties', [MatterController::class, 'attachCounterparty'])
         ->name('api.v1.matters.counterparties.attach');

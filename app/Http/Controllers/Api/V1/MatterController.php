@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\MatterTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMatterRequest;
 use App\Http\Requests\UpdateMatterRequest;
@@ -15,6 +16,23 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MatterController extends Controller
 {
+    public function types(): JsonResponse
+    {
+        $grouped = [
+            'transactional' => [],
+            'litigation' => [],
+        ];
+
+        foreach (MatterTypeEnum::cases() as $case) {
+            $grouped[$case->track()][] = [
+                'value' => $case->value,
+                'label' => $case->label(),
+            ];
+        }
+
+        return response()->json(['data' => $grouped]);
+    }
+
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = Matter::with(['client', 'leadLawyer']);

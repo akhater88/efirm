@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\LitigationStatus;
 use App\Enums\MatterStatus;
+use App\Enums\MatterTypeEnum;
 use App\Enums\PracticeArea;
 use App\Enums\RepresentationRole;
 use App\Models\Contact;
@@ -44,6 +45,12 @@ class StoreMatterRequest extends FormRequest
             'tags' => 'nullable|array',
             'tags.*' => 'string|max:50',
             'is_litigation' => 'sometimes|boolean',
+            'matter_type' => ['nullable', Rule::enum(MatterTypeEnum::class)],
+            'target_closing_date' => 'nullable|date',
+            'deal_value_currency' => 'nullable|string|size:3',
+            'deal_value_amount' => 'nullable|numeric|min:0',
+            'expected_document_types' => 'nullable|array',
+            'expected_document_types.*' => 'string|max:100',
             'court_id' => 'nullable|string|exists:courts,id',
             'judge_id' => 'nullable|string|exists:judges,id',
             'court_case_number' => 'nullable|string|max:100',
