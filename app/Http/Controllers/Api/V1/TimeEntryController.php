@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hearing;
+use App\Models\Matter;
 use App\Models\TimeEntry;
+use App\Services\QuickTimerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class TimeEntryController extends Controller
 {
@@ -98,6 +102,69 @@ class TimeEntryController extends Controller
         $timeEntry->delete();
 
         return response()->json(null, 204);
+    }
+
+    /**
+     * Start a contextual quick timer (F-FIX-02.4, Decision #31).
+     */
+    public function start(Request $request, QuickTimerService $service): JsonResponse
+    {
+        $this->authorize('create', TimeEntry::class);
+
+        $validated = $request->validate([
+            'matter_id' => 'required_without:hearing_id|nullable|string|exists:matters,id',
+            'hearing_id' => 'required_without:matter_id|nullable|string|exists:hearings,id',
+        ]);
+
+        try {
+            if (! empty($validated['hearing_id'])) {
+                $hearing = Hearing::findOrFail($validated['hearing_id']);
+                $entry = $service->startForHearing($hearing, $request->user());
+            } else {
+                $matter = Matter::findOrFail($validated['matter_id']);
+                $entry = $service->startForMatter($matter, $request->user());
+            }
+        } catch (ConflictHttpException $e) {
+            return response()->json(['message' => $e->getMessage()], 409);
+        }
+
+        return response()->json(['data' => $entry->load('matter')], 201);
+    }
+
+    /**
+     * Stop a running timer (F-FIX-02.4, Decision #31).
+     */
+    public function stop(Request $request, TimeEntry $timeEntry, QuickTimerService $service): JsonResponse
+    {
+        $this->authorize('update', $timeEntry);
+
+        $validated = $request->validate([
+            'description' => 'nullable|string',
+            'adjusted_duration_minutes' => 'nullable|integer|min:1|max:1440',
+        ]);
+
+        $entry = $service->stop(
+            $timeEntry,
+            $request->user(),
+            $validated['description'] ?? null,
+            $validated['adjusted_duration_minutes'] ?? null,
+        );
+
+        return response()->json(['data' => $entry->load('matter')]);
+    }
+
+    /**
+     * Get the user's currently active timer (F-FIX-02.4, Decision #31).
+     */
+    public function active(Request $request, QuickTimerService $service): JsonResponse
+    {
+        $entry = $service->getActiveTimerForUser($request->user());
+
+        if (! $entry) {
+            return response()->json(null, 204);
+        }
+
+        return response()->json(['data' => $entry->load('matter')]);
     }
 
     public function summary(Request $request): JsonResponse

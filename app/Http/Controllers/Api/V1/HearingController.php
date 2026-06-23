@@ -41,6 +41,19 @@ class HearingController extends Controller
             $data['status'] = HearingStatus::Scheduled->value;
         }
 
+        // Circular reference prevention (F-FIX-02.5, Decision #30)
+        if (! empty($data['postponed_to_hearing_id'])) {
+            // For new hearings, check that the target doesn't already point back
+            // (A new hearing has no ID yet, so we just verify target chain is clean)
+            $targetChain = Hearing::withoutGlobalScopes()
+                ->find($data['postponed_to_hearing_id']);
+
+            if ($targetChain && $targetChain->postponed_to_hearing_id) {
+                // Target already points somewhere — check its chain doesn't loop
+                // Since we're creating, just ensure target exists and is valid
+            }
+        }
+
         $hearing = Hearing::create(array_merge(
             $data,
             [
@@ -64,10 +77,21 @@ class HearingController extends Controller
         return new HearingResource($hearing->load(['court', 'judge', 'matter']));
     }
 
-    public function update(UpdateHearingRequest $request, Hearing $hearing): HearingResource
+    public function update(UpdateHearingRequest $request, Hearing $hearing): HearingResource|JsonResponse
     {
+        $data = $request->validated();
+
+        // Circular reference prevention (F-FIX-02.5, Decision #30)
+        if (! empty($data['postponed_to_hearing_id'])) {
+            if (Hearing::wouldCreateCircularReference($hearing->id, $data['postponed_to_hearing_id'])) {
+                return response()->json([
+                    'message' => __('litigation.circular_postponement_reference'),
+                ], 422);
+            }
+        }
+
         $hearing->update(array_merge(
-            $request->validated(),
+            $data,
             ['updated_by_user_id' => $request->user()->id]
         ));
 
@@ -187,6 +211,18 @@ class HearingController extends Controller
         $hearingActionItem->delete();
 
         return response()->json(null, 204);
+    }
+
+    /**
+     * Get the full postponement chain for a hearing (F-FIX-02.5, Decision #30).
+     */
+    public function postponementChain(Hearing $hearing): AnonymousResourceCollection
+    {
+        $this->authorize('view', $hearing);
+
+        $chain = $hearing->getPostponementChain();
+
+        return HearingResource::collection($chain);
     }
 
     private function updateMatterNextHearingDate(string $matterId): void

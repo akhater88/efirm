@@ -225,6 +225,21 @@ return [
     'dispatch' => 'Dispatch',
     'dispatch_complete' => 'Complete Dispatch',
 
+    // --- Hearing Postponement Chain (F-FIX-02.5, Decision #30) ---
+    'postponement_reason' => 'Postponement Reason',
+    'postponement_reason_ar' => 'Postponement Reason (Arabic)',
+    'postponement_reason_en' => 'Postponement Reason (English)',
+    'postponement_initiated_by' => 'Postponement Initiated By',
+    'postponement_initiated_our_side' => 'Our Side',
+    'postponement_initiated_opposing_side' => 'Opposing Side',
+    'postponement_initiated_court' => 'Court',
+    'postponement_initiated_unknown' => 'Unknown',
+    'postponement_chain' => 'Postponement Chain',
+    'circular_postponement_reference' => 'Cannot set postponement target: circular reference detected.',
+
+    // --- Quick Timer (F-FIX-02.4, Decision #31) ---
+    'timer_already_active' => 'You already have an active timer running. Stop it before starting a new one.',
+
     // --- Success messages ---
     'court_created_success' => 'Court created successfully',
     'court_updated_success' => 'Court updated successfully',

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 class Hearing extends Model
 {
@@ -40,6 +41,9 @@ class Hearing extends Model
         'session_attended_by',
         'next_action_required',
         'postponed_to_hearing_id',
+        'postponement_reason_ar',
+        'postponement_reason_en',
+        'postponement_initiated_by',
         'our_attendee_user_id',
         'assigned_lawyer_user_id',
         'lawyer_assigned_at',
@@ -151,6 +155,85 @@ class Hearing extends Model
     public function isHeld(): bool
     {
         return $this->status === HearingStatus::Held;
+    }
+
+    /**
+     * Whether this hearing has been postponed to another hearing.
+     */
+    public function getIsPostponementAttribute(): bool
+    {
+        return $this->postponed_to_hearing_id !== null;
+    }
+
+    /**
+     * Build the full postponement chain for this hearing, traversing
+     * both backwards (via postponedFrom) and forwards (via postponedTo)
+     * to collect every linked hearing in chronological order.
+     *
+     * Per advisor input: docs/02_advisor_meeting_log.md Conversation 3.5, Decision #30.
+     */
+    public function getPostponementChain(): Collection
+    {
+        $chain = collect();
+        $visited = [];
+
+        // Walk backwards to find the root
+        $root = $this;
+        while (true) {
+            $visited[$root->id] = true;
+            $parent = self::withoutGlobalScopes()
+                ->where('postponed_to_hearing_id', $root->id)
+                ->first();
+
+            if (! $parent || isset($visited[$parent->id])) {
+                break;
+            }
+
+            $root = $parent;
+        }
+
+        // Walk forwards from root
+        $current = $root;
+        $visited = [];
+        while ($current) {
+            if (isset($visited[$current->id])) {
+                break;
+            }
+            $visited[$current->id] = true;
+            $chain->push($current);
+
+            if (! $current->postponed_to_hearing_id) {
+                break;
+            }
+
+            $current = self::withoutGlobalScopes()->find($current->postponed_to_hearing_id);
+        }
+
+        return $chain->sortBy('hearing_date')->values();
+    }
+
+    /**
+     * Check whether adding a link to the given target would create a circular reference.
+     */
+    public static function wouldCreateCircularReference(string $sourceId, string $targetId): bool
+    {
+        $current = self::withoutGlobalScopes()->find($targetId);
+        $visited = [$sourceId => true];
+
+        while ($current) {
+            if (isset($visited[$current->id])) {
+                return true;
+            }
+            $visited[$current->id] = true;
+
+            if (! $current->postponed_to_hearing_id) {
+                break;
+            }
+
+            $current = self::withoutGlobalScopes()->find($current->postponed_to_hearing_id);
+        }
+
+        return false;
     }
 
     // --- Scopes ---

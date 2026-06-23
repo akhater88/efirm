@@ -26,6 +26,9 @@ class UpdateHearingRequest extends FormRequest
             'outcome' => 'nullable|string',
             'next_action_required' => 'nullable|string',
             'postponed_to_hearing_id' => 'nullable|string|exists:hearings,id',
+            'postponement_reason_ar' => 'required_with:postponed_to_hearing_id|nullable|string|min:10',
+            'postponement_reason_en' => 'nullable|string',
+            'postponement_initiated_by' => 'required_with:postponed_to_hearing_id|nullable|string|in:our_side,opposing_side,court,unknown',
             'our_attendee_user_id' => 'nullable|string|exists:users,id',
         ];
     }

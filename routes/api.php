@@ -210,6 +210,14 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('task-approvals/{taskWorkflowApproval}/respond', [TaskWorkflowController::class, 'respondToApproval'])
         ->name('task-approvals.respond');
 
+    // Time Entries — Quick Timer (F-FIX-02.4, Decision #31) — registered before apiResource
+    Route::post('time-entries/start', [TimeEntryController::class, 'start'])
+        ->name('time-entries.start');
+    Route::get('time-entries/active', [TimeEntryController::class, 'active'])
+        ->name('time-entries.active');
+    Route::post('time-entries/{timeEntry}/stop', [TimeEntryController::class, 'stop'])
+        ->name('time-entries.stop');
+
     // Time Entries
     Route::apiResource('time-entries', TimeEntryController::class);
     Route::get('time-entries-summary', [TimeEntryController::class, 'summary'])
@@ -248,6 +256,10 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 
     // Litigation — Hearings [HARD-STOP-LAWYER-REQUIRED]
     Route::apiResource('hearings', HearingController::class);
+
+    // Hearing Postponement Chain (F-FIX-02.5, Decision #30)
+    Route::get('hearings/{hearing}/postponement-chain', [HearingController::class, 'postponementChain'])
+        ->name('hearings.postponement-chain');
 
     // Hearing Session History (F-FIX-02.1, Decision #28)
     Route::put('hearings/{hearing}/session', [HearingController::class, 'recordSession'])

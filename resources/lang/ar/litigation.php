@@ -225,6 +225,21 @@ return [
     'dispatch' => 'إرسال',
     'dispatch_complete' => 'إتمام الإرسال',
 
+    // --- Hearing Postponement Chain (F-FIX-02.5, Decision #30) ---
+    'postponement_reason' => 'سبب التأجيل',
+    'postponement_reason_ar' => 'سبب التأجيل (عربي)',
+    'postponement_reason_en' => 'سبب التأجيل (إنجليزي)',
+    'postponement_initiated_by' => 'التأجيل بمبادرة من',
+    'postponement_initiated_our_side' => 'جانبنا',
+    'postponement_initiated_opposing_side' => 'الطرف المقابل',
+    'postponement_initiated_court' => 'المحكمة',
+    'postponement_initiated_unknown' => 'غير معروف',
+    'postponement_chain' => 'سلسلة التأجيلات',
+    'circular_postponement_reference' => 'لا يمكن تعيين هدف التأجيل: تم اكتشاف مرجع دائري.',
+
+    // --- Quick Timer (F-FIX-02.4, Decision #31) ---
+    'timer_already_active' => 'لديك مؤقت نشط بالفعل. أوقفه قبل بدء مؤقت جديد.',
+
     // --- Success messages ---
     'court_created_success' => 'تم إنشاء المحكمة بنجاح',
     'court_updated_success' => 'تم تحديث المحكمة بنجاح',
