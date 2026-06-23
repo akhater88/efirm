@@ -16,13 +16,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+// Per advisor input from Khaldoun Khater,
+// docs/02_advisor_meeting_log.md Conversation 3.5, Decision #27
 class MatterResource extends Resource
 {
     protected static ?string $model = Matter::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -48,7 +50,7 @@ class MatterResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Matters';
+        return __('navigation.groups.case_management');
     }
 
     public static function form(Schema $schema): Schema

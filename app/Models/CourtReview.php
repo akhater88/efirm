@@ -34,6 +34,15 @@ class CourtReview extends Model
         'appeal_deadline_date',
         'appeal_filed',
         'next_steps',
+        'dispatched_to_user_id',
+        'dispatched_at',
+        'completed_by_user_id',
+        'location_in_courthouse_ar',
+        'location_in_courthouse_en',
+        'expected_outcome_ar',
+        'expected_outcome_en',
+        'completion_notes',
+        'evidence_document_id',
         'created_by_user_id',
         'updated_by_user_id',
     ];
@@ -49,6 +58,7 @@ class CourtReview extends Model
             'appealable' => 'boolean',
             'appeal_deadline_date' => 'date',
             'appeal_filed' => 'boolean',
+            'dispatched_at' => 'datetime',
             'deleted_at' => 'datetime',
         ];
     }
@@ -70,6 +80,21 @@ class CourtReview extends Model
         return $this->belongsTo(Document::class, 'decision_document_id');
     }
 
+    public function dispatchedTo(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'dispatched_to_user_id');
+    }
+
+    public function completedByUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'completed_by_user_id');
+    }
+
+    public function evidenceDocument(): BelongsTo
+    {
+        return $this->belongsTo(Document::class, 'evidence_document_id');
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
@@ -78,5 +103,25 @@ class CourtReview extends Model
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by_user_id');
+    }
+
+    // --- Accessors ---
+
+    public function isDispatched(): bool
+    {
+        return $this->dispatched_to_user_id !== null && $this->dispatched_at !== null;
+    }
+
+    public function isOverdueDispatch(): bool
+    {
+        if (! $this->isDispatched()) {
+            return false;
+        }
+
+        if ($this->completed_by_user_id !== null) {
+            return false;
+        }
+
+        return $this->dispatched_at->addDays(7)->isPast();
     }
 }

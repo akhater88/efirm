@@ -28,6 +28,7 @@ class TimeEntry extends Model
         'is_billable',
         'billing_rate_per_hour',
         'currency',
+        'started_via_context',
         'created_by_user_id',
         'updated_by_user_id',
     ];

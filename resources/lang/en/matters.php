@@ -52,6 +52,14 @@ return [
     'our_position' => 'Our Position',
     'counterparty_notes' => 'Notes',
 
+    // Forked matter creation (Decision #26)
+    'track_transactional' => 'Transactional',
+    'track_litigation' => 'Litigation',
+    'target_closing_date' => 'Target Closing Date',
+    'deal_value' => 'Deal Value',
+    'expected_document_types' => 'Expected Document Types',
+    'matter_type' => 'Matter Type',
+
     // Validation
     'client_must_be_client' => 'The selected contact must be flagged as a client',
     'cannot_attach_client_as_counterparty' => 'Cannot attach the client as a counterparty',

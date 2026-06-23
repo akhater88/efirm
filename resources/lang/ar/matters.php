@@ -52,6 +52,14 @@ return [
     'our_position' => 'موقفنا',
     'counterparty_notes' => 'ملاحظات',
 
+    // Forked matter creation (Decision #26)
+    'track_transactional' => 'المعاملات',
+    'track_litigation' => 'التقاضي',
+    'target_closing_date' => 'تاريخ الإغلاق المستهدف',
+    'deal_value' => 'قيمة الصفقة',
+    'expected_document_types' => 'أنواع المستندات المتوقعة',
+    'matter_type' => 'نوع الملف',
+
     // Validation
     'client_must_be_client' => 'جهة الاتصال المحددة يجب أن تكون عميلاً',
     'cannot_attach_client_as_counterparty' => 'لا يمكن إضافة العميل كطرف مقابل',
