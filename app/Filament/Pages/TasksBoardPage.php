@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use BackedEnum;
 use Filament\Pages\Page;
+use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 
 class TasksBoardPage extends Page
@@ -14,7 +15,7 @@ class TasksBoardPage extends Page
 
     protected static ?string $slug = 'tasks-board';
 
-    protected ?string $maxContentWidth = 'full';
+    protected Width|string|null $maxContentWidth = Width::Full;
 
     public static function getNavigationLabel(): string
     {
