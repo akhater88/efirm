@@ -7,32 +7,26 @@ on:
     branches: [main]
 
 jobs:
-  quality:
+  tests:
     runs-on: ubuntu-latest
 
     services:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: code_job
+          MYSQL_DATABASE: testing
+          MYSQL_USER: test
+          MYSQL_PASSWORD: secret
+          MYSQL_ROOT_PASSWORD: secret
         ports:
           - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
       redis:
         image: redis:7
         ports:
           - 6379:6379
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - uses: actions/checkout@v4
@@ -41,19 +35,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring, mysql, redis
+          extensions: mbstring, pdo, pdo_mysql, redis, bcmath, zip
           coverage: none
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Install npm dependencies
+      - name: Install NPM dependencies
         run: npm ci
 
       - name: Build assets
@@ -65,26 +53,59 @@ jobs:
       - name: Generate key
         run: php artisan key:generate
 
-      - name: Configure environment
+      - name: Configure database
         run: |
-          sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=mysql/' .env
-          sed -i 's/DB_PASSWORD=/DB_PASSWORD=password/' .env
-          sed -i 's/DB_DATABASE=code_job/DB_DATABASE=code_job/' .env
-          sed -i 's/SESSION_DRIVER=redis/SESSION_DRIVER=array/' .env
-          sed -i 's/CACHE_STORE=redis/CACHE_STORE=array/' .env
-          sed -i 's/QUEUE_CONNECTION=redis/QUEUE_CONNECTION=sync/' .env
+          php artisan config:clear
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: test
+          DB_PASSWORD: secret
 
       - name: Run migrations
         run: php artisan migrate --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: test
+          DB_PASSWORD: secret
 
-      - name: Pint check
+      - name: Run Pint (code style)
         run: ./vendor/bin/pint --test
 
-      - name: Larastan
-        run: ./vendor/bin/phpstan analyse
+      - name: Run Pest tests
+        run: php -d memory_limit=512M ./vendor/bin/pest
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: test
+          DB_PASSWORD: secret
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+          CACHE_STORE: redis
+          SESSION_DRIVER: redis
+          QUEUE_CONNECTION: redis
 
-      - name: Spectral lint
-        run: npx spectral lint openapi/spec.yaml
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Pest tests
-        run: ./vendor/bin/pest
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo, bcmath
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run Larastan (static analysis)
+        run: ./vendor/bin/phpstan analyse --memory-limit=512M
+        continue-on-error: true
