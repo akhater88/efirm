@@ -46,9 +46,10 @@
 
     {{-- Board --}}
     @if (count($columns) > 0)
-        <div class="flex gap-4 overflow-x-auto pb-4 {{ $isRtl ? 'flex-row-reverse' : '' }}" style="min-height: 60vh;">
+        <div style="display: flex; gap: 1rem; overflow-x: auto; min-height: 60vh; padding-bottom: 1rem; {{ $isRtl ? 'flex-direction: row-reverse;' : '' }}">
             @foreach ($columns as $column)
-                <div class="flex-shrink-0 w-72 bg-gray-50 rounded-lg flex flex-col border border-gray-200"
+                <div style="flex-shrink: 0; width: 288px; display: flex; flex-direction: column;"
+                     class="bg-gray-50 rounded-lg border border-gray-200"
                      id="column-{{ $column['id'] }}"
                      data-stage-id="{{ $column['id'] }}">
                     {{-- Column header --}}

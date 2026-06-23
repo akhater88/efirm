@@ -1,3 +1,5 @@
 <x-filament-panels::page>
-    <livewire:tasks.task-board />
+    <div style="width: 100%; overflow-x: auto;">
+        <livewire:tasks.task-board />
+    </div>
 </x-filament-panels::page>
