@@ -38,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 'Workspace',
                 'Contacts',
-                'Matters',
+                'Case Management',
                 'Documents',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
