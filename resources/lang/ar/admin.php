@@ -136,6 +136,17 @@ return [
         'banner' => 'تنتحل هوية :name — جميع الإجراءات قيد التسجيل.',
     ],
 
+    // Subscriptions
+    'subscriptions' => [
+        'singular' => 'اشتراك',
+        'plural' => 'الاشتراكات',
+        'state_trial' => 'تجريبي',
+        'state_active' => 'نشط',
+        'state_past_due' => 'متأخر الدفع',
+        'state_suspended' => 'معلّق',
+        'state_cancelled' => 'ملغى',
+    ],
+
     // Plans CRUD
     'plans' => [
         'singular' => 'خطة',

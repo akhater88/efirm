@@ -136,6 +136,17 @@ return [
         'banner' => 'Impersonating :name — all actions are being recorded.',
     ],
 
+    // Subscriptions
+    'subscriptions' => [
+        'singular' => 'Subscription',
+        'plural' => 'Subscriptions',
+        'state_trial' => 'Trial',
+        'state_active' => 'Active',
+        'state_past_due' => 'Past Due',
+        'state_suspended' => 'Suspended',
+        'state_cancelled' => 'Cancelled',
+    ],
+
     // Plans CRUD
     'plans' => [
         'singular' => 'Plan',
