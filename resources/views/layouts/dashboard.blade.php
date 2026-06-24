@@ -31,6 +31,9 @@
     {{-- Top Chrome --}}
     <livewire:dashboard.top-chrome />
 
+    {{-- Left Sidebar --}}
+    <livewire:dashboard.left-sidebar />
+
     {{-- Flash Messages --}}
     @if (session('success'))
         <div style="max-width: 1280px; margin: 16px auto; padding: 0 16px;">
@@ -48,8 +51,8 @@
         </div>
     @endif
 
-    {{-- Main Content --}}
-    <main style="max-width: 1280px; margin: 0 auto; padding: 24px 16px;">
+    {{-- Main Content (offset by sidebar width) --}}
+    <main style="margin-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 240px; padding: 24px 24px; min-height: calc(100vh - 56px);">
         @yield('content')
     </main>
 

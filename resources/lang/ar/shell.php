@@ -24,4 +24,21 @@ return [
     'profile' => 'الملف الشخصي',
     'workspace_panel' => 'لوحة مساحة العمل',
     'logout' => 'تسجيل الخروج',
+
+    // Left sidebar
+    'nav_dashboard' => 'لوحة المعلومات',
+    'nav_practice' => 'الممارسة',
+    'nav_matters' => 'القضايا',
+    'nav_contacts' => 'جهات الاتصال',
+    'nav_work' => 'العمل',
+    'nav_tasks' => 'المهام',
+    'nav_documents' => 'المستندات',
+    'nav_obligations' => 'الالتزامات',
+    'nav_library' => 'المكتبة',
+    'nav_clause_library' => 'مكتبة البنود',
+    'nav_smart_lists' => 'القوائم الذكية',
+    'nav_time' => 'الوقت',
+    'nav_time_entries' => 'سجل الوقت',
+    'collapse_sidebar' => 'طي',
+    'expand_sidebar' => 'توسيع',
 ];
