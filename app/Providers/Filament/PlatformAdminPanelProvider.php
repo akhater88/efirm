@@ -32,7 +32,7 @@ class PlatformAdminPanelProvider extends PanelProvider
             ->login(Login::class)
             ->authGuard('admin')
             ->brandName(__('admin.panel.brand'))
-            ->brandLogo(asset('img/brand/efirm-logo.svg'))
+            ->brandLogo(asset('img/brand/efirm-logo-reversed.svg'))
             ->brandLogoHeight('32px')
             ->favicon(asset('img/brand/efirm-favicon.svg'))
             ->colors([
