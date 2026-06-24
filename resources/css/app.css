@@ -4,6 +4,180 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* ─── Font families ─── */
+    --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Source Sans Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-arabic: 'IBM Plex Sans Arabic', Tahoma, Arial, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Code', Menlo, Monaco, Consolas, monospace;
+
+    /* ─── Brand colors ─── */
+    --color-brand-50:  #ECFAF1;
+    --color-brand-100: #C8EFD6;
+    --color-brand-200: #94DDB0;
+    --color-brand-300: #5FC588;
+    --color-brand-400: #2DA763;
+    --color-brand-500: #0D5C2E;
+    --color-brand-600: #094B26;
+    --color-brand-700: #072E17;
+    --color-brand-800: #052015;
+    --color-brand-900: #03150E;
+    --color-brand-950: #010A05;
+
+    /* ─── Neutral colors (warm gray) ─── */
+    --color-neutral-50:  #FAFAF9;
+    --color-neutral-100: #F5F5F4;
+    --color-neutral-200: #E7E5E4;
+    --color-neutral-300: #D6D3D1;
+    --color-neutral-400: #A8A29E;
+    --color-neutral-500: #78716C;
+    --color-neutral-600: #57534E;
+    --color-neutral-700: #44403C;
+    --color-neutral-800: #292524;
+    --color-neutral-900: #1C1917;
+    --color-neutral-950: #0C0A09;
+
+    /* ─── Semantic colors ─── */
+    --color-success-50:  #F0FDF4;
+    --color-success-500: #15803D;
+    --color-success-700: #166534;
+    --color-warning-50:  #FFFBEB;
+    --color-warning-500: #F59E0B;
+    --color-warning-700: #B45309;
+    --color-danger-50:   #FEF2F2;
+    --color-danger-500:  #DC2626;
+    --color-danger-700:  #B91C1C;
+    --color-info-50:     #EFF6FF;
+    --color-info-500:    #2563EB;
+    --color-info-700:    #1D4ED8;
+
+    /* ─── Tier colors ─── */
+    --color-tier-starter:    #64748B;
+    --color-tier-pro:        #0D5C2E;
+    --color-tier-enterprise: #D97706;
+
+    /* ─── Shadows (warm-tinted) ─── */
+    --shadow-xs:  0 1px 2px 0 rgba(28, 25, 23, 0.05);
+    --shadow-sm:  0 1px 3px 0 rgba(28, 25, 23, 0.1), 0 1px 2px -1px rgba(28, 25, 23, 0.1);
+    --shadow-md:  0 4px 6px -1px rgba(28, 25, 23, 0.1), 0 2px 4px -2px rgba(28, 25, 23, 0.1);
+    --shadow-lg:  0 10px 15px -3px rgba(28, 25, 23, 0.1), 0 4px 6px -4px rgba(28, 25, 23, 0.1);
+    --shadow-xl:  0 20px 25px -5px rgba(28, 25, 23, 0.1), 0 8px 10px -6px rgba(28, 25, 23, 0.1);
+    --shadow-focus-brand: 0 0 0 3px rgba(13, 92, 46, 0.2);
+
+    /* ─── Border radius ─── */
+    --radius-xs:  2px;
+    --radius-sm:  4px;
+    --radius-md:  6px;
+    --radius-lg:  8px;
+    --radius-xl:  12px;
+    --radius-2xl: 16px;
+}
+
+/* ─── Self-hosted fonts ─── */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/playfair-display-v30-latin-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/source-sans-pro-v21-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/source-sans-pro-v21-latin-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/source-sans-pro-v21-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/source-sans-pro-v21-latin-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-v12-arabic-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-v12-arabic-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-v12-arabic-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-v12-arabic-700.woff2') format('woff2');
+}
+
+/* ─── CSS custom properties (semantic aliases) ─── */
+:root {
+  /* Semantic surfaces */
+  --surface-page:           #FAFAF9;
+  --surface-card:           #FFFFFF;
+  --surface-card-hover:     #F5F5F4;
+  --surface-sidebar:        #072E17;
+  --surface-sidebar-hover:  #052015;
+  --surface-sidebar-active: #094B26;
+
+  /* Semantic text */
+  --text-primary:     #1C1917;
+  --text-secondary:   #44403C;
+  --text-tertiary:    #78716C;
+  --text-on-dark:     #FAFAF9;
+  --text-on-dark-dim: #D6D3D1;
+  --text-on-brand:    #FFFFFF;
+  --text-link:        #0D5C2E;
+  --text-link-hover:  #094B26;
+
+  /* Borders */
+  --border-default: #E7E5E4;
+  --border-hover:   #D6D3D1;
+  --border-focus:   #0D5C2E;
+
+  /* Focus ring */
+  --ring-brand: 0 0 0 3px rgba(13, 92, 46, 0.2);
+}
+
+/* ─── Base body styling ─── */
+html {
+  background-color: var(--surface-page);
+  color: var(--text-primary);
+}
+
+html[lang="ar"] body {
+  font-family: 'IBM Plex Sans Arabic', Tahoma, Arial, sans-serif;
+}
+
+html[lang="en"] body {
+  font-family: 'Source Sans Pro', system-ui, -apple-system, sans-serif;
 }

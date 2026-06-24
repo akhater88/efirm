@@ -6,16 +6,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', __('common.app_name'))</title>
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#2563eb">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#072E17">
+
+    {{-- Font preload --}}
+    <link rel="preload" href="{{ asset('fonts/source-sans-pro-v21-latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-arabic-v12-arabic-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+
+    {{-- Favicons --}}
+    <link rel="icon" href="{{ asset('img/brand/efirm-favicon.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('img/brand/efirm-favicon-32.png') }}" sizes="32x32" type="image/png">
+
     @vite(['resources/css/editor.css', 'resources/js/editor.js'])
     @livewireStyles
     <style>
-        body { font-family: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif; }
-        [dir="rtl"] body { font-family: 'IBM Plex Sans Arabic', 'Inter', system-ui, sans-serif; }
-        .ProseMirror { font-family: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif; }
+        body { font-family: 'Source Sans Pro', 'IBM Plex Sans Arabic', system-ui, sans-serif; }
+        [dir="rtl"] body { font-family: 'IBM Plex Sans Arabic', 'Source Sans Pro', system-ui, sans-serif; }
+        .ProseMirror { font-family: 'Source Sans Pro', 'IBM Plex Sans Arabic', system-ui, sans-serif; }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
