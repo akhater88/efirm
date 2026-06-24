@@ -57,6 +57,10 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
             ])
             ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn () => view('filament.hooks.brand-styles'),
+            )
+            ->renderHook(
                 PanelsRenderHook::USER_MENU_BEFORE,
                 fn () => view('filament.hooks.locale-switcher'),
             )
