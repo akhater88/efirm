@@ -8,9 +8,11 @@ use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ShareDownloadController;
 use App\Http\Controllers\Web\SsoController;
+use App\Http\Controllers\Webhooks\StripeWebhookController;
 use App\Livewire\Documents\DocumentEditor;
 use App\Models\User;
 use App\Services\AdminImpersonationService;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -85,6 +87,11 @@ Route::middleware(['auth', 'workspace'])->group(function () {
         return redirect('/admin');
     })->name('impersonation.stop')->withoutMiddleware(['workspace']);
 });
+
+// Stripe webhooks — no auth, no CSRF, signature-verified
+Route::post('webhooks/stripe', StripeWebhookController::class)
+    ->name('webhooks.stripe')
+    ->withoutMiddleware([PreventRequestForgery::class]);
 
 // Public share download — no auth required, rate-limited
 Route::get('share/{token}', ShareDownloadController::class)
