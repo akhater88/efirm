@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->login(false)
             ->registration(false)
             ->brandName(__('brand.app_name'))
-            ->brandLogo(asset('img/brand/efirm-logo.svg'))
+            ->brandLogo(asset('img/brand/efirm-logo-reversed.svg'))
             ->brandLogoHeight('32px')
             ->favicon(asset('img/brand/efirm-favicon.svg'))
             ->colors([

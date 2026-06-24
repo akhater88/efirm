@@ -75,16 +75,57 @@
         background-color: #052015 !important;
     }
 
-    /* Topbar: white background with brand accent */
+    /* Topbar: brand-700 background with white text */
     .fi-topbar {
-        border-bottom-color: #E7E5E4 !important;
+        background-color: #072E17 !important;
+        border-bottom-color: rgba(255, 255, 255, 0.1) !important;
     }
 
-    /* Brand logo in sidebar — ensure reversed logo is visible */
-    .fi-logo img,
-    .fi-sidebar-header img {
-        filter: brightness(0) invert(1);
+    .fi-topbar nav {
+        background-color: #072E17 !important;
     }
+
+    /* Topbar text and icons: white */
+    .fi-topbar-item-label,
+    .fi-topbar button,
+    .fi-topbar a {
+        color: #D6D3D1 !important;
+    }
+
+    .fi-topbar button:hover,
+    .fi-topbar a:hover {
+        color: #FFFFFF !important;
+    }
+
+    /* Topbar user menu, breadcrumbs, search */
+    .fi-topbar .fi-breadcrumbs ol li,
+    .fi-topbar .fi-breadcrumbs a,
+    .fi-topbar .fi-breadcrumbs span {
+        color: #D6D3D1 !important;
+    }
+
+    /* Topbar icons */
+    .fi-topbar svg {
+        color: #D6D3D1 !important;
+    }
+
+    .fi-topbar button:hover svg,
+    .fi-topbar a:hover svg {
+        color: #FFFFFF !important;
+    }
+
+    /* Global search in topbar */
+    .fi-global-search-field input {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        color: #FFFFFF !important;
+    }
+
+    .fi-global-search-field input::placeholder {
+        color: #A8A29E !important;
+    }
+
+    /* Brand logo — reversed (white) SVG used directly via panel brandLogo config */
 
     /* Tenant menu text in sidebar */
     .fi-tenant-menu-trigger {
