@@ -6,6 +6,8 @@ return [
     'nav' => [
         'admin_users' => 'Admin Users',
         'activity_log' => 'Activity Log',
+        'plans' => 'Plans',
+        'group_billing' => 'Billing',
     ],
 
     // Panel
@@ -96,6 +98,34 @@ return [
         'user_disabled' => 'User Disabled',
         'user_reenabled' => 'User Re-enabled',
         'locale_changed' => 'Locale Changed',
+        'plan_created' => 'Plan Created',
+        'plan_updated' => 'Plan Updated',
+    ],
+
+    // Plans CRUD
+    'plans' => [
+        'singular' => 'Plan',
+        'plural' => 'Plans',
+        'slug' => 'Slug',
+        'name_en' => 'Name (English)',
+        'name_ar' => 'Name (Arabic)',
+        'description_en' => 'Description (English)',
+        'description_ar' => 'Description (Arabic)',
+        'price_per_seat' => 'Price per Seat (USD)',
+        'max_seats' => 'Max Seats',
+        'max_matters' => 'Max Matters',
+        'max_contacts' => 'Max Contacts',
+        'max_storage_mb' => 'Max Storage (MB)',
+        'features' => 'Feature Flags',
+        'feature_key' => 'Feature',
+        'feature_value' => 'Enabled',
+        'is_active' => 'Active',
+        'sort_order' => 'Sort Order',
+        'null_unlimited' => 'Leave empty for unlimited',
+        'section_details' => 'Plan Details',
+        'section_pricing' => 'Pricing',
+        'section_limits' => 'Usage Limits',
+        'section_features' => 'Feature Flags',
     ],
 
     // Dashboard

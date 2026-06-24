@@ -16,6 +16,8 @@ enum AdminActivityEventType: string
     case UserDisabled = 'admin.user.disabled';
     case UserReenabled = 'admin.user.reenabled';
     case LocaleChanged = 'admin.locale.changed';
+    case PlanCreated = 'admin.plan.created';
+    case PlanUpdated = 'admin.plan.updated';
 
     public function label(): string
     {
@@ -32,6 +34,8 @@ enum AdminActivityEventType: string
             self::UserDisabled => __('admin.activity.user_disabled'),
             self::UserReenabled => __('admin.activity.user_reenabled'),
             self::LocaleChanged => __('admin.activity.locale_changed'),
+            self::PlanCreated => __('admin.activity.plan_created'),
+            self::PlanUpdated => __('admin.activity.plan_updated'),
         };
     }
 }
