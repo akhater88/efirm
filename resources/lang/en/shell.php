@@ -24,4 +24,21 @@ return [
     'profile' => 'Profile',
     'workspace_panel' => 'Workspace panel',
     'logout' => 'Log out',
+
+    // Left sidebar
+    'nav_dashboard' => 'Dashboard',
+    'nav_practice' => 'Practice',
+    'nav_matters' => 'Matters',
+    'nav_contacts' => 'Contacts',
+    'nav_work' => 'Work',
+    'nav_tasks' => 'Tasks',
+    'nav_documents' => 'Documents',
+    'nav_obligations' => 'Obligations',
+    'nav_library' => 'Library',
+    'nav_clause_library' => 'Clause Library',
+    'nav_smart_lists' => 'Smart Lists',
+    'nav_time' => 'Time',
+    'nav_time_entries' => 'Time Entries',
+    'collapse_sidebar' => 'Collapse',
+    'expand_sidebar' => 'Expand',
 ];
