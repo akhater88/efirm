@@ -9,14 +9,24 @@ use Stripe\StripeClient;
 
 class StripeSyncService
 {
-    private readonly StripeClient $stripe;
+    private ?StripeClient $stripe = null;
 
-    public function __construct()
+    private function client(): StripeClient
     {
-        $this->stripe = new StripeClient([
-            'api_key' => config('services.stripe.secret'),
-            'stripe_version' => config('services.stripe.api_version'),
-        ]);
+        if ($this->stripe === null) {
+            $secret = config('services.stripe.secret');
+
+            if (empty($secret)) {
+                throw new \RuntimeException('Stripe secret key is not configured. Set STRIPE_SECRET in .env.');
+            }
+
+            $this->stripe = new StripeClient([
+                'api_key' => $secret,
+                'stripe_version' => config('services.stripe.api_version'),
+            ]);
+        }
+
+        return $this->stripe;
     }
 
     /**
@@ -38,7 +48,7 @@ class StripeSyncService
         }
 
         try {
-            $customer = $this->stripe->customers->create([
+            $customer = $this->client()->customers->create([
                 'name' => $workspace->name,
                 'metadata' => [
                     'workspace_id' => $workspace->id,
@@ -79,7 +89,7 @@ class StripeSyncService
         $priceId = $this->resolvePriceId($subscription->plan->slug);
 
         try {
-            $stripeSubscription = $this->stripe->subscriptions->create([
+            $stripeSubscription = $this->client()->subscriptions->create([
                 'customer' => $subscription->stripe_customer_id,
                 'items' => [
                     [
@@ -123,7 +133,7 @@ class StripeSyncService
         }
 
         try {
-            $stripeSubscription = $this->stripe->subscriptions->retrieve(
+            $stripeSubscription = $this->client()->subscriptions->retrieve(
                 $subscription->stripe_subscription_id,
             );
 
@@ -133,7 +143,7 @@ class StripeSyncService
                 throw new \RuntimeException('No subscription item found on the Stripe subscription.');
             }
 
-            $this->stripe->subscriptionItems->update($itemId, [
+            $this->client()->subscriptionItems->update($itemId, [
                 'quantity' => $newCount,
             ]);
         } catch (ApiErrorException $e) {
@@ -159,7 +169,7 @@ class StripeSyncService
         }
 
         try {
-            $this->stripe->subscriptions->cancel(
+            $this->client()->subscriptions->cancel(
                 $subscription->stripe_subscription_id,
             );
         } catch (ApiErrorException $e) {
