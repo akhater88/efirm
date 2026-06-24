@@ -6,6 +6,8 @@ return [
     'nav' => [
         'admin_users' => 'مستخدمو الإدارة',
         'activity_log' => 'سجل النشاط',
+        'plans' => 'الخطط',
+        'group_billing' => 'الفوترة',
     ],
 
     // Panel
@@ -96,6 +98,34 @@ return [
         'user_disabled' => 'تعطيل مستخدم',
         'user_reenabled' => 'إعادة تفعيل مستخدم',
         'locale_changed' => 'تغيير اللغة',
+        'plan_created' => 'إنشاء خطة',
+        'plan_updated' => 'تحديث خطة',
+    ],
+
+    // Plans CRUD
+    'plans' => [
+        'singular' => 'خطة',
+        'plural' => 'الخطط',
+        'slug' => 'المعرّف',
+        'name_en' => 'الاسم (إنجليزي)',
+        'name_ar' => 'الاسم (عربي)',
+        'description_en' => 'الوصف (إنجليزي)',
+        'description_ar' => 'الوصف (عربي)',
+        'price_per_seat' => 'السعر لكل مقعد (دولار)',
+        'max_seats' => 'الحد الأقصى للمقاعد',
+        'max_matters' => 'الحد الأقصى للقضايا',
+        'max_contacts' => 'الحد الأقصى لجهات الاتصال',
+        'max_storage_mb' => 'الحد الأقصى للتخزين (ميجابايت)',
+        'features' => 'ميزات الخطة',
+        'feature_key' => 'الميزة',
+        'feature_value' => 'مفعّلة',
+        'is_active' => 'نشطة',
+        'sort_order' => 'الترتيب',
+        'null_unlimited' => 'اتركه فارغا للحد غير المحدود',
+        'section_details' => 'تفاصيل الخطة',
+        'section_pricing' => 'التسعير',
+        'section_limits' => 'حدود الاستخدام',
+        'section_features' => 'ميزات الخطة',
     ],
 
     // Dashboard
