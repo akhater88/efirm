@@ -29,7 +29,7 @@ class TasksBoardPage extends Page
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Practice';
+        return __('navigation.groups.practice');
     }
 
     public function getView(): string

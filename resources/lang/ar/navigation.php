@@ -2,7 +2,11 @@
 
 return [
     'groups' => [
+        'workspace' => 'مساحة العمل',
         'case_management' => 'إدارة القضايا',
+        'contacts' => 'جهات الاتصال',
+        'practice' => 'إدارة الممارسة',
+        'documents' => 'المستندات',
     ],
 
     'case_management' => [

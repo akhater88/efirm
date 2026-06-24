@@ -48,7 +48,7 @@ class ContactResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Contacts';
+        return __('navigation.groups.contacts');
     }
 
     public static function form(Schema $schema): Schema

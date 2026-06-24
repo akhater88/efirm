@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\ShareDownloadController;
 use App\Http\Controllers\Web\SsoController;
 use App\Livewire\Documents\DocumentEditor;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Locale switch — available to all users (auth + guest)
@@ -20,7 +21,7 @@ Route::middleware('guest')->group(function () {
     Route::get('login', fn () => view('auth.login'))->name('login');
 
     // Email/password login
-    Route::post('login', function (\Illuminate\Http\Request $request) {
+    Route::post('login', function (Request $request) {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',

@@ -2,7 +2,11 @@
 
 return [
     'groups' => [
+        'workspace' => 'Workspace',
         'case_management' => 'Case Management',
+        'contacts' => 'Contacts',
+        'practice' => 'Practice',
+        'documents' => 'Documents',
     ],
 
     'case_management' => [

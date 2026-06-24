@@ -49,7 +49,7 @@ class LibraryClauseResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Documents';
+        return __('navigation.groups.documents');
     }
 
     public static function form(Schema $schema): Schema

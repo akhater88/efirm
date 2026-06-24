@@ -47,7 +47,7 @@ class TaskResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Practice';
+        return __('navigation.groups.practice');
     }
 
     public static function form(Schema $schema): Schema
