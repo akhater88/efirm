@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\AiGenerationTemplateController;
+use App\Http\Controllers\Api\V1\AiTwinWaitlistController;
 use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\AutomationController;
@@ -51,6 +52,12 @@ use App\Models\Matter;
 use App\Services\AiDocumentGenerationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+// Public endpoints (no auth required)
+Route::prefix('v1')->middleware('throttle:ai-twin-waitlist')->group(function () {
+    Route::post('ai-twin/waitlist', [AiTwinWaitlistController::class, 'store'])
+        ->name('api.v1.ai-twin.waitlist.store');
+});
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::get('me', [AuthController::class, 'me'])->name('api.v1.me');

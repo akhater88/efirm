@@ -14,6 +14,45 @@ servers:
   - url: https://staging.example.com/api/v1
     description: Staging (Cloudways — URL TBD after D-01)
 paths:
+  /api/v1/ai-twin/waitlist:
+    post:
+      summary: Submit email to AI Twin waitlist
+      description: >
+        Public endpoint (no authentication required). Captures an email address
+        for the AI Twin feature waitlist. Idempotent — duplicate emails return
+        200 without creating a second row. Rate-limited to 5 requests/min per IP.
+      operationId: aiTwinWaitlistStore
+      tags: [AI Twin]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                  example: lawyer@example.com
+      responses:
+        '200':
+          description: Email recorded (or already existed)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Thank you! We will be in touch.
+        '422':
+          description: Validation error (invalid or missing email)
+        '429':
+          description: Rate limit exceeded (5 requests/min per IP)
+
   /api/v1/search:
     get:
       summary: Global search across contacts and matters

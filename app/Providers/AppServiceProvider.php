@@ -42,7 +42,10 @@ use App\Models\User;
 use App\Models\Workspace;
 use App\Observers\HearingActionItemObserver;
 use App\Observers\WorkspaceObserver;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -54,6 +57,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        RateLimiter::for('ai-twin-waitlist', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip());
+        });
+
         Workspace::observe(WorkspaceObserver::class);
         HearingActionItem::observe(HearingActionItemObserver::class);
 
