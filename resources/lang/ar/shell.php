@@ -41,4 +41,5 @@ return [
     'nav_time_entries' => 'سجل الوقت',
     'collapse_sidebar' => 'طي',
     'expand_sidebar' => 'توسيع',
+    'quick_links' => 'روابط سريعة',
 ];

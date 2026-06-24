@@ -34,6 +34,9 @@
     {{-- Left Sidebar --}}
     <livewire:dashboard.left-sidebar />
 
+    {{-- Quick Links Rail --}}
+    <livewire:dashboard.quick-links-rail />
+
     {{-- Flash Messages --}}
     @if (session('success'))
         <div style="max-width: 1280px; margin: 16px auto; padding: 0 16px;">
@@ -51,11 +54,18 @@
         </div>
     @endif
 
-    {{-- Main Content (offset by sidebar width) --}}
-    <main style="margin-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 240px; padding: 24px 24px; min-height: calc(100vh - 56px);">
+    {{-- Main Content (offset by sidebar + quick links rail) --}}
+    <main class="dashboard-main" style="margin-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 240px; margin-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}: 72px; padding: 24px 24px; min-height: calc(100vh - 56px);">
         @yield('content')
     </main>
 
     @livewireScripts
+    <style>
+        @media (max-width: 1279px) {
+            .dashboard-main {
+                margin-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}: 0 !important;
+            }
+        }
+    </style>
 </body>
 </html>
