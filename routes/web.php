@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\ShareDownloadController;
 use App\Http\Controllers\Web\SsoController;
 use App\Livewire\Documents\DocumentEditor;
 use App\Models\User;
+use App\Services\AdminImpersonationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -76,6 +77,13 @@ Route::middleware(['auth', 'workspace'])->group(function () {
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::post('logout', [GoogleOAuthController::class, 'logout'])->name('logout');
+
+    // Stop impersonation — accessible during impersonation session
+    Route::post('impersonation/stop', function () {
+        app(AdminImpersonationService::class)->stop('explicit');
+
+        return redirect('/admin');
+    })->name('impersonation.stop')->withoutMiddleware(['workspace']);
 });
 
 // Public share download — no auth required, rate-limited

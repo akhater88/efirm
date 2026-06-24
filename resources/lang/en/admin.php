@@ -8,6 +8,8 @@ return [
         'activity_log' => 'Activity Log',
         'plans' => 'Plans',
         'group_billing' => 'Billing',
+        'workspaces' => 'Workspaces',
+        'group_platform' => 'Platform',
     ],
 
     // Panel
@@ -100,6 +102,38 @@ return [
         'locale_changed' => 'Locale Changed',
         'plan_created' => 'Plan Created',
         'plan_updated' => 'Plan Updated',
+        'impersonation_started' => 'Impersonation Started',
+        'impersonation_ended' => 'Impersonation Ended',
+    ],
+
+    // Workspaces
+    'workspaces' => [
+        'singular' => 'Workspace',
+        'plural' => 'Workspaces',
+        'name' => 'Name',
+        'slug' => 'Slug',
+        'locale' => 'Locale',
+        'members_count' => 'Members',
+        'created_at' => 'Created At',
+        'pdpl_consent' => 'PDPL Consent',
+        'consent_yes' => 'Obtained',
+        'consent_no' => 'Not obtained',
+        'consent_date' => 'Consent Date',
+        'consent_version' => 'Consent Version',
+        'section_details' => 'Workspace Details',
+        'section_pdpl' => 'PDPL Compliance',
+    ],
+
+    // Impersonation
+    'impersonation' => [
+        'start' => 'Impersonate User',
+        'stop' => 'Stop Impersonating',
+        'modal_heading' => 'Start Impersonation',
+        'modal_description' => 'You will be logged in as the selected user. All actions during impersonation are recorded in the audit log.',
+        'select_user' => 'Select User',
+        'purpose' => 'Purpose (required for audit)',
+        'already_active' => 'You already have an active impersonation session. Stop it first.',
+        'banner' => 'Impersonating :name — all actions are being recorded.',
     ],
 
     // Plans CRUD
