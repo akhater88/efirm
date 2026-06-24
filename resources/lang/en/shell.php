@@ -41,4 +41,5 @@ return [
     'nav_time_entries' => 'Time Entries',
     'collapse_sidebar' => 'Collapse',
     'expand_sidebar' => 'Expand',
+    'quick_links' => 'Quick Links',
 ];
