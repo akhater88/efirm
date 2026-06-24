@@ -22,8 +22,11 @@ class SubscriptionFactory extends Factory
             'plan_id' => Plan::factory(),
             'state' => SubscriptionState::Active,
             'seat_count' => 1,
-            'stripe_customer_id' => 'cus_'.fake()->unique()->bothify('??????????????'),
-            'stripe_subscription_id' => 'sub_'.fake()->unique()->bothify('??????????????'),
+            'stripe_customer_id' => null,
+            'stripe_subscription_id' => null,
+            'trial_ends_at' => null,
+            'grace_period_ends_at' => null,
+            'cancelled_at' => null,
         ];
     }
 
@@ -62,6 +65,20 @@ class SubscriptionFactory extends Factory
         return $this->state([
             'state' => SubscriptionState::Cancelled,
             'cancelled_at' => now(),
+        ]);
+    }
+
+    public function withStripeCustomer(string $customerId = 'cus_test123'): static
+    {
+        return $this->state([
+            'stripe_customer_id' => $customerId,
+        ]);
+    }
+
+    public function withStripeSubscription(string $subscriptionId = 'sub_test123'): static
+    {
+        return $this->state([
+            'stripe_subscription_id' => $subscriptionId,
         ]);
     }
 }

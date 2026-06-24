@@ -18,6 +18,8 @@ class PlanFactory extends Factory
             'slug' => fake()->unique()->slug(1),
             'name' => fake()->word().' Plan',
             'name_ar' => 'خطة '.fake()->word(),
+            'description' => fake()->sentence(),
+            'description_ar' => fake()->sentence(),
             'price_per_seat_usd' => fake()->randomElement([20, 25, 30]),
             'max_seats' => 10,
             'max_matters' => 50,

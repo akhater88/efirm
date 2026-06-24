@@ -41,4 +41,12 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'api_version' => '2025-08-27.acacia',
+        'price_id_prefix' => env('STRIPE_PRICE_ID_PREFIX', 'price'),
+    ],
+
 ];
