@@ -3,15 +3,11 @@
 @section('title', __('dashboard.title') . ' — ' . __('common.app_name'))
 
 @section('content')
-    <div class="text-center mt-16">
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">
-            {{ __('dashboard.welcome_message') }}
-        </h1>
-        <p class="text-lg text-gray-600 mb-8">
-            {{ $workspace?->name }}
-        </p>
-        <p class="text-gray-400">
-            {{ __('dashboard.empty_state') }}
-        </p>
+    {{-- Hero Banner --}}
+    <livewire:dashboard.dashboard-hero />
+
+    {{-- Widget grid placeholder --}}
+    <div style="text-align: center; padding: 48px 0; color: var(--text-tertiary, #78716C); font-size: 14px;">
+        {{ __('dashboard.empty_state') }}
     </div>
 @endsection
