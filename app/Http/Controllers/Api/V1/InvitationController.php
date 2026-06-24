@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Workspace;
 use App\Models\WorkspaceInvitation;
 use App\Services\InvitationService;
+use App\Services\SubscriptionEntitlementService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,12 @@ class InvitationController extends Controller
             'email' => 'required|email|max:255',
             'role' => 'required|in:admin,member',
         ]);
+
+        $entitlements = app(SubscriptionEntitlementService::class);
+
+        if ($entitlements->getSubscription($workspace) && ! $entitlements->canAddSeat($workspace)) {
+            return response()->json(['message' => __('admin.entitlements.seat_limit_reached')], 422);
+        }
 
         try {
             $invitation = $this->invitationService->invite(

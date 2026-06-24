@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Contact;
+use App\Services\SubscriptionEntitlementService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreContactRequest extends FormRequest
@@ -10,6 +11,23 @@ class StoreContactRequest extends FormRequest
     public function authorize(): bool
     {
         return $this->user()->can('create', Contact::class);
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $workspace = $this->user()->currentWorkspace();
+
+            if (! $workspace) {
+                return;
+            }
+
+            $entitlements = app(SubscriptionEntitlementService::class);
+
+            if ($entitlements->getSubscription($workspace) && ! $entitlements->canCreateContact($workspace)) {
+                $validator->errors()->add('_subscription', __('admin.entitlements.contact_limit_reached'));
+            }
+        });
     }
 
     public function rules(): array
