@@ -9,14 +9,7 @@
     {{-- Widget Grid --}}
     <x-dashboard.widget-grid>
         <x-slot:topLeft>
-            <x-dashboard.widget-card
-                :title="__('dashboard.widget_matters')"
-                state="empty"
-                :empty-message="__('dashboard.no_recent_matters')"
-                view-all-url="/app/matters"
-                create-url="/app/matters/create"
-                :create-label="__('shell.new_matter')"
-            />
+            <livewire:dashboard.widget.legal-matters-widget />
         </x-slot:topLeft>
 
         <x-slot:topRight>
