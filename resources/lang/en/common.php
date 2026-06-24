@@ -14,4 +14,6 @@ return [
     'search' => 'Search',
     'no_results' => 'No results found',
     'error_occurred' => 'An error occurred',
+    'view_all' => 'View all',
+    'no_items' => 'No items yet.',
 ];

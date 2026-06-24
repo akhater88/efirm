@@ -14,4 +14,6 @@ return [
     'search' => 'بحث',
     'no_results' => 'لا توجد نتائج',
     'error_occurred' => 'حدث خطأ',
+    'view_all' => 'عرض الكل',
+    'no_items' => 'لا توجد عناصر حتى الآن.',
 ];
