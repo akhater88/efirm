@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\BlockSuspendedWorkspace;
 use App\Http\Middleware\EnsureWorkspaceSelected;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'workspace' => EnsureWorkspaceSelected::class,
+            'subscription.active' => BlockSuspendedWorkspace::class,
         ]);
         $middleware->web(append: [
             SetLocale::class,
