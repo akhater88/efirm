@@ -18,6 +18,8 @@ enum AdminActivityEventType: string
     case LocaleChanged = 'admin.locale.changed';
     case PlanCreated = 'admin.plan.created';
     case PlanUpdated = 'admin.plan.updated';
+    case ImpersonationStarted = 'admin.impersonation.started';
+    case ImpersonationEnded = 'admin.impersonation.ended';
 
     public function label(): string
     {
@@ -36,6 +38,8 @@ enum AdminActivityEventType: string
             self::LocaleChanged => __('admin.activity.locale_changed'),
             self::PlanCreated => __('admin.activity.plan_created'),
             self::PlanUpdated => __('admin.activity.plan_updated'),
+            self::ImpersonationStarted => __('admin.activity.impersonation_started'),
+            self::ImpersonationEnded => __('admin.activity.impersonation_ended'),
         };
     }
 }

@@ -8,6 +8,8 @@ return [
         'activity_log' => 'سجل النشاط',
         'plans' => 'الخطط',
         'group_billing' => 'الفوترة',
+        'workspaces' => 'مساحات العمل',
+        'group_platform' => 'المنصة',
     ],
 
     // Panel
@@ -100,6 +102,38 @@ return [
         'locale_changed' => 'تغيير اللغة',
         'plan_created' => 'إنشاء خطة',
         'plan_updated' => 'تحديث خطة',
+        'impersonation_started' => 'بدء انتحال الهوية',
+        'impersonation_ended' => 'إنهاء انتحال الهوية',
+    ],
+
+    // Workspaces
+    'workspaces' => [
+        'singular' => 'مساحة عمل',
+        'plural' => 'مساحات العمل',
+        'name' => 'الاسم',
+        'slug' => 'المعرّف',
+        'locale' => 'اللغة',
+        'members_count' => 'الأعضاء',
+        'created_at' => 'تاريخ الإنشاء',
+        'pdpl_consent' => 'موافقة PDPL',
+        'consent_yes' => 'تم الحصول عليها',
+        'consent_no' => 'لم يتم الحصول عليها',
+        'consent_date' => 'تاريخ الموافقة',
+        'consent_version' => 'إصدار الموافقة',
+        'section_details' => 'تفاصيل مساحة العمل',
+        'section_pdpl' => 'الامتثال لقانون حماية البيانات',
+    ],
+
+    // Impersonation
+    'impersonation' => [
+        'start' => 'انتحال هوية المستخدم',
+        'stop' => 'إيقاف الانتحال',
+        'modal_heading' => 'بدء انتحال الهوية',
+        'modal_description' => 'سيتم تسجيل دخولك كالمستخدم المحدد. جميع الإجراءات أثناء الانتحال مسجلة في سجل التدقيق.',
+        'select_user' => 'اختر المستخدم',
+        'purpose' => 'الغرض (مطلوب للتدقيق)',
+        'already_active' => 'لديك جلسة انتحال نشطة بالفعل. أوقفها أولا.',
+        'banner' => 'تنتحل هوية :name — جميع الإجراءات قيد التسجيل.',
     ],
 
     // Plans CRUD
