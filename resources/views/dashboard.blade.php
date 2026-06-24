@@ -13,31 +13,15 @@
         </x-slot:topLeft>
 
         <x-slot:topRight>
-            <x-dashboard.widget-card
-                :title="__('dashboard.widget_calendar')"
-                state="empty"
-                :empty-message="__('dashboard.no_upcoming_events')"
-            />
+            <livewire:dashboard.widget.calendar-widget />
         </x-slot:topRight>
 
         <x-slot:bottomLeft>
-            <x-dashboard.widget-card
-                :title="__('dashboard.widget_documents')"
-                state="empty"
-                :empty-message="__('dashboard.no_recent_documents')"
-                view-all-url="/app/documents"
-            />
+            <livewire:dashboard.widget.documents-widget />
         </x-slot:bottomLeft>
 
         <x-slot:bottomRight>
-            <x-dashboard.widget-card
-                :title="__('dashboard.widget_tasks')"
-                state="empty"
-                :empty-message="__('dashboard.no_recent_tasks')"
-                view-all-url="/app/tasks"
-                create-url="/app/tasks/create"
-                :create-label="__('shell.new_task')"
-            />
+            <livewire:dashboard.widget.tasks-widget />
         </x-slot:bottomRight>
 
         <x-slot:feedLeft>

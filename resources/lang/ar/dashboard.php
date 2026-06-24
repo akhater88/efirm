@@ -23,4 +23,5 @@ return [
     'no_recent_tasks' => 'لا توجد مهام حديثة',
     'no_upcoming_obligations' => 'لا توجد التزامات قادمة',
     'no_upcoming_renewals' => 'لا توجد تجديدات قادمة',
+    'days_left' => '{0} اليوم|{1} يوم واحد|{2} يومان|[3,10] :count أيام|[11,*] :count يوم',
 ];
