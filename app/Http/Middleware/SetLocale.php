@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,8 +13,8 @@ class SetLocale
      * Resolution order:
      * 1. ?lang=ar|en query parameter (per-request override)
      * 2. Session locale (set by locale switcher)
-     * 3. Authenticated user's preferred_locale
-     * 4. Workspace default_locale
+     * 3. Authenticated user's preferred_locale (or admin's locale)
+     * 4. Workspace default_locale (workspace users only)
      * 5. App default: 'ar'
      */
     public function handle(Request $request, Closure $next): Response
@@ -43,13 +44,24 @@ class SetLocale
 
         // 3. Authenticated user's preferred locale
         $user = $request->user();
-        if ($user && in_array($user->preferred_locale, ['ar', 'en'], true)) {
-            return $user->preferred_locale;
+
+        if (! $user) {
+            // Try admin guard
+            $user = $request->user('admin');
         }
 
-        // 4. Workspace default locale
         if ($user) {
+            $locale = $user->preferred_locale ?? $user->locale ?? null;
+
+            if ($locale && in_array($locale, ['ar', 'en'], true)) {
+                return $locale;
+            }
+        }
+
+        // 4. Workspace default locale (workspace users only)
+        if ($user instanceof User && method_exists($user, 'currentWorkspace')) {
             $workspace = $user->currentWorkspace();
+
             if ($workspace && in_array($workspace->default_locale, ['ar', 'en'], true)) {
                 return $workspace->default_locale;
             }
