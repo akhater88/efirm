@@ -30,10 +30,13 @@ class PlatformAdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login(Login::class)
             ->authGuard('admin')
+            ->brandName(__('admin.panel.brand'))
+            ->brandLogo(asset('img/brand/efirm-logo.svg'))
+            ->brandLogoHeight('32px')
+            ->favicon(asset('img/brand/efirm-favicon.svg'))
             ->colors([
-                'primary' => Color::Red,
+                'primary' => Color::hex('#0D5C2E'),
             ])
-            ->brandName('Platform Admin')
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([

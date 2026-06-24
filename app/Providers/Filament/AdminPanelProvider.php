@@ -33,8 +33,12 @@ class AdminPanelProvider extends PanelProvider
             ->tenantRoutePrefix('workspace')
             ->login(false)
             ->registration(false)
+            ->brandName(__('brand.app_name'))
+            ->brandLogo(asset('img/brand/efirm-logo.svg'))
+            ->brandLogoHeight('32px')
+            ->favicon(asset('img/brand/efirm-favicon.svg'))
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::hex('#0D5C2E'),
             ])
             ->navigationGroups([
                 __('navigation.groups.workspace'),
