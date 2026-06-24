@@ -25,20 +25,11 @@
         </x-slot:bottomRight>
 
         <x-slot:feedLeft>
-            <x-dashboard.widget-card
-                :title="__('dashboard.widget_obligations')"
-                state="empty"
-                :empty-message="__('dashboard.no_upcoming_obligations')"
-                view-all-url="/app/obligations"
-            />
+            <livewire:dashboard.widget.upcoming-obligations-feed />
         </x-slot:feedLeft>
 
         <x-slot:feedRight>
-            <x-dashboard.widget-card
-                :title="__('dashboard.widget_renewals')"
-                state="empty"
-                :empty-message="__('dashboard.no_upcoming_renewals')"
-            />
+            <livewire:dashboard.widget.upcoming-renewals-feed />
         </x-slot:feedRight>
     </x-dashboard.widget-grid>
 @endsection
