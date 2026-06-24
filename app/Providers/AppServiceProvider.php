@@ -67,6 +67,7 @@ class AppServiceProvider extends ServiceProvider
         // Polymorphic morph map — short stable keys for all polymorphic relationships.
         // New entities added here when their Surge builds (S-08 litigation, S-09 financial).
         Relation::enforceMorphMap([
+            'workspace' => Workspace::class,
             'matter' => Matter::class,
             'contact' => Contact::class,
             'document' => Document::class,

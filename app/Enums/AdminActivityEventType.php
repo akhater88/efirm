@@ -20,6 +20,7 @@ enum AdminActivityEventType: string
     case PlanUpdated = 'admin.plan.updated';
     case ImpersonationStarted = 'admin.impersonation.started';
     case ImpersonationEnded = 'admin.impersonation.ended';
+    case CancellationInitiated = 'admin.cancellation.initiated';
 
     public function label(): string
     {
@@ -40,6 +41,7 @@ enum AdminActivityEventType: string
             self::PlanUpdated => __('admin.activity.plan_updated'),
             self::ImpersonationStarted => __('admin.activity.impersonation_started'),
             self::ImpersonationEnded => __('admin.activity.impersonation_ended'),
+            self::CancellationInitiated => __('admin.activity.cancellation_initiated'),
         };
     }
 }

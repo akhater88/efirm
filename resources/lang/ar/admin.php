@@ -104,6 +104,15 @@ return [
         'plan_updated' => 'تحديث خطة',
         'impersonation_started' => 'بدء انتحال الهوية',
         'impersonation_ended' => 'إنهاء انتحال الهوية',
+        'cancellation_initiated' => 'بدء الإلغاء',
+    ],
+
+    // PDPL Retention
+    'pdpl' => [
+        'retention_days' => '90',
+        'retention_notice' => 'سيتم الاحتفاظ ببيانات مساحة العمل لمدة :days يوم بعد الإلغاء وفقا لقانون حماية البيانات الشخصية رقم 24 لسنة 2023.',
+        'purge_complete' => 'تم حذف بيانات مساحة العمل.',
+        'consent_version' => 'v1.0-draft',
     ],
 
     // Workspaces

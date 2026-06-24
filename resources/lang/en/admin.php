@@ -104,6 +104,15 @@ return [
         'plan_updated' => 'Plan Updated',
         'impersonation_started' => 'Impersonation Started',
         'impersonation_ended' => 'Impersonation Ended',
+        'cancellation_initiated' => 'Cancellation Initiated',
+    ],
+
+    // PDPL Retention
+    'pdpl' => [
+        'retention_days' => '90',
+        'retention_notice' => 'Workspace data will be retained for :days days after cancellation per PDPL Law No. 24/2023.',
+        'purge_complete' => 'Workspace data has been purged.',
+        'consent_version' => 'v1.0-draft',
     ],
 
     // Workspaces
