@@ -262,7 +262,7 @@ class DemoWorkspaceSeeder extends Seeder
 
         $spaMatter->counterparties()->attach($acmeMena->id, ['representing' => 'they_represent']);
         $spaMatter->lawyers()->attach($admin->id, ['role' => 'lead']);
-        $spaMatter->lawyers()->attach($member->id, ['role' => 'associate']);
+        $spaMatter->lawyers()->attach($member->id, ['role' => 'supporting']);
 
         $ndaMatter = Matter::create([
             'workspace_id' => $workspace->id,
@@ -301,7 +301,7 @@ class DemoWorkspaceSeeder extends Seeder
 
         $supplyMatter->counterparties()->attach($acmeMena->id, ['representing' => 'they_represent']);
         $supplyMatter->lawyers()->attach($admin->id, ['role' => 'lead']);
-        $supplyMatter->lawyers()->attach($member2->id, ['role' => 'associate']);
+        $supplyMatter->lawyers()->attach($member2->id, ['role' => 'supporting']);
 
         $closedMatter = Matter::create([
             'workspace_id' => $workspace->id,
@@ -702,7 +702,7 @@ class DemoWorkspaceSeeder extends Seeder
 
         $litigationMatter->counterparties()->attach($alNoorTech->id, ['representing' => 'they_represent']);
         $litigationMatter->lawyers()->attach($admin->id, ['role' => 'lead']);
-        $litigationMatter->lawyers()->attach($member->id, ['role' => 'associate']);
+        $litigationMatter->lawyers()->attach($member->id, ['role' => 'supporting']);
 
         $ammanCourt = Court::create([
             'workspace_id' => $workspace->id,
