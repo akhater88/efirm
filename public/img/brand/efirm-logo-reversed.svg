@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 320" fill="none">
+  <defs><style>@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;display=swap');</style></defs>
+  <rect width="280" height="320" fill="#0D5C2E"/>
+  <rect x="22" y="22" width="236" height="12" rx="2" fill="#FFFFFF"/>
+  <circle cx="72" cy="82" r="48" fill="#FFFFFF"/>
+  <circle cx="208" cy="82" r="48" fill="#FFFFFF"/>
+  <rect x="120" y="34" width="40" height="98" fill="#FFFFFF"/>
+  <circle cx="72" cy="82" r="19" fill="#0D5C2E"/>
+  <circle cx="208" cy="82" r="19" fill="#0D5C2E"/>
+  <circle cx="72" cy="82" r="8" fill="#FFFFFF"/>
+  <circle cx="208" cy="82" r="8" fill="#FFFFFF"/>
+  <rect x="120" y="132" width="9" height="70" rx="1" fill="#FFFFFF"/>
+  <rect x="151" y="132" width="9" height="70" rx="1" fill="#FFFFFF"/>
+  <path d="M129,132 L151,132 L158,152 L122,152 Z" fill="#FFFFFF"/>
+  <path d="M122,152 L158,152 L161,194 L119,194 Z" fill="#FFFFFF"/>
+  <path d="M119,194 L161,194 L140,222 Z" fill="#FFFFFF"/>
+  <text x="140" y="292" text-anchor="middle"
+    font-family="'Playfair Display', Georgia, serif"
+    font-weight="700" font-size="52" letter-spacing="4"
+    fill="#FFFFFF">efirm</text>
+</svg>
