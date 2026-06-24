@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', __('dashboard.title') . ' — ' . __('common.app_name'))
 
