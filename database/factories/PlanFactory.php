@@ -12,25 +12,58 @@ class PlanFactory extends Factory
 {
     protected $model = Plan::class;
 
-    /**
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'slug' => $this->faker->unique()->slug(2),
-            'name' => $this->faker->words(2, true),
-            'name_ar' => $this->faker->words(2, true),
-            'description' => $this->faker->sentence(),
-            'description_ar' => $this->faker->sentence(),
-            'price_per_seat_usd' => $this->faker->randomElement([20.00, 25.00, 30.00]),
-            'max_seats' => $this->faker->numberBetween(5, 50),
-            'max_matters' => $this->faker->numberBetween(50, 500),
-            'max_contacts' => $this->faker->numberBetween(100, 1000),
-            'max_storage_mb' => $this->faker->numberBetween(1024, 10240),
-            'features' => [],
+            'slug' => fake()->unique()->slug(1),
+            'name' => fake()->word().' Plan',
+            'name_ar' => 'خطة '.fake()->word(),
+            'description' => fake()->sentence(),
+            'description_ar' => fake()->sentence(),
+            'price_per_seat_usd' => fake()->randomElement([20, 25, 30]),
+            'max_seats' => 10,
+            'max_matters' => 50,
+            'max_contacts' => 100,
+            'max_storage_mb' => 5000,
+            'features' => ['document_editor', 'clause_library'],
             'is_active' => true,
-            'sort_order' => 0,
+            'sort_order' => 1,
         ];
+    }
+
+    public function unlimited(): static
+    {
+        return $this->state([
+            'max_seats' => null,
+            'max_matters' => null,
+            'max_contacts' => null,
+            'max_storage_mb' => null,
+        ]);
+    }
+
+    public function starter(): static
+    {
+        return $this->state([
+            'slug' => 'starter',
+            'name' => 'Starter',
+            'price_per_seat_usd' => 20,
+            'max_seats' => 5,
+            'max_matters' => 20,
+            'max_contacts' => 50,
+            'features' => ['document_editor'],
+        ]);
+    }
+
+    public function pro(): static
+    {
+        return $this->state([
+            'slug' => 'pro',
+            'name' => 'Pro',
+            'price_per_seat_usd' => 25,
+            'max_seats' => 10,
+            'max_matters' => 100,
+            'max_contacts' => 200,
+            'features' => ['document_editor', 'clause_library', 'ai_operations'],
+        ]);
     }
 }

@@ -191,6 +191,15 @@ return [
         'back' => 'Back',
     ],
 
+    // Entitlements
+    'entitlements' => [
+        'suspended_read_only' => 'Your workspace is suspended. Read-only access.',
+        'seat_limit_reached' => 'Seat limit reached for your plan.',
+        'matter_limit_reached' => 'Matter limit reached for your plan.',
+        'contact_limit_reached' => 'Contact limit reached for your plan.',
+        'feature_not_available' => 'This feature is not available on your plan.',
+    ],
+
     // Errors
     'errors' => [
         'unauthorized' => 'You do not have permission to perform this action.',

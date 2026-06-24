@@ -191,6 +191,15 @@ return [
         'back' => 'رجوع',
     ],
 
+    // Entitlements
+    'entitlements' => [
+        'suspended_read_only' => 'مساحة عملك معلّقة. الوصول للقراءة فقط.',
+        'seat_limit_reached' => 'تم الوصول للحد الأقصى للمقاعد في خطتك.',
+        'matter_limit_reached' => 'تم الوصول للحد الأقصى للقضايا في خطتك.',
+        'contact_limit_reached' => 'تم الوصول للحد الأقصى لجهات الاتصال في خطتك.',
+        'feature_not_available' => 'هذه الميزة غير متوفرة في خطتك.',
+    ],
+
     // Errors
     'errors' => [
         'unauthorized' => 'ليس لديك صلاحية لتنفيذ هذا الإجراء.',
