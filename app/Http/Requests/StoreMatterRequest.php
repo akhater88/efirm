@@ -9,6 +9,7 @@ use App\Enums\PracticeArea;
 use App\Enums\RepresentationRole;
 use App\Models\Contact;
 use App\Models\Matter;
+use App\Services\SubscriptionEntitlementService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,6 +18,23 @@ class StoreMatterRequest extends FormRequest
     public function authorize(): bool
     {
         return $this->user()->can('create', Matter::class);
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $workspace = $this->user()->currentWorkspace();
+
+            if (! $workspace) {
+                return;
+            }
+
+            $entitlements = app(SubscriptionEntitlementService::class);
+
+            if ($entitlements->getSubscription($workspace) && ! $entitlements->canCreateMatter($workspace)) {
+                $validator->errors()->add('_subscription', __('admin.entitlements.matter_limit_reached'));
+            }
+        });
     }
 
     public function rules(): array
