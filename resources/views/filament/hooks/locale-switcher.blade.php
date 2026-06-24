@@ -1,18 +1,15 @@
-<form method="POST" action="{{ route('locale.switch') }}" class="flex items-center">
-    @csrf
-    @if (app()->getLocale() === 'ar')
-        <input type="hidden" name="locale" value="en">
-        <button type="submit"
-                class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400
-                       dark:hover:text-gray-200 px-2 py-1">
-            English
-        </button>
-    @else
-        <input type="hidden" name="locale" value="ar">
-        <button type="submit"
-                class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400
-                       dark:hover:text-gray-200 px-2 py-1">
-            العربية
-        </button>
-    @endif
-</form>
+@if (app()->getLocale() === 'ar')
+    <a href="{{ url('/locale/en') }}"
+       style="font-size: 13px; color: #6B7280; text-decoration: none; padding: 4px 8px; border-radius: 4px;"
+       onmouseover="this.style.color='#111827'"
+       onmouseout="this.style.color='#6B7280'">
+        English
+    </a>
+@else
+    <a href="{{ url('/locale/ar') }}"
+       style="font-size: 13px; color: #6B7280; text-decoration: none; padding: 4px 8px; border-radius: 4px;"
+       onmouseover="this.style.color='#111827'"
+       onmouseout="this.style.color='#6B7280'">
+        العربية
+    </a>
+@endif

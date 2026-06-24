@@ -17,6 +17,21 @@ use Illuminate\Support\Facades\Route;
 Route::post('locale/switch', [LocaleController::class, 'switch'])
     ->name('locale.switch');
 
+// GET-based locale switch (avoids CSRF issues inside Filament's Livewire panel)
+Route::get('locale/{locale}', function (string $locale) {
+    if (! in_array($locale, ['ar', 'en'])) {
+        abort(404);
+    }
+
+    session(['locale' => $locale]);
+
+    if (auth()->check()) {
+        auth()->user()->update(['preferred_locale' => $locale]);
+    }
+
+    return redirect()->back();
+})->name('locale.set');
+
 Route::middleware('guest')->group(function () {
     Route::get('login', fn () => view('auth.login'))->name('login');
 
