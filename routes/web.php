@@ -119,4 +119,6 @@ if (app()->environment('local')) {
 
         return redirect()->route('dashboard');
     })->name('dev.login');
+
+    Route::get('dev/style-guide', fn () => view('dev.style-guide'))->name('dev.style-guide');
 }
