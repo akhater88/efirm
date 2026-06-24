@@ -24,4 +24,7 @@ return [
     'no_upcoming_obligations' => 'No upcoming obligations',
     'no_upcoming_renewals' => 'No upcoming renewals',
     'days_left' => '{0} today|{1} 1 day|[2,*] :count days',
+    'days' => 'days',
+    'search_obligations' => 'Search obligations...',
+    'search_renewals' => 'Search renewals...',
 ];
