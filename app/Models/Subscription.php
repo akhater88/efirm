@@ -24,6 +24,9 @@ class Subscription extends Model
         'trial_ends_at',
         'grace_period_ends_at',
         'cancelled_at',
+        'data_retention_expires_at',
+        'data_purged',
+        'data_purged_at',
     ];
 
     protected function casts(): array
@@ -34,6 +37,9 @@ class Subscription extends Model
             'trial_ends_at' => 'datetime',
             'grace_period_ends_at' => 'datetime',
             'cancelled_at' => 'datetime',
+            'data_retention_expires_at' => 'datetime',
+            'data_purged' => 'boolean',
+            'data_purged_at' => 'datetime',
         ];
     }
 

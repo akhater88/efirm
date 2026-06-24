@@ -72,6 +72,16 @@ class Workspace extends Model
         return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
+    public function matters(): HasMany
+    {
+        return $this->hasMany(Matter::class);
+    }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(Contact::class);
+    }
+
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by_user_id');
