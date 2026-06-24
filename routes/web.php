@@ -27,12 +27,15 @@ Route::get('locale/{locale}', function (string $locale) {
     }
 
     session(['locale' => $locale]);
+    app()->setLocale($locale);
 
     if (auth()->check()) {
         auth()->user()->update(['preferred_locale' => $locale]);
     }
 
-    return redirect()->back();
+    $referer = request()->headers->get('referer');
+
+    return redirect($referer ?: '/dashboard');
 })->name('locale.set');
 
 Route::middleware('guest')->group(function () {
