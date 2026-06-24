@@ -106,6 +106,16 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: Check for Arabic-Indic numerals in AR lang files
+        run: |
+          if grep -rP '[\x{0660}-\x{0669}]' resources/lang/ar/; then
+            echo "::error::Arabic-Indic numerals found in AR lang files. Use Western Arabic numerals (0-9) only."
+            exit 1
+          fi
+
+      - name: Validate tokens.json
+        run: jq empty resources/design/tokens.json
+
       - name: Run Larastan (static analysis)
         run: ./vendor/bin/phpstan analyse --memory-limit=512M
         continue-on-error: true

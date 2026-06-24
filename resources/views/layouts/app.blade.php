@@ -6,7 +6,24 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', __('common.app_name'))</title>
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#2563eb">
+
+    {{-- Font preload for above-the-fold typography --}}
+    <link rel="preload" href="{{ asset('fonts/source-sans-pro-v21-latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-arabic-v12-arabic-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+
+    {{-- Favicons --}}
+    <link rel="icon" href="{{ asset('img/brand/efirm-favicon.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('img/brand/efirm-favicon-32.png') }}" sizes="32x32" type="image/png">
+    <link rel="icon" href="{{ asset('img/brand/efirm-favicon-16.png') }}" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('img/brand/efirm-favicon-192.png') }}">
+
+    {{-- PWA / theme color --}}
+    <meta name="theme-color" content="#072E17">
+
+    {{-- SEO / brand --}}
+    <meta name="description" content="{{ __('brand.tagline') }}">
+    <meta property="og:site_name" content="{{ __('brand.app_name') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
