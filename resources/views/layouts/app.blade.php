@@ -67,8 +67,8 @@
                                         {{ __('nav.profile') }}
                                     </a>
 
-                                    @if (auth()->user()->canAccessPanel(\Filament\Facades\Filament::getPanel('admin')))
-                                        <a href="/admin"
+                                    @if (auth()->user()->canAccessPanel(\Filament\Facades\Filament::getPanel('app')))
+                                        <a href="/app"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                                             {{ __('nav.admin') }}
                                         </a>

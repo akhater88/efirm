@@ -12,7 +12,7 @@ it('allows owner to access filament admin panel', function () {
         'workspace_id' => $workspace->id,
     ]);
 
-    $response = $this->actingAs($user)->get("/admin/workspace/{$workspace->id}");
+    $response = $this->actingAs($user)->get("/app/workspace/{$workspace->id}");
 
     $response->assertStatus(200);
 });
@@ -25,7 +25,7 @@ it('allows admin to access filament admin panel', function () {
         'workspace_id' => $workspace->id,
     ]);
 
-    $response = $this->actingAs($user)->get("/admin/workspace/{$workspace->id}");
+    $response = $this->actingAs($user)->get("/app/workspace/{$workspace->id}");
 
     $response->assertStatus(200);
 });
@@ -38,13 +38,13 @@ it('allows member to access filament admin panel (Filament-everywhere pivot)', f
         'workspace_id' => $workspace->id,
     ]);
 
-    $response = $this->actingAs($user)->get("/admin/workspace/{$workspace->id}");
+    $response = $this->actingAs($user)->get("/app/workspace/{$workspace->id}");
 
     $response->assertStatus(200);
 });
 
 it('denies unauthenticated user access to filament admin panel', function () {
-    $response = $this->get('/admin');
+    $response = $this->get('/app');
 
     $response->assertRedirect();
 });
