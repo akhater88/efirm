@@ -1,261 +1,149 @@
 # CLAUDE.md — Project Memory for Claude Code
 
-> Read this file first. It encodes everything you need to know before touching the codebase.
-> **Last meaningful update: 2026-06-23 (late)** — SURGE-FIX-02 (Case Management refinement) + Path consolidation under `docs/`.
-> **Path convention:** All planning, validation, decision, prompt, and spike artifacts live under `docs/` at the repo root. See §5 for the full folder layout.
-
----
-
-## Update log
-
-- **2026-06-17** — Initial draft, pre-build.
-- **2026-06-21 (am)** — Stack reconciled after S-01: Laravel 13, Filament v5, Pest 4, ULIDs, Tailwind v4. Filament-everywhere pivot.
-- **2026-06-21 (pm)** — D-09 strategic pivot. Depth-wedge superseded by breadth-coverage.
-- **2026-06-22** — SURGE-10/11/12 added: Task Workflows, AI Doc Gen, Templates engine, Integrations. Added non-negotiables for rule engine isolation, OAuth token security, PWA constraints.
-- **2026-06-23 (am)** — SURGE-13 inserted: Lawyer Management & Matter-Lawyer assignment gap fixed.
-- **2026-06-23 (mid)** — SURGE-FIX-01 inserted. Khaldoun Khater (Al-Dujani, Amman) practitioner input. 24 decisions logged. New entity: ExpertReport. New service: AppealDeadlineService. Court-level-dependent deadlines.
-- **2026-06-23 (pm)** — SURGE-FIX-02 inserted. Khaldoun competitive review of HAQQ.ai plus pain-point conversations produced 6 refinement Flows (Hearing Session History, Court Review Trainee Dispatch, Forked Matter Creation, Contextual Quick Timer, Hearing Postponement Chain UX, Case Management Navigation Refinement). New entity: HearingActionItem. New services: HearingSessionService, CourtReviewDispatchService, QuickTimerService. New enum: MatterTypeEnum (14 cases across Transactional and Litigation tracks). 6 new decisions logged (#26-#31) in `docs/validation/02_advisor_meeting_log.md` Conversation 3.5.
-- **2026-06-23 (late)** — Path consolidation. All planning, validation, decision, prompt, and spike artifacts now live under `docs/` at the repo root (previously scattered at top level). The §5 folder structure has been rewritten to reflect this. All references in code comments, engineer-agent prompts, and inter-file links use the `docs/` prefix. The old top-level paths (`planning/`, `validation/`, `decisions/`, `prompts/`, `spikes/`) are deprecated and must not be recreated.
+> This file is loaded by Claude Code on every session against this repository.
+> Read it first. It encodes everything you need to know before touching the codebase.
+> **Version: v7** • **Last meaningful update: 2026-06-24**
+> Changes since v6: stack version corrections (Laravel 13.x, Filament v5.x, Pest 4.x), direct Stripe SDK (not Cashier), planning path migration (`docs/`), SURGE-14 architectural decisions (admin guard, append-only ledgers, defense-in-depth invariants, no-secrets-in-audit, platform-vs-tenant scope split, locale key parity, no-hardcoded-strings enforcement).
 
 ---
 
 ## 1. Project
 
-A **bilingual (Arabic/English), AI-native legal-OS** for Levant law firms (2–10 lawyers). Covers contracts, litigation, practice management, financials, CRM, workflow automation.
+A **bilingual (Arabic/English), AI-native commercial-contracts workspace** for small Levant law firms (2–10 lawyers). The product makes the contract document itself the workspace — editable, versioned, clause-aware, with AI inline — and explicitly avoids the litigation, accounting, and CRM breadth of competitors (HAQQ.ai, Clio).
 
-**Strategic posture (per D-09):** ~85–90% of HAQQ's nominal surface. Email/calendar via OAuth (NOT native). Mobile via PWA (NOT native). Depth advantage on documents + AI surfaces retained. Beating HAQQ in workflow precision on Levant-specific friction points where they ship one-size-fits-all forms.
+**Single hardest test we must pass:** a lawyer imports a real `.docx` contract, edits clauses (mixed AR/EN, RTL/LTR), exports back to `.docx`, and opens the file in Microsoft Word with formatting intact. If round-trip fidelity breaks, the wedge breaks.
 
-**Single hardest test:** a lawyer imports a real `.docx`, edits clauses (mixed AR/EN, RTL/LTR), exports back, opens in Microsoft Word with formatting intact. If round-trip fidelity breaks, the wedge breaks.
-
-**Active advisor relationship (informal):** Khaldoun Khater — commercial litigator at Al-Dujani Office, Amman; 12 years; cousin of founder; cousin favour-economy basis. Three substantive conversations to date plus competitive review of HAQQ.ai. **Khaldoun cannot sign formal compliance attestations** — those require the separately-engaged paid attorney (introduction pending per Decision #23).
-
-**Hard stops on production deployment (do not waive):**
-
-- Lawyer signoff on litigation procedural model (S-08)
-- Lawyer + CPA signoff on Trust Accounts (S-09 F-09.2)
-- Lawyer-drafted ToS / Privacy / DPA / AI Disclaimer (S-06)
-- Lawyer-reviewed AI prompt templates (clause-level, S-04)
-- Lawyer-reviewed AI document-generation templates (S-10 F-10.4, F-10.5)
-- Lawyer-reviewed seed Document Templates (S-11 F-11.3)
-- Paid-lawyer-drafted PDPL consent text (S-FIX-01.5)
-
-**Informal-advisor input vs formal signoff:** Khaldoun's input IS captured in code (SURGE-FIX-01 and SURGE-FIX-02) and IS cited by decision number in code comments. This is informal validation, not formal attestation. Hard stops above remain RED for production until the formal paid lawyer signs the corresponding `docs/validation/0X_lawyer_signoff.md` files.
+**MVP audience:** small commercial-law firms in Jordan, Lebanon, Palestine, Iraq.
+**Wedge (PROVISIONAL until Arabic AI test against HAQQ completes):** either Arabic-legal depth or integrated single-surface UX. Build is wedge-agnostic at the structural level.
 
 ---
 
 ## 2. Tech Stack
 
-| Layer | Value |
-|---|---|
-| Backend framework | Laravel 13.16.x |
-| Admin/Customer panel | Filament v5.6.x |
-| PHP | 8.3 (CI pin) |
-| Frontend (Filament) | Livewire 3 + Tailwind v4 |
-| Frontend (document editor) | Custom Livewire 3 + Blade + TipTap (S-03) |
-| Frontend (Task Board) | Filament Page + Livewire + SortableJS (S-10) |
-| Database | MySQL 8.x InnoDB, UTF8MB4 |
-| ORM | Eloquent (Laravel 13) — soft deletes; ULID PKs |
-| Primary key | ULID via `HasUlids` |
-| Cache / queues | Redis (Cloudways-managed) |
-| Object storage | S3-compatible |
-| Cloud | Cloudways → DigitalOcean Frankfurt FRA1 (triggers PDPL consent) |
-| CI/CD | GitHub Actions |
-| Auth (web) | Google OAuth via Socialite v5 + optional SAML/OIDC per workspace (S-12) |
-| Auth (API) | Laravel Sanctum |
-| API style | REST + OpenAPI 3.0 (`openapi/spec.yaml`) |
-| LLM provider | Anthropic Claude (behind `LlmProvider`) |
-| Billing | Stripe via Laravel Cashier (per D-15 ceiling) |
-| PDF | Spatie laravel-pdf |
-| Money | Laravel `decimal` + bcmath. No floats |
-| Email integration | Microsoft Graph + Gmail API (OAuth 2.0) |
-| Calendar integration | Google Calendar API + MS Graph Calendar |
-| SSO | `aacotroneo/laravel-saml2` (SAML 2.0 + OIDC) |
-| PWA | Web App Manifest + Service Worker (static-asset cache only) |
-| Encryption at rest | Laravel `encrypted` casts (OAuth tokens, IdP certs) |
-| Tests | Pest 4.7.x |
-| E2E | Pest Browser Plugin (Playwright) |
-| Static analysis | Larastan 3.10 at level 6 |
-| Code style | Laravel Pint |
-| Localization | `laravel-lang/common` + `resources/lang/{ar,en}/*.php` |
-| Default locale | `ar` (Arabic, RTL) |
+| Layer | Value | Notes |
+|---|---|---|
+| Backend framework | **Laravel 13.x** | Single monolith for MVP. Wave-target: 13.16. |
+| Admin panel | **Filament v5.x** | Wave-target: 5.6. Schema-based form API (`Schema::make()`), NOT v3's `Form::make()`. |
+| Workspace panel | **Filament v5.x (second panel)** | Separate panel registered alongside admin panel. |
+| Backend language | PHP 8.3 | Use modern syntax (readonly, enums, etc.) |
+| Frontend (web) | Blade + Tailwind + Livewire 3 | No SPA. Server-rendered first. |
+| Editor (in-document) | TipTap or CKEditor (decided in `decisions/D-02.md`) | Lives client-side, called via Livewire |
+| Database | MySQL 8.x InnoDB | UTF8MB4 charset throughout |
+| ORM | Eloquent | Soft deletes on tenant-scoped models only |
+| Cache / queues | Redis | Cloudways managed |
+| Object storage | S3-compatible | For .docx blobs, document exports |
+| Cloud | Cloudways (DigitalOcean FRA1) | Region per `decisions/D-01.md` |
+| CI/CD | GitHub Actions | `.github/workflows/` |
+| Auth (web) | Google OAuth via Socialite | Session cookies, `web` guard |
+| Auth (admin) | **Email + password via `admin` guard** | Session-based, distinct cookie (`platform_admin_session`), path-scoped to `/admin`, SameSite=Strict. **NOT Sanctum tokens.** |
+| Auth (API) | Laravel Sanctum | Bearer tokens. **Workspace users only — never admins.** |
+| API style | REST + OpenAPI 3.0 | Source of truth: `openapi/spec.yaml`. **Admin panel introduces zero public REST endpoints.** |
+| LLM provider | Anthropic Claude (default) or per `decisions/D-03.md` | Abstracted behind `LlmProvider` interface |
+| Billing | **Stripe direct SDK** (NOT Laravel Cashier) | Custom subscription lifecycle. Stripe API version pinned to `2025-08-27.acacia` in `config/services.php`. Webhooks idempotent via `stripe_webhook_events` ledger. |
+| Tests | **Pest 4.x** | Wave-target: 4.7. `tests/Unit/`, `tests/Feature/`, `tests/Browser/`. PHPUnit syntax not acceptable. |
+| E2E tests | Pest Browser Plugin (Playwright) | For editor + .docx round-trip especially. Also RTL snapshot tests. |
+| Static analysis | Larastan level 6 | `phpstan.neon` |
+| Code style | Laravel Pint | `pint.json` |
+| Localization | Laravel localization | `resources/lang/{ar,en}/*.php`. **Key structure parity enforced.** |
+| Default locale | `ar` (Arabic, RTL) | `en` is secondary, equal-weight at UI level |
 
 ---
 
 ## 3. Common Commands
 
 ```bash
-# First-time
-composer install && npm install
-cp .env.example .env && php artisan key:generate
-php artisan migrate --seed && npm run build
+# First-time setup
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm run build
 
-# Daily
+# Daily dev
 php artisan serve
-php artisan queue:work --queue=default,contracts,exports,reminders,invoices,automations,litigation,court_reviews
+php artisan queue:work
 npm run dev
 
 # Tests
-./vendor/bin/pest
-./vendor/bin/pest --filter=AppealDeadline
-./vendor/bin/pest --filter=HearingSessionHistory
-./vendor/bin/pest --filter=ForkedMatterCreation
-./vendor/bin/pest tests/Browser
-./vendor/bin/pest --parallel
-./vendor/bin/pest --coverage --min=80
+./vendor/bin/pest                       # unit + feature (Pest 4.x)
+./vendor/bin/pest --filter=Document     # subset
+./vendor/bin/pest tests/Browser         # E2E (slow)
+./vendor/bin/pest --coverage --min=95   # coverage gate
 
 # Code quality
-./vendor/bin/pint && ./vendor/bin/phpstan analyse
+./vendor/bin/pint                       # auto-format
+./vendor/bin/pint --test                # check only (CI)
+./vendor/bin/phpstan analyse            # static analysis (level 6)
 
 # Migrations
+php artisan make:migration create_<table>_table --create=<table>
+php artisan make:migration add_<col>_to_<table>_table --table=<table>
 php artisan migrate
-php artisan migrate:fresh --seed   # LOCAL ONLY
+php artisan migrate:rollback --step=1
+php artisan migrate:fresh --seed         # local only — never in shared envs
 
-# Jurisdiction seeders — manual, gated
-php artisan db:seed --class=JordanCourtsSeeder       # CSV-driven (S-FIX-01.8)
-php artisan db:seed --class=JordanChartOfAccountsSeeder  # CPA-gated
-php artisan db:seed --class=AiGenerationTemplatesSeeder  # Lawyer-gated
-php artisan db:seed --class=DocumentTemplatesSeeder
-php artisan db:seed --class=WorkflowBundlesSeeder
+# Filament (v5.x)
+php artisan make:filament-resource <Entity> --panel=admin
+php artisan make:filament-resource <Entity> --panel=app
+php artisan filament:assets              # publish assets on deploy
+php artisan filament:upgrade
+
+# Seeders
+php artisan db:seed
+php artisan db:seed --class=AdminUserSeeder       # idempotent; production-safe
+php artisan db:seed --class=DemoWorkspaceSeeder
 
 # OpenAPI
 ./vendor/bin/spectral lint openapi/spec.yaml
+
+# Queue
+php artisan queue:listen --queue=default,contracts,exports,stripe-webhooks
+php artisan horizon                      # if Horizon installed (TBD)
+
+# Stripe (local testing)
+stripe listen --forward-to localhost:8000/webhooks/stripe
 ```
+
+**Local services required:**
+
+- MySQL 8.x on `localhost:3306`
+- Redis on `localhost:6379`
+- (Optional) MinIO for S3-compatible storage on `localhost:9000`
+- (Optional) Stripe CLI for local webhook testing
 
 ---
 
 ## 4. Architectural Non-Negotiables
 
-These are constraints, not preferences.
+These are constraints, not preferences. **Do not violate them.** If a task seems to require violating one, stop and surface the conflict.
 
-### Core principles
+### Tenant-scoped (workspace) entities
 
-1. Workspace scoping mandatory via `BelongsToWorkspace`
-2. Policy + FormRequest on every write endpoint AND every Filament resource
-3. Soft deletes everywhere — except append-only ledgers (§4b)
-4. Audit columns everywhere — except append-only ledgers
-5. Optimistic locking via `updated_at` → 409 mismatch
-6. OpenAPI spec sync in same PR
-7. Bilingual via Laravel localization only
-8. No N+1 (eager load for lists)
-9. No raw SQL outside Repository + integration test
-10. Document editing is client-side (S-03 only)
-11. Filament is the primary UI for ALL roles. §4a
-12. ULIDs as primary keys via `HasUlids`
-13. Polymorphic morph map registered in `AppServiceProvider` (short stable keys)
-14. No floating-point arithmetic on money. §4c
-15. Append-only ledgers immutable at multiple layers. §4b
-16. Rule engine isolation (S-11): no `eval()`, no user-supplied code. §4d
-17. OAuth tokens encrypted at rest (S-12). §4e
-18. Integration over native for email/calendar/signature
-19. PWA caches static assets only, NEVER data
-20. Advisor input takes precedence over provisional defaults. §4f
-21. Court-level-dependent deadline calculation. §4g
-22. **Forked Matter Creation backward compatibility** (NEW v6). §4h
-23. **Single active timer per user** (NEW v6). §4i
-24. **Hearing session content requires status='held'** (NEW v6). §4j
+1. **Workspace scoping is mandatory for tenant-scoped entities.** Every tenant-scoped model uses the `BelongsToWorkspace` trait. Every query is automatically scoped via a global Eloquent scope. Cross-workspace data leakage is a P0 bug class. **Exception: platform-level entities** (see rule 12 below).
+2. **Policy + FormRequest on every write endpoint.** No exceptions. No inline validation. No `if ($user->role === ...)` checks in controllers.
+3. **Soft deletes on tenant-scoped entities.** Every tenant-scoped model uses `SoftDeletes`. Hard delete only via explicit admin tooling. **Append-only ledger tables and platform-level entities are exempt** (see rules 11 and 12).
+4. **Audit columns everywhere.** `created_at`, `updated_at`, `created_by_id`, `updated_by_id` on every tenant entity.
+5. **Optimistic locking on concurrent edits.** Compare `updated_at` on update; reject HTTP 409 if mismatch.
 
-### §4a. Filament-everywhere
+### Cross-cutting
 
-Filament v5 is the primary UI for all authenticated users. Granular access via Policy methods. `canAccessPanel()` returns true for any workspace member. Exceptions: auth/login, document editor (S-03), Task Board (S-10), Stripe redirect (S-06), public share tokens (S-03), public invoice viewing (S-09), SSO callbacks (S-12), public ICS feed (S-12), onboarding wizard (S-06).
+6. **OpenAPI spec sync.** Every public API endpoint added/changed updates `openapi/spec.yaml` in the same PR. CI enforces. **Admin-panel work does NOT touch `openapi/spec.yaml`** (admin panel is browser-only Livewire/Filament, not REST).
+7. **Bilingual via Laravel localization only.** Never hardcode user-facing strings. Always `__('domain.key')`. **Enforced by `NoHardcodedStringsTest` for every domain folder.**
+8. **No N+1.** Lists use eager loading. Larastan rule enforces (`larastan/larastan` baseline).
+9. **No raw SQL in app code** unless wrapped in a Repository with a corresponding integration test.
+10. **Document editing is client-side.** Server stores editor JSON state + .docx blob; the editor library runs in the browser. AI calls go through the backend, never browser → LLM provider directly.
 
-**S-FIX-02.6 update:** Case Management is now a unified navigation group containing 4 resources in order: MatterResource (sort 1), HearingResource (sort 2), CourtReviewResource (sort 3), ServiceLogEntryResource (sort 4). Bilingual group label "إدارة القضايا" / "Case Management".
+### Ledgers, invariants, secrets, scope, locale (SURGE-14 additions)
 
-### §4b. Append-only ledgers
-
-| Ledger | Model | Surge |
-|---|---|---|
-| `ai_interactions` | AiInteraction | S-04 |
-| `trust_ledger_entries` | TrustLedgerEntry | S-09 |
-| `financial_audit_log` | FinancialAuditLog | S-09 |
-| `ai_document_generations` | AiDocumentGeneration | S-10 |
-| `automation_runs` | AutomationRun | S-11 |
-| `audit_logs` | AuditLog | S-12 |
-
-Enforcement: model lifecycle hook blocks `updating`/`deleting`; Policy denies; DB trigger (trust_ledger_entries only); multi-layer Pest tests.
-
-**S-FIX-01 strengthening:** `trust_ledger_entries.description` REQUIRED (min 10 chars) when `entry_type='adjustment'` (Decision #7).
-
-### §4c. Money handling
-
-DECIMAL(15,2). Cast `'amount' => 'decimal:2'`. All arithmetic via bcmath or `MoneyService`. Currency separate `CHAR(3)`. No floats. No exceptions.
-
-### §4d. Rule engine isolation (S-11)
-
-Condition evaluator = fixed-operator interpreter (eq, neq, gt, lt, gte, lte, in, contains, is_null, is_not_null, and, or, not). No `eval()`. No arbitrary class instantiation. Action handlers fixed in `app/Services/AutomationActions/`.
-
-### §4e. OAuth token security (S-12)
-
-Tokens use `encrypted` cast. Never in API responses, audit diffs, or logs. Zeroed on disconnect before soft delete. Pest tests verify each protection actively.
-
-### §4f. Advisor input precedence rule
-
-When `docs/validation/02_advisor_meeting_log.md` contains a decision contradicting an earlier `[PROVISIONAL-FOUNDER-DECIDED]` placeholder, advisor input wins.
-
-**Citation convention** for code comments:
-```php
-// Per advisor input from Khaldoun Khater, docs/validation/02_advisor_meeting_log.md 
-// Conversation N, Decision #NN
-```
-
-This builds the audit trail the formal paid lawyer will follow when engaged.
-
-**Boundary:** Advisor input does NOT satisfy formal lawyer signoff hard stops in §10. Khaldoun cannot sign production-deploy attestations.
-
-### §4g. Court-level-dependent deadline calculation
-
-No hardcoded appeal deadlines or court-procedural windows. All such calculations route through `AppealDeadlineService` or equivalents.
-
-**Window depends on court level:**
-- Magistrate Court (محاكم الصلح) → 10 days
-- First Instance Court (محاكم البداية) → 30 days
-- Appeal / Cassation → throws `UnsupportedCourtLevelException` (advisor input pending)
-
-**Start date depends on `judgment_presence`:**
-- `wijahi` (وجاهي — in-presence) → day after `decision_date`
-- `mithla_wijahi` (بمثابة الوجاهي — deemed in-presence) → day after `notified_date`
-- `ghyabi` (غيابي — pure default) → throws `UnconfirmedRegulationException` (pending advisor confirmation)
-- NULL → throws `MissingJudgmentPresenceException`
-
-When the service throws, the caller creates Obligation with `status='requires_input'` + notifies Lead Lawyer. **No silent fallback to hardcoded windows.**
-
-Per Decision #18, Conversation 2, 2026-06-23. **A 10-day deadline rendered as 30 days = missed appeal = malpractice exposure for the firm using this product.** This rule exists to prevent that.
-
-### §4h. Forked Matter Creation backward compatibility (NEW v6)
-
-The `Matter.matter_type` field (added in S-FIX-02.3 via `MatterTypeEnum`) is the source of truth for whether a Matter is Transactional or Litigation. The legacy `is_litigation` boolean column is preserved for backward compatibility with pre-S-FIX-02 data and legacy API clients but is DERIVED from `matter_type` going forward.
-
-**Rules:**
-- New Matter creation requires `matter_type` to be set via the stepped wizard or API. Legacy API clients passing `is_litigation` boolean receive a deprecation warning header but the request succeeds with auto-derived `matter_type`.
-- Server-side validation enforces field/track consistency: Transactional matters cannot have `court_id`, `case_number`, `judge_id`, `opposing_counsel_id` (422 if supplied). Litigation matters cannot have `target_closing_date`, `deal_value_amount`, `expected_document_types` (422 if supplied).
-- Existing Matters with NULL `matter_type` (pre-migration data) continue to function. The backfill migration assigns conservative defaults (`is_litigation=true` → `commercial_litigation`; `false` → `commercial_contracts`) and produces `docs/validation/fix-02_matter_type_backfill_audit.csv` listing every assigned default for founder manual review. NO automatic correction of legacy data.
-- The `is_litigation` accessor on the Matter model derives from `matter_type` when present; falls back to the legacy column when NULL.
-
-Per Decision #26, Conversation 3.5.
-
-### §4i. Single active timer per user (NEW v6)
-
-The `QuickTimerService` (added in S-FIX-02.4) enforces that any user has at most ONE active `TimeEntry` (where `ended_at IS NULL`) at any time across the entire system.
-
-**Rules:**
-- Starting a new timer when user has an active timer: returns 409 with bilingual error message "You have an active timer; stop it before starting a new one" / "لديك مؤقت نشط بالفعل. أوقفه قبل بدء واحد جديد"
-- Active timer enforcement is at the service layer, not just the database. Race condition between two concurrent start requests resolved by service-level lock (DB row lock on the user's existing active TimeEntry).
-- The Active Timer Indicator widget rendered in Filament chrome via `panels::user-menu.before` render hook shows the active timer state and provides a Stop action visible from any page.
-- Workspace isolation applies: a user with active timer in Workspace A cannot also start a timer in Workspace B. Cross-workspace active timer prevented at service layer.
-
-Per Decision #31, Conversation 3.5.
-
-### §4j. Hearing session content requires status='held' (NEW v6)
-
-The session content fields on Hearing (`judge_statement_ar`, `judge_statement_en`, `outcome_summary_ar`, `outcome_summary_en`, `our_submissions_made`, `opposing_submissions_made`, `next_session_required_actions_ar`, `next_session_required_actions_en`, `session_attended_by`) and the `HearingActionItem` records can only be created/edited when the Hearing's `status === 'held'`.
-
-**Rules:**
-- API endpoints reject session content writes on Hearings with non-held status with 422 + bilingual message "Session outcome can only be recorded for hearings that have been held" / "لا يمكن تسجيل نتيجة جلسة لم تنعقد بعد"
-- Filament form's "Session Outcome" tab visibility condition: `fn($record) => $record && $record->status === 'held'`
-- HearingActionItem auto-creates a linked Obligation via `HearingActionItemObserver` on the `creating` event. Status changes propagate one-way: action_item.status → obligation.status. Soft-deleting an action item marks the linked Obligation as 'waived' with reason "Action item removed".
-- Hearing status transition from 'held' back to 'scheduled' (i.e., postponement after holding) preserves existing session content as historical record. New session content is captured on the new Hearing created as the postponement.
-- Only users in `session_attended_by` array OR the Matter's lead lawyer can edit session content (enforced via `HearingPolicy`).
-
-Per Decision #28, Conversation 3.5.
+11. **Cursor pagination only.** No `paginate()` (offset). All list/index endpoints — public API, admin Filament resources, internal services — use Laravel cursor pagination. Offset pagination is a defect.
+12. **Append-only ledger tables.** The following are append-only: `admin_activity_log`, `subscription_events`, `stripe_webhook_events`, `admin_impersonation_sessions`. For each: no `updated_at` column, no soft deletes, no Filament Edit/Delete actions, no policy methods for update/delete. Corrections via new offsetting rows only.
+13. **Platform-level entities are NOT workspace-scoped.** `AdminUser`, `AdminActivityLog`, `Plan`, `Subscription` (the subscription record itself, owned by a workspace but written/managed by platform admins), `subscription_events`, `stripe_webhook_events`, `admin_impersonation_sessions` are platform-level. They do NOT use `BelongsToWorkspace`. They live in `app/Models/` without the trait.
+14. **Defense-in-depth for critical invariants.** Last-super-admin-must-exist, single-active-timer-per-user (Year-2 feature), single-active-impersonation-per-admin, and similar invariants are enforced at THREE layers: FormRequest validation + Policy method + Pest test asserting database-level invariant. All three layers must exist; any one alone is insufficient.
+15. **No secrets in audit payloads.** `password`, `password_confirmation`, `new_password`, `current_password`, Stripe webhook secrets, Stripe API keys, Sanctum tokens — none of these appear in any audit log row, console log, error report, queue job argument, or Stripe webhook event row. Enforced by `AuditLogPasswordLeakageTest`.
+16. **Auth guard isolation.** Three guards: `web` (workspace session), `admin` (admin panel session), `sanctum` (workspace API tokens). They do not cross-authenticate. `AdminUser` model NEVER uses `HasApiTokens` trait. `User` model can use `HasApiTokens` (workspace users authenticate the API via Sanctum). Session cookies are path-scoped and distinct.
+17. **Localization key parity.** `resources/lang/ar/*.php` and `resources/lang/en/*.php` must have identical key structures. Enforced by `LocaleKeyParityTest` in CI.
+18. **Stripe webhook idempotency.** Every Stripe webhook is recorded in `stripe_webhook_events` keyed on `stripe_event_id` BEFORE any side effect. Replays no-op. Signature verification non-negotiable.
 
 ---
 
@@ -263,238 +151,212 @@ Per Decision #28, Conversation 3.5.
 
 ```
 app/
-  Concerns/                  Traits (BelongsToWorkspace, AppendOnlyLedger)
-  Enums/                     PHP enums (incl. LitigationStatusEnum, HearingTypeEnum, JudgmentPresenceEnum, CourtLevelEnum, KycItemTypeEnum, MatterTypeEnum)
-  Exceptions/                Custom exceptions (UnsupportedCourtLevelException, MissingJudgmentPresenceException, UnconfirmedRegulationException)
-  Filament/
-    Resources/               Filament resources (incl. ExpertReportResource, HearingResource with session outcome tab, CourtReviewResource with dispatch fields)
-    Pages/                   Custom Filament pages (incl. MyCourtTasksToday)
-    Widgets/                 Dashboard + chrome widgets (incl. ActiveTimerIndicator)
+  Models/                    Eloquent models — singular PascalCase
+                             (both tenant-scoped and platform-level live here)
+  Concerns/                  Shared model traits (e.g., BelongsToWorkspace)
+  Enums/                     PHP 8.1+ enums (Role, MatterStatus, AdminRole,
+                             AdminActivityEventType, SubscriptionState, etc.)
   Http/
-    Controllers/Api/V1/      Versioned API controllers
-    Controllers/Web/         Non-Filament web controllers
-    Requests/                FormRequests (incl. StoreMatterRequest with track validation)
-    Resources/               API resources (strip OAuth tokens)
-    Middleware/              SetLocale, EnsureWorkspaceSelected, EnsurePdplConsentObtained
-  Livewire/                  Custom Livewire components (incl. SessionsTimeline)
-  Models/                    Eloquent models (incl. ExpertReport, HearingActionItem)
-  Services/                  Domain services (incl. AppealDeadlineService, ExpertReportService, HearingSessionService, CourtReviewDispatchService, QuickTimerService)
-    AutomationActions/       Action handlers (S-11)
-  Policies/                  <Entity>Policy (incl. HearingActionItemPolicy, CourtReviewPolicy with dispatch/complete methods)
-  Jobs/                      Queue jobs
-  Observers/                 Eloquent observers (incl. CourtReviewObserver, ExpertReportObserver, HearingActionItemObserver)
-  Mail/                      Bilingual mailables
-  Console/Kernel.php         Scheduled tasks
-  Providers/                 AppServiceProvider (morph map), AppPanelProvider (Case Management navigation group)
+    Controllers/
+      Api/V1/                Versioned API controllers (workspace-side)
+      Web/                   Server-rendered web controllers (workspace-side)
+      Webhooks/              External webhooks (e.g., StripeWebhookController)
+    Requests/                FormRequest classes — Store<X>Request, Update<X>Request
+    Resources/               API resources (transformers)
+    Middleware/              Custom middleware
+      Admin/                 Admin-guard-specific middleware
+                             (EnforceIdleTimeout, EnforceAbsoluteTimeout)
+  Filament/
+    Admin/                   Admin panel (platform operators)
+      Resources/             <Entity>Resource for admin panel
+      Pages/                 Custom pages (Auth\Login, Dashboard)
+      Widgets/               Dashboard widgets
+      Components/            Custom render-hook components (e.g., UserMenu)
+    App/                     Workspace panel (firm users)
+      Resources/             <Entity>Resource for workspace panel
+  Services/                  Domain services (e.g., DocumentService,
+                             SubscriptionEntitlementService,
+                             AdminActivityLogger)
+  Policies/                  Authorization policies — <Entity>Policy
+  Jobs/                      Queue jobs — verb-shaped names
+  Mail/                      Mailable classes
+  Console/
+    Kernel.php               Scheduled tasks
+  Providers/
+    AdminPanelProvider.php   Filament admin panel registration
+    AppPanelProvider.php     Filament workspace panel registration
+
+config/
+  admin.php                  Admin-panel-specific config (session timeouts,
+                             password rules, locale defaults)
 
 database/
-  migrations/
-  seeders/
-    *.php                    
-    data/
-      jordan_courts.csv      # From advisor (Khaldoun)
-  factories/
+  migrations/                Timestamped migrations
+  seeders/                   Seeders (AdminUserSeeder is production-safe)
+  factories/                 Model factories
 
 resources/
-  views/                     auth, documents, invoices, filament, sso, ics, onboarding, livewire/sessions-timeline
-  lang/ar/                   litigation_status, hearing_type, kyc_items, ai_disclaimers, pdpl_consent_v1, expert_reports, appeal_deadlines, navigation, matter_types, hearings, sessions_timeline, hearing_action_items, quick_timer, etc.
-  lang/en/                   (same files)
-  css/, js/
-  pwa/                       manifest, service worker, icons
+  views/                     Blade templates
+  lang/ar/                   Arabic translations (parity-enforced with en/)
+  lang/en/                   English translations (parity-enforced with ar/)
+  css/, js/                  Frontend assets (Vite-bundled)
 
-routes/                      web.php, api.php, console.php
+routes/
+  web.php                    Web routes (session auth, `web` guard)
+                             Includes Stripe webhook route (no auth, signed)
+  api.php                    API routes (Sanctum auth, `sanctum` guard)
+  console.php                Artisan commands
+  (admin routes registered via Filament panel provider, NOT a route file)
 
 tests/
-  Unit/
-  Feature/
-    Api/V1/, Filament/, Models/, Policies/, Services/, Concerns/, Locale/, Middleware/
-    Financial/
-    Litigation/              (incl. AppealDeadlineCalculationTest, ExpertReportObjectionTest, HearingSessionHistoryTest, CourtReviewDispatchTest, HearingPostponementChainTest)
-    Matters/                 (incl. ForkedCreationTest)
-    TimeTracking/            (incl. ContextualTimerTest)
-    Compliance/              (Append-only multi-layer)
-    Automations/
-    Integrations/
-  Browser/
-  fixtures/
+  Unit/                      Pure unit tests
+  Feature/                   HTTP + Filament integration tests
+    Api/V1/                  Mirror controller structure (workspace-side)
+    Filament/                Workspace Filament resource tests
+    Admin/                   Admin panel tests (auth, resources, middleware,
+                             policy enforcement, guard isolation)
+  Browser/                   E2E via Pest Browser Plugin
+    Admin/                   Admin panel RTL snapshot tests
+    __snapshots__/admin/     Baseline screenshots (8 screens × 2 locales)
+  fixtures/                  Test files (.docx samples, etc.)
 
-openapi/spec.yaml
+openapi/
+  spec.yaml                  REST API specification — single source of truth
+                             (workspace API only; admin panel has no public API)
 
-docs/                        ALL PROJECT DOCUMENTATION (planning, validation, decisions, prompts, spikes)
-  README.md                  Index of docs/ subfolders for new readers
-  decisions/                 Architecture Decision Records (ADRs) — append-only, supersede via new ADR
-    D-09_breadth_pivot.md
-    D-15_pricing_ceiling.md
-  prompts/                   Clause-level AI prompts (Lawyer-gated for production)
-    document_generation/     Full-document AI generation templates (Lawyer-gated)
-  spikes/                    Throwaway research notes
-  validation/                Founder waiver, advisor logs, lawyer signoffs, backfill audits
-    00_FOUNDER_WAIVER.md
-    01_haqq_ai_test_protocol.md
-    02_advisor_meeting_log.md  # SOURCE OF TRUTH for advisor input (Conversations 1, 2, 3, 3.5)
-    06_legal_docs/             Pending paid lawyer
-    08_litigation_lawyer_signoff.md
-    09_trust_account_lawyer_signoff.md
-    09_trust_account_cpa_signoff.md
-    10_ai_generation_lawyer_signoff.md
-    13_lawyer_management_advisor_review.md
-    court_reviews_pre_deadline_fix_audit.csv          # From S-FIX-01.3
-    fix-02_matter_type_backfill_audit.csv             # From S-FIX-02.3
-    fix-02_evidence_hearings_to_reclassify.csv        # From S-FIX-01.1 (if any)
-  planning/                  Roadmap, Surge plans, Flow specs, Wave-Ready Packages
-    00_MVP_ROADMAP_v0.2.md
-    HAQQ_COVERAGE_GAP_ANALYSIS.md
-    SURGE-01-... through SURGE-09-... (shipped)
-    SURGE-FIX-01-Advisor-Corrections.md  (shipped)
-    SURGE-FIX-02-Case-Management-Refinement.md  # ACTIVE — current priority
-    F-FIX-02-01-Hearing-Session-History.md
-    F-FIX-02-01-Hearing-Session-History-WRP-1.md
-    F-FIX-02-02-Court-Review-Trainee-Dispatch.md
-    F-FIX-02-03-Forked-Matter-Creation.md
-    F-FIX-02-04-Contextual-Quick-Timer.md
-    F-FIX-02-05-Hearing-Postponement-Chain-UX.md
-    F-FIX-02-06-Case-Management-Navigation-Refinement.md
-    SURGE-10 through SURGE-13 (queued)
-    SURGE-VERIFY.md
+docs/
+  README.md                  Index of all planning artifacts
+  00_MVP_ROADMAP.md          Master plan
+  SURGE-NN-*.md              Per-Surge plans
+  WAVE-NN.N-*.md             Per-Wave Wave-Ready Packages
+  validation/                SURGE-00 deliverables + advisor meeting logs
+    02_advisor_meeting_log.md    Khaldoun's documented decisions (source of truth)
+
+decisions/
+  D-01.md … D-NN.md          Architecture decision records (append-only)
+
+prompts/                     AI prompt templates (must have legal-review header)
+spikes/                      Throwaway research code (deleted post-decision)
 ```
 
-**Path convention (NEW in v6):** All planning, validation, decision, prompt, and spike artifacts live under the `docs/` folder at the repo root. References from code comments, README files, and engineer-agent prompts MUST use the `docs/` prefix. The old top-level paths (`planning/`, `validation/`, etc.) are deprecated and must not be created.
+**Note on folder migration:** v6 referenced `planning/` for Surge/Wave files; v7 canonicalizes to `docs/`. Any reference to `planning/` in older Surge plans should be read as `docs/`.
 
 ---
 
 ## 6. Naming Conventions
 
-| Thing | Convention |
-|---|---|
-| Primary key | ULID via `HasUlids` |
-| FK column | `string(26)` snake_case ending in `_id` |
-| Eloquent model | Singular PascalCase — `ExpertReport`, `HearingActionItem`, `LawyerProfile` |
-| Table | Plural snake_case — `expert_reports`, `hearing_action_items`, `lawyer_profiles` |
-| Morph key | Short snake_case — `'expert_report'`, `'matter'`, `'task'`, `'hearing_action_item'` |
-| Migration | Verb-shaped, timestamped |
-| Filament resource | `<Entity>Resource` |
-| Filament page | `<Name>Page` (e.g., `MyCourtTasksToday`) |
-| Filament widget | `<Name>` (e.g., `ActiveTimerIndicator`) |
-| Policy | `<Entity>Policy` |
-| FormRequest | `<Action><Entity>Request` (e.g., `StoreMatterRequest`) |
-| API controller | `Api\V1\<Entity>Controller` |
-| Service | `<Entity\|Domain>Service` — `AppealDeadlineService`, `HearingSessionService`, `CourtReviewDispatchService`, `QuickTimerService` |
-| Observer | `<Entity>Observer` — `CourtReviewObserver`, `HearingActionItemObserver` |
-| Exception | `<Reason>Exception` — `UnsupportedCourtLevelException` |
-| PHP enum | `<Entity>Enum` — `LitigationStatusEnum`, `JudgmentPresenceEnum`, `MatterTypeEnum` |
-| Localization domain | snake_case filename |
-| Route name | dotted snake_case |
+| Thing | Convention | Example |
+|---|---|---|
+| Eloquent model (tenant) | Singular PascalCase | `Contract`, `Matter`, `Counterparty` |
+| Eloquent model (platform-level) | Singular PascalCase | `AdminUser`, `AdminActivityLog`, `Plan`, `StripeWebhookEvent` |
+| Table | Plural snake_case | `contracts`, `matters`, `admin_users`, `admin_activity_log` |
+| Ledger table | Singular snake_case ending `_log` or `_events` | `admin_activity_log`, `subscription_events` |
+| Pivot table | Alphabetical concat | `matter_counterparties` |
+| Migration | Verb-shaped, timestamped | `2026_06_24_create_admin_users_table` |
+| Filament resource (workspace) | `App\Filament\App\Resources\<Entity>Resource` | `App\Filament\App\Resources\ContractResource` |
+| Filament resource (admin) | `App\Filament\Admin\Resources\<Entity>Resource` | `App\Filament\Admin\Resources\AdminUserResource` |
+| Policy | `<Entity>Policy` | `ContractPolicy`, `AdminUserPolicy` |
+| FormRequest (store) | `Store<Entity>Request` | `StoreContractRequest`, `StoreAdminUserRequest` |
+| FormRequest (update) | `Update<Entity>Request` | `UpdateContractRequest`, `UpdateAdminUserRequest` |
+| API controller | `Api\V1\<Entity>Controller` | `app/Http/Controllers/Api/V1/ContractController.php` |
+| Web controller | `Web\<Entity>Controller` | `app/Http/Controllers/Web/ContractController.php` |
+| Webhook controller | `Webhooks\<Source>WebhookController` | `app/Http/Controllers/Webhooks/StripeWebhookController.php` |
+| Service | `<Entity\|Domain>Service` | `DocumentService`, `SubscriptionEntitlementService`, `AdminActivityLogger` |
+| Middleware (admin-specific) | `app/Http/Middleware/Admin/<Name>.php` | `EnforceIdleTimeout`, `EnforceAbsoluteTimeout` |
+| Job | Verb-shaped, `Job` suffix | `ImportDocumentJob`, `SyncStripeSubscriptionJob` |
+| Test (API feature) | `tests/Feature/Api/V1/<Entity>ApiTest.php` | — |
+| Test (workspace Filament) | `tests/Feature/Filament/<Entity>ResourceTest.php` | — |
+| Test (admin Filament) | `tests/Feature/Admin/Resources/<Entity>ResourceTest.php` | — |
+| Test (unit service) | `tests/Unit/Services/<Entity\|Domain>ServiceTest.php` | — |
+| Test (invariant) | `tests/Feature/<Domain>InvariantTest.php` | `AdminUsersInvariantTest` |
+| Localization domain | snake_case filename | `resources/lang/ar/matters.php`, `resources/lang/ar/admin.php` |
+| Route name | dotted snake_case | `matters.show`, `documents.export`, `filament.admin.resources.admin-users.index` |
+| Stripe event ID column | `stripe_event_id` | (unique, idempotency key) |
 
 ---
 
 ## 7. Domain Glossary
 
-### Core (S-01 to S-06)
+The product's bounded context. When in doubt about a noun, this is the canonical meaning.
 
-- **Workspace, WorkspaceMember, Role**
-- **Contact, Client, Counterparty, OpposingCounsel**
-- **Matter** — Commercial OR litigation. `court_level` field added in S-FIX-01.3. **`matter_type` field added in S-FIX-02.3** — enum-driven track (Transactional vs Litigation). `is_litigation` boolean preserved for backward compat; derived from `matter_type` going forward.
-- **Document, DocumentVersion, DocumentClause**
-- **ContractMetadata**
-- **Obligation**
-- **LibraryClause**
-- **AiInteraction** (append-only)
-- **Subscription**
+### Tenant-scoped entities (firm-facing)
 
-### Practice Management (S-07)
+- **Workspace** — A tenant. Every tenant-scoped entity belongs to exactly one workspace. Users can belong to multiple workspaces.
+- **WorkspaceMember** — A user's role within a specific workspace (Owner / Admin / Member). Stored in the pivot.
+- **User** — A workspace user. Authenticates via `web` guard (session) or `sanctum` (API). Distinct from `AdminUser`.
+- **Role (workspace)** — Owner, Admin, Member. Three values. No more at MVP. (Distinct from admin roles below.)
+- **Contact** — A person or organization. Polymorphic. Can be flagged as Client and/or Counterparty.
+- **Client** — A Contact with `is_client = true`. Represented by us.
+- **Counterparty** — A Contact with `is_counterparty = true`. The other side of a deal.
+- **Matter** — A piece of legal work for a Client. Commercial scope only. **Has NO court fields.** Title, Client, Counterparty(s), Status, Stage, Practice Area, Notes.
+- **Document** — A working artifact tied to a Matter. Most commonly a contract. Has versions, clauses, optional contract metadata.
+- **DocumentVersion** — A snapshot of a Document at a point in time. Immutable once created. Every save creates a new version.
+- **DocumentClause** — A structural addressable unit within a DocumentVersion. Extracted on save by `ClauseExtractionService`.
+- **ContractMetadata** — One-to-one with Document where `document_type = 'contract'`. Carries value, currency, dates, term, governing law.
+- **Obligation** — A dated commitment derived from a contract. Has type, responsible party, due date, status. Drives reminder emails.
+- **LibraryClause** — A reusable clause in the workspace's Clause Library. May have AR + EN paired bodies. May be marked as a fallback of another clause (the playbook).
+- **AiInteraction** — An audit row for every AI call. Carries prompt, response, model, tokens, cost, accepted/rejected flag.
 
-- **Task, TimeEntry, KycChecklist, KycItem, KpiTarget, Team, SmartList**
-- **KycItem.item_type** extended in S-FIX-01.6 with `commercial_registration_certificate`, `signatory_authority_document` for corporate Contacts
-- **TimeEntry** extended in S-FIX-02.4 with `started_via_context` enum for analytics
+### Platform-level entities (admin-facing, SURGE-14)
 
-### Litigation (S-08) `[HARD-STOP-LAWYER-REQUIRED for production]`
+- **AdminUser** — Platform operator. Distinct from `User` (workspace user). Authenticates via `admin` guard. Has one of four roles: `super_admin`, `support`, `finance`, `read_only`. NEVER uses Sanctum tokens. Never workspace-scoped.
+- **AdminActivityLog** — Append-only audit ledger of every admin-side action. PDPL Article 13 accountability surface. Read-democratically (all admin roles can view all rows).
+- **Plan** — A subscription tier. Three plans at launch: `starter` ($20/seat USD), `pro` ($25/seat USD), `enterprise` ($30/seat USD). Each carries per-seat USD price, caps (seats, storage, matters, contacts), and `features` (JSON flags).
+- **Subscription** — A workspace's subscription record. Owned by a workspace but managed by platform admins via the Stripe direct SDK. Five lifecycle states: `trial` (14 days, no card) → `active` → `past_due` (7-day grace) → `suspended` → `cancelled` (14 days total). Mirrored to Stripe via the SDK.
+- **SubscriptionEvent** — Append-only entry in the subscription lifecycle ledger. Event types include `trial_started`, `activated`, `payment_failed`, `past_due_entered`, `suspended`, `cancelled`, `plan_changed`, `seats_changed`.
+- **StripeWebhookEvent** — Append-only idempotency ledger for Stripe webhooks. Keyed on `stripe_event_id` (unique). Records signature verification result + processing outcome.
+- **AdminImpersonationSession** — Append-only record of an admin impersonating a workspace user. Carries start/end timestamps, IP address, audit purpose, terminating event (timeout / explicit / forced).
 
-- **Court, Judge, Hearing, CourtReview, ServiceLogEntry**
-- **CourtReview** extended in S-FIX-01.3 with `judgment_presence` enum (wijahi / mithla_wijahi / ghyabi) and `notified_date`. Further extended in S-FIX-02.2 with dispatch fields (`dispatched_to_user_id`, `dispatched_at`, `completed_by_user_id`, `location_in_courthouse_*`, `expected_outcome_*`, `completion_notes`, `evidence_document_id`).
-- **Hearing.hearing_type** extended in S-FIX-01.1 — `plaintiff_evidence`, `defendant_evidence`, `notification_session` replace generic `evidence`
-- **Matter.litigation_status** extended in S-FIX-01.1 — `fee_payment_and_registration`, `notification_pending`, `referred_to_expert` added
-- **Hearing extended in S-FIX-02.1** with session content fields (`judge_statement_*`, `outcome_summary_*`, `our_submissions_made`, `opposing_submissions_made`, `next_session_required_actions_*`, `session_attended_by`). Editable only when `status='held'` per §4j.
-- **Hearing extended in S-FIX-02.5** with postponement metadata (`postponement_reason_ar`, `postponement_reason_en`, `postponement_initiated_by` enum).
-- **NEW: ExpertReport** (S-FIX-01.2) — first-class entity. 8-day mandatory objection deadline. Auto-creates Obligation on receipt. Models the "Expert Phase" of Jordanian commercial litigation.
-- **NEW: HearingActionItem** (S-FIX-02.1) — follow-up actions captured during a held hearing; auto-creates Obligation via observer; status changes propagate to Obligation.
+### Subscription state machine
 
-### Financial (S-09) `[F-09.2 HARD-STOP-LAWYER+CPA-REQUIRED for production]`
+```
+   ┌─────────────┐
+   │   trial     │  (14d, no card required)
+   └──────┬──────┘
+          │ first successful payment
+          ▼
+   ┌─────────────┐  ◄────────────────────────┐
+   │   active    │                           │ payment recovered
+   └──────┬──────┘                           │
+          │ payment fails                    │
+          ▼                                  │
+   ┌─────────────┐  ────────────────────────┘
+   │  past_due   │  (7-day grace)
+   └──────┬──────┘
+          │ grace expires
+          ▼
+   ┌─────────────┐
+   │  suspended  │  (read-only via BlockSuspendedWorkspace mw)
+   └──────┬──────┘
+          │ 7 more days (14 days total in degraded state)
+          ▼
+   ┌─────────────┐
+   │  cancelled  │  ──►  PDPL purge schedule (Wave 14.9)
+   └─────────────┘
+```
 
-- **Account, TrustAccount, TrustLedgerEntry, JournalEntry, JournalEntryLine, Invoice, InvoiceLine, Receipt**
-- **TrustLedgerEntry.description** REQUIRED (min 10 chars) for `entry_type='adjustment'` (S-FIX-01.4)
+### Words NOT in our domain (off-strategy)
 
-### CRM (S-09)
-
-- **Pipeline, Lead, Opportunity**
-
-### Workflow & Generation (S-10)
-
-- **TaskWorkflow, TaskWorkflowStage, TaskWorkflowTransition, TaskWorkflowApproval**
-- **AiDocumentGeneration, AiGenerationTemplate**
-
-### Platform engine (S-11)
-
-- **FormTemplate, FormTemplateField, FormSubmission**
-- **Automation, AutomationAction, AutomationRun**
-- **DocumentTemplate**
-- **WorkflowBundle**
-
-### Integration (S-12)
-
-- **EmailIntegration, EmailAttachment, CalendarIntegration, ExternalCalendarEvent, WorkspaceSsoConfig, AuditLog**
-
-### Lawyer Management (S-13)
-
-- **LawyerProfile, MatterLawyer** (pivot with `lead`/`supporting` roles)
-
-### Critical services
-
-- **`AppealDeadlineService`** (S-FIX-01.3) — court-level-dependent calculation. See §4g.
-- **`ExpertReportService`** (S-FIX-01.2) — 8-day objection deadline; state transitions
-- **`HearingSessionService`** (S-FIX-02.1) — records outcome, manages action items, returns sessions timeline for Matter
-- **`CourtReviewDispatchService`** (S-FIX-02.2) — dispatches Court Review to user, manages completion workflow
-- **`QuickTimerService`** (S-FIX-02.4) — single-active-timer enforcement per §4i
-
-### Words NOT in our domain (permanently OUT)
-
-- "Case" (we say Matter)
-- "Pleading" (out — generate via AI)
-- **Native Email** — `emails` for native content (out — EmailIntegration OAuth)
-- **Native Calendar** — `calendar_events` with recurrence (out — CalendarIntegration OAuth)
-- "Chat / Messaging entity"
-- "Native Mobile App" — PWA only
-- "Visual workflow designer with drag-drop nodes"
-- "Custom code/script actions" (security)
-- "Cron triggers below hourly granularity"
-- "Webhook actions"
+Case (we say Matter), Hearing, Court, Judge, Opponent, Pleading, Discovery, Service of Process, Invoice (Year-2), Trust Account (never), KPI (Year-2), Lead (Year-2), Email-as-an-entity (Year-2).
 
 ---
 
 ## 8. Localization Rules
 
-- Default locale `ar`
-- Every user-facing string in `resources/lang/{ar,en}/<domain>.php`
-- Framework strings from `laravel-lang/common`
-- `SetLocale` middleware sets `<html dir>` and `<html lang>`
-- Tailwind v4 logical properties handle RTL
-- Dates: Gregorian only at MVP
-- Numbers: Latin digits both locales
-- Currency: ISO code + amount
-- AR translations NEVER auto-generated
-- Mixed-direction content respects per-paragraph `dir`
-- Court / Judge / Expert names stored bilingual (`name_ar`, `name_en`)
-- Workflow stages, Form fields, Automation names — all bilingual
-- Email integration UI in user's locale; email content in original language
-- **Litigation enum labels (S-FIX-01.1)** — AR is authoritative form for court communications; EN for client-facing
-- **AI Disclaimer (S-FIX-01.7)** — standardized text both locales per advisor input
-- **PDPL Consent text (S-FIX-01.5)** — versioned per revision; placeholder until paid lawyer drafts production version
-- **MatterTypeEnum labels (S-FIX-02.3)** — 14 cases across 2 tracks. Both locales required. Stored in `resources/lang/{ar,en}/matter_types.php`.
-- **Hearing session content (S-FIX-02.1)** — judge_statement_ar required for capture; judge_statement_en optional translation for client reporting. Stored in `resources/lang/{ar,en}/hearings.php`.
-- **Sessions Timeline UI (S-FIX-02.1)** — bilingual via `resources/lang/{ar,en}/sessions_timeline.php`.
-- **Hearing Action Items (S-FIX-02.1)** — description_ar required, description_en optional. Status labels bilingual.
-- **Court Review dispatch (S-FIX-02.2)** — location_in_courthouse_ar and expected_outcome_ar required for dispatch.
-- **Quick Timer (S-FIX-02.4)** — UI labels and toast messages bilingual via `resources/lang/{ar,en}/quick_timer.php`.
-- **Navigation labels (S-FIX-02.6)** — Case Management group + 4 sub-resources bilingual via `resources/lang/{ar,en}/navigation.php`.
+- **Default locale is `ar`.** Anonymous visitors see Arabic unless they override via `?lang=en`.
+- **Every user-facing string lives in `resources/lang/{ar,en}/<domain>.php`.** No exceptions.
+- **No hard-coded user-facing strings.** Every visible string goes through `__('domain.key')`. Enforced by `NoHardcodedStringsTest` per domain folder.
+- **Key parity between locales.** `ar/*.php` and `en/*.php` must have identical key structures (same keys in both, same nesting depth, same key names). Enforced by `LocaleKeyParityTest`.
+- **`<html dir>` and `<html lang>` are set by `SetLocale` middleware** based on resolved locale. RTL/LTR is automatic.
+- **Tailwind RTL utilities** are enabled via the official plugin. Use `ltr:` and `rtl:` variants when direction-specific styling is needed. Prefer logical properties (`ps-*`, `pe-*`, `ms-*`, `me-*`, `start-*`, `end-*`) over directional ones (`pl-*`, `pr-*`).
+- **Dates** — Gregorian only at MVP. Hijri is a Year-2 backlog item.
+- **Numbers** — Use Western Arabic numerals (0–9) in both locales (per Khaldoun input — Jordan legal/business context). Eastern Arabic numerals (٠–٩) is OUT of scope.
+- **Currency** — USD only at MVP. Display `$1,234.56` (prefix, two decimals, comma thousands). User-locale formatting for decimal separator deferred.
+- **Plurals** — Use Laravel's `trans_choice()` and `:count` placeholders. Arabic has 6 plural forms; account for all where the message is plural-sensitive.
+- **AR translations are NEVER auto-generated.** Either the Product Designer's Content Spec provides them, or a key is flagged `[NEEDS-AR-TRANSLATION-REVIEW]` and routed to the lawyer advisor or a professional translator.
+- **Arabic conventions:** Modern Standard Arabic (MSA), not Levantine dialect. Arabic punctuation (`،`, `؟`, `؛`), NOT Latin equivalents. Imperative verbs for action buttons. ":name" interpolation placeholders preserve Laravel syntax.
+- **Mixed-direction content in documents** — paragraphs inherit their own direction via `dir="auto"` or per-block `dir` attribute from the editor's JSON state.
+- **Password fields are always `dir="ltr"`** regardless of page locale (passwords mix directions and right-alignment creates input ambiguity).
 
 ---
 
@@ -502,155 +364,182 @@ docs/                        ALL PROJECT DOCUMENTATION (planning, validation, de
 
 Every PR must pass:
 
-1. Pest test suite green
-2. Pint clean
-3. Larastan level 6 clean
-4. OpenAPI spec valid + in sync
-5. Workspace isolation tested
-6. AR locale smoke test
-7. Filament resource tests
-8. Append-only enforcement (6 ledgers, multi-layer)
-9. Financial idempotency
-10. Money precision
-11. Litigation procedural tests (per jurisdiction, per court-level)
-12. Task Workflow backward compatibility (S-10)
-13. AI document generation refuses non-approved templates in production
-14. Rule engine condition-evaluator (S-11) — every operator, every type coercion
-15. Automation loop-prevention
-16. Action handler isolation
-17. OAuth token security (encryption, redaction, zeroing)
-18. SAML signature validation
-19. ICS export RFC 5545 compliance
-20. PWA manifest valid; service worker static-only
-21. AppealDeadlineService calculation tests (S-FIX-01.3) — minimum 10 cases
-22. ExpertReport objection countdown tests (S-FIX-01.2) — including Observer auto-creating Obligation
-23. Trust ledger adjustment description enforcement (S-FIX-01.4) — multi-layer
-24. PDPL consent gate tests (S-FIX-01.5) — Matter creation blocked when consent not obtained
-25. Advisor-citation comment audit — grep verifies all new code added per S-FIX-01 + S-FIX-02 has `docs/validation/02_advisor_meeting_log.md` decision-number citations
-26. **Hearing session content tests** (S-FIX-02.1) — minimum 12 cases including status='held' enforcement, observer auto-Obligation creation, policy enforcement on session_attended_by
-27. **Court Review dispatch tests** (S-FIX-02.2) — minimum 8 cases including mobile breakpoint rendering
-28. **Forked Matter Creation tests** (S-FIX-02.3) — minimum 10 cases including wizard renders, API track validation, backfill audit CSV produced, legacy `is_litigation` deprecation warning
-29. **Contextual Timer tests** (S-FIX-02.4) — minimum 8 cases including single-active-timer constraint enforcement, race condition handling, mobile breakpoint
-30. **Hearing Postponement Chain tests** (S-FIX-02.5) — minimum 5 cases including circular reference detection
-31. **Case Management Navigation tests** (S-FIX-02.6) — minimum 4 cases including locale-respecting labels
+1. **Pest 4.x test suite green.** All `tests/Unit/`, `tests/Feature/`, and (for affected Surges) `tests/Browser/`. PHPUnit syntax not acceptable.
+2. **Pint clean.** `pint --test` returns no diffs.
+3. **Larastan level 6 clean.** `phpstan analyse` returns no errors.
+4. **OpenAPI spec valid + in sync.** `spectral lint openapi/spec.yaml` clean. Custom CI check: every new public route has a matching spec entry. (Admin panel routes are exempt — admin panel has no public API.)
+5. **Workspace isolation tested.** For any new tenant-scoped entity, at least one test verifies cross-workspace data is invisible.
+6. **Guard isolation tested.** For any Wave touching auth, at least one test asserts `web` ↔ `admin` ↔ `sanctum` guard isolation.
+7. **Audit log secret leakage tested.** `AuditLogPasswordLeakageTest` runs on every CI build asserting no audit row contains password/secret keys.
+8. **Locale key parity tested.** `LocaleKeyParityTest` runs on every CI build asserting `ar/*` and `en/*` lang files match in key structure.
+9. **No-hardcoded-strings tested.** `NoHardcodedStringsTest` runs per domain folder.
+10. **AR locale smoke test.** For any new UI-bearing Flow, at least one Browser test asserts AR-locale rendering with correct `<html dir="rtl">`.
+11. **Invariant tests for critical invariants.** Where rule 14 applies (defense-in-depth), the Pest invariant test is mandatory and runs in CI.
+12. **Append-only enforcement.** For ledger tables (rule 11), the Filament resource test asserts NO Create/Edit/Delete actions are registered.
+13. **Test coverage gate.** ≥95% line coverage on namespaces affected by the Wave. `php artisan test --coverage --min=95` scoped to those namespaces.
 
-**Test discipline:** SURGE-FIX-02 alone must add ≥ 50 tests. Cumulative target after S-FIX-02: ≥ 727 tests. Industry baseline for system this size: 2,500-4,000. Gap remains; flag as standing risk.
+**Test data hygiene:**
+
+- Use factories (`<Entity>Factory`) for all test data. Never insert raw rows in tests.
+- For shared setup, use Pest's `beforeEach()` per test file; avoid global state.
+- Browser tests use real .docx fixtures from `tests/fixtures/docx/` — commit anonymized real-world contracts, not synthetic ones, for round-trip fidelity tests.
+- Admin panel browser tests use snapshot baselines committed to `tests/Browser/__snapshots__/admin/`.
 
 ---
 
-## 10. What NOT to Do
+## 10. What NOT to Do (off-strategy + schema constraints)
 
-### Schema-level — STILL REJECT
+### Schema-level constraints — REJECT any task that would add these
 
-- **Native email module:** `emails` table for native content
-- **Native calendar module:** `calendar_events` with full recurrence
-- **Mobile app code:** iOS / Android / React Native
-- **Native messaging/chat:** `messages`, `chat_threads`
-- **Custom code execution in automations**
-- **Webhook trigger receivers** + **Outbound webhook actions** (Year-2)
-- **Service Worker caching data** (security/UX)
-- **AI extraction tables populated without user review**
-- **OAuth token visibility in any non-encrypted form**
-- **Hardcoded appeal deadlines or court-procedural windows** — must route through service classes
-- **Adjustment entries on trust ledger without ≥ 10-char description** — multi-layer enforced
-- **Matter creation without `matter_type`** (S-FIX-02.3) — legacy `is_litigation`-only requests trigger deprecation warning but still must derive a matter_type
-- **Multiple concurrent active TimeEntries per user** (S-FIX-02.4) — service layer enforces single-active constraint
-- **Hearing session content writes when status != 'held'** (S-FIX-02.1) — multi-layer rejection (API, Filament, Policy)
-- **Hardcoded matter type field rules** — must use MatterTypeEnum::isTransactional() / isLitigation() / track() methods
+The `matters` table must NEVER contain:
 
-### Hard stops on production deployment
+- `judge_name`, `judge_id`
+- `court_id`, `court_type`, `court`
+- `court_case_number`, `case_number`
+- `opponent_name`, `opponent_contact_id`, `opponents_lawyer`
+- `representation_type`
+- `region` (litigation construct — different from `governing_law` on contract_metadata, which IS allowed)
 
-| Hard Stop | Gates | Resolution file |
-|---|---|---|
-| Lawyer-drafted ToS / Privacy / DPA / AI Disclaimer | S-06 paid launch | `docs/validation/06_legal_docs/*` |
-| Lawyer-reviewed AI prompt templates (clause-level) | S-04 real-user exposure | `docs/prompts/*.md` headers |
-| Lawyer signoff on litigation procedural model | S-08 production | `docs/validation/08_litigation_lawyer_signoff.md` |
-| Lawyer + CPA signoff on Trust Accounts | S-09 F-09.2 production | `docs/validation/09_trust_account_lawyer_signoff.md` + `docs/validation/09_trust_account_cpa_signoff.md` |
-| Lawyer-reviewed AI doc-gen templates | S-10 F-10.4 production | `docs/prompts/document_generation/*.md` headers |
-| Lawyer-reviewed in-DB AI gen templates | S-10 F-10.5 | `ai_generation_templates.legal_review_status='approved'` |
-| Lawyer-reviewed seed Document Templates | S-11 F-11.3 production | Per template advisor signoff |
-| Paid-lawyer-drafted PDPL consent text | Production launch | `docs/validation/06_legal_docs/pdpl_consent_v1.md` |
-| KYC checklist content review | S-07 F-07.3 — recommended | `[ADVISOR-REVIEW-RECOMMENDED]` markers |
+The codebase must NEVER contain:
 
-**Khaldoun's input does NOT clear these hard stops.** Cousin favour-economy basis; cannot sign external compliance attestations. Formal signoff requires separately-engaged paid lawyer (introduction pending per Decision #23).
+- Migrations for `hearings`, `court_reviews`, `service_logs`, `judges`, `courts`
+- Filament resources for any litigation entity
+- Routes under `/litigation`, `/hearings`, `/court-*`, `/service-logs`
+- A native accounting module — no `chart_of_accounts`, `journal_entries`, `trust_accounts`, `invoices` (Year-2), `receipts` (Year-2)
+- A native CRM module — no `leads`, `pipelines`, `opportunities`, `deals` table (Year-2)
+- A native email client — Emails are out (Year-2 might integrate Outlook/Gmail, not build)
+- A native calendar module — deadlines live on Obligations (Year-2 might add calendar export)
+- KPI / target tracking — out
+- A form-templates / global-config engine — out (hardcoded defaults are fine)
+- Workflow / automation engine — out
+- Mobile app code — web only
 
-### Operational
+### Append-only ledger constraints (SURGE-14)
 
-- No LLM calls direct from browser
-- No LLM keys outside `.env`
-- No logging prompt content (except in audit ledger rows)
-- No bypass of `BelongsToWorkspace` scope
-- No commit of `.env`, real client data, API keys
-- No auto-translate Arabic strings
-- No UPDATE or DELETE on append-only ledgers
-- No floating-point arithmetic on money
-- No seeding jurisdiction data without lawyer/CPA signoff
-- No user-supplied expressions to `eval`/`assert`/`compile`
-- No unencrypted OAuth tokens
-- No PWA service worker data caching
-- No hardcoded appeal deadlines — always route through `AppealDeadlineService`
-- No silent default to 30-day window when court_level or judgment_presence unknown — throw and surface to lawyer
-- No adjustment trust_ledger_entries without ≥ 10-char description
-- **No Hearing session content edits unless status='held'** (S-FIX-02.1)
-- **No HearingActionItem creation without auto-creating linked Obligation** (S-FIX-02.1)
-- **No Matter creation without matter_type via API or Filament** (S-FIX-02.3)
-- **No second active timer per user** (S-FIX-02.4)
-- **No Case Management resource added to a navigation group other than 'Case Management'** (S-FIX-02.6)
+For `admin_activity_log`, `subscription_events`, `stripe_webhook_events`, `admin_impersonation_sessions`:
 
-### Process
+- Do NOT add `updated_at` column
+- Do NOT use `SoftDeletes`
+- Do NOT register Filament Create / Edit / Delete actions in their Resources
+- Do NOT add Policy methods for `update` or `delete`
+- Do NOT add Artisan commands or one-off scripts that mutate existing rows
+- Corrections happen via a new offsetting row (e.g., `admin.activity_log.correction` event referencing the prior row's id in payload)
 
-- No work on a Surge whose upstream gates not satisfied
-- No skipping Pest tests
-- No modifying `CLAUDE.md` without founder direction — append-only Update log
-- No modifying `docs/decisions/` files; supersede via new ADR
-- No modifying `docs/validation/02_advisor_meeting_log.md` — append only with dated entries
-- No marking a Surge "Production Ready" if applicable hard stop unresolved
-- No implementing schema corrections contradicting `docs/validation/02_advisor_meeting_log.md` without raising contradiction to founder for advisor follow-up
+### Guard / authentication constraints (SURGE-14)
+
+- Do NOT add the `HasApiTokens` trait to `AdminUser`. Admin auth is session-only.
+- Do NOT add Sanctum API endpoints under `/admin/*`. Admin panel is browser-only.
+- Do NOT create routes that authenticate via both `web` and `admin` guards. Each route uses exactly one guard.
+- Do NOT share session cookies between `web` and `admin` guards. The admin cookie is path-scoped to `/admin` with SameSite=Strict.
+- Do NOT log Stripe webhook secrets, Stripe API keys, or any password/credential in any payload (audit log, console log, error report, queue job arguments).
+
+### Operational constraints
+
+- Do not call LLM providers directly from the browser. Always proxy through the backend.
+- Do not store LLM API keys anywhere except `.env` (read via `config()`).
+- Do not log prompt content unless the `AiInteraction` audit row receives it (intentional, for cost + compliance).
+- Do not bypass the `BelongsToWorkspace` scope with `withoutGlobalScopes()` unless explicitly in a platform-admin context (which is rare and must be reviewed).
+- Do not commit `.env` files, fixture files containing real client data, or API keys.
+- Do not auto-translate Arabic strings via Google Translate / DeepL / LLM. Flag for human review.
+- Do not allow the admin seeder (`AdminUserSeeder`) to fall back to hard-coded default credentials in production. Production must supply `ADMIN_SEED_EMAIL`, `ADMIN_SEED_NAME`, `ADMIN_SEED_PASSWORD` env vars or the seeder throws.
+
+### Process constraints
+
+- Do not begin work on a Surge whose upstream gates are not green (per SURGE-00 deliverables + prior Surge sign-off). Use the AODC_Software_Engineer agent's Gate Status Report.
+- Do not skip Pest tests "just to ship faster." CI will block.
+- Do not modify `CLAUDE.md` (this file) without explicit founder direction. CLAUDE.md updates happen at Surge completion, not during Waves.
+- Do not modify any file under `decisions/` without an ADR-style superseding entry. ADRs are append-only.
+- Do not bypass the AODC pipeline. Tasks without a Tech Task Package are surfaced back to the AODC_Software_Engineer agent.
 
 ---
 
 ## 11. AODC Pipeline Reference
 
+This project is built via the AODC (Agent-Orchestrated Development Cycle) methodology. Relevant artifacts live in:
+
 | Location | Contents |
 |---|---|
-| `docs/README.md` | Index of docs/ subfolders for new readers |
-| `docs/planning/00_MVP_ROADMAP_v0.2.md` | Master plan v0.2 (active) |
-| `docs/planning/HAQQ_COVERAGE_GAP_ANALYSIS.md` | Coverage map |
-| `docs/planning/SURGE-NN-*.md` | Per-Surge plans (S-01 to S-09 shipped) |
-| `docs/planning/SURGE-FIX-01-Advisor-Corrections.md` | Shipped |
-| `docs/planning/SURGE-FIX-02-Case-Management-Refinement.md` | **ACTIVE — current priority** |
-| `docs/planning/F-FIX-02-NN-*.md` | Flow specs for SURGE-FIX-02 |
-| `docs/planning/F-FIX-02-01-Hearing-Session-History-WRP-1.md` | Wave-Ready Package for F-FIX-02.1 |
-| `docs/planning/SURGE-10/11/12/13` | Queued after S-FIX-02 |
-| `docs/planning/SURGE-VERIFY.md` | Standing recommendation |
-| `docs/validation/00_FOUNDER_WAIVER.md` | Operating waiver |
-| `docs/validation/02_advisor_meeting_log.md` | **Source of truth for advisor input (Conversations 1, 2, 3, 3.5)** |
-| `docs/validation/08_litigation_lawyer_signoff.md` | Pending paid lawyer |
-| `docs/validation/09_trust_account_lawyer_signoff.md` | Pending paid lawyer + CPA |
-| `docs/validation/10_ai_generation_lawyer_signoff.md` | Pending paid lawyer |
-| `docs/decisions/D-09_breadth_pivot.md` | Strategic pivot ADR |
-| `docs/decisions/D-15_pricing_ceiling.md` | Pricing per advisor (JOD 20–30) |
-| `docs/prompts/` | Clause-level AI prompts |
-| `docs/prompts/document_generation/` | Full-document AI generation templates |
-| `docs/spikes/` | Throwaway research |
+| `docs/README.md` | Index + non-negotiables + naming conventions (canonical) |
+| `docs/00_MVP_ROADMAP.md` | Master plan — wedge, scope, sequencing, principles |
+| `docs/SURGE-NN-*.md` | Per-Surge plans — Flows, dependencies, acceptance |
+| `docs/WAVE-NN.N-*.md` | Per-Wave Wave-Ready Packages |
+| `docs/validation/` | SURGE-00 deliverables (PRD, AI test report, interviews) + advisor logs |
+| `docs/validation/02_advisor_meeting_log.md` | Khaldoun Khater's documented decisions (source of truth for advisor input) |
+| `decisions/D-NN.md` | Architecture decision records |
+| `prompts/` | AI prompt templates — each requires `[LEGAL-REVIEW]` sign-off in header |
+| `spikes/` | Throwaway research — deleted after the corresponding decision |
+
+### Roles in the AODC pipeline
+
+```
+Business request  →  Wave-Ready Package  →  Tech Task Package  →  Claude Code execution
+   (Founder)         (Product Designer)     (Engineer agent)      (Claude Code)
+```
+
+- **Founder (Abdullah)** — Owns product, scope, business decisions. Sole approver of Surge/Wave content.
+- **Product Designer agent** — Produces Wave-Ready Packages with structured Intent, Stories, Wireframes, API Contracts, Content Spec, Edge Cases, Sign-Off.
+- **Engineer agent** — Consumes Wave-Ready Packages. Produces Tech Task Packages with migrations, models, FormRequests, Policies, Filament Resources, tests.
+- **Claude Code** — Reads Tech Task Packages. Writes the actual code in the repository.
+
+**When asked to do work, expect to be given:** a Tech Task Package (TTP) produced by the Engineer agent. The TTP references the relevant Wave-Ready Package in `docs/` and contains everything you need.
+
+**If a task arrives without a TTP** — for example, the AO pastes a free-form request directly — stop and ask: "Should this be routed through the Engineer agent first to produce a Tech Task Package?" Ad-hoc tasks bypass the gates that exist to prevent rework.
+
+### Advisor precedence
+
+When practitioner input (from Khaldoun Khater, lawyer advisor) conflicts with prior architectural assumptions, **advisor input takes precedence** for legal-domain questions. The advisor meeting log at `docs/validation/02_advisor_meeting_log.md` is the source of truth for these decisions. Examples already lifted to architectural rules:
+
+- Appeal windows are court-level-dependent (10 days for Magistrate Courts, 30 days for First Instance Courts). Malpractice exposure if conflated.
+- Hearing session content is gated by `status = 'held'`. Sessions in other states do not expose content.
+- Trust accounting trial-ledger adjustments require explicit description (Jordanian Lawyers Act).
+- ExpertReport entity has an 8-day objection countdown.
+- Western numerals (0–9) in Arabic UI, not Eastern (٠–٩).
 
 ---
 
 ## 12. When in doubt
 
-Order of precedence:
+Order of precedence for resolving uncertainty:
 
-1. **This file (`CLAUDE.md`)**
-2. **`docs/decisions/D-NN.md` ADRs** in reverse chronological order
-3. **`docs/validation/02_advisor_meeting_log.md`** — practitioner-validated decisions cited by number
-4. **`docs/validation/00_FOUNDER_WAIVER.md`** — operating mode
-5. **`docs/planning/00_MVP_ROADMAP_v0.2.md`**
-6. **The specific Surge plan**
-7. **The Tech Task Package**
-8. **The Founder**
+1. **This file (`CLAUDE.md`).** If something here contradicts other documents, this wins, but flag the contradiction for the Founder.
+2. **`docs/00_MVP_ROADMAP.md`.** The strategic source of truth.
+3. **The specific Surge plan** for the work in question (`docs/SURGE-NN-*.md`).
+4. **The Wave-Ready Package** for the Wave in question (`docs/WAVE-NN.N-*.md`).
+5. **The Tech Task Package** for the Flow in question.
+6. **The advisor meeting log** (`docs/validation/02_advisor_meeting_log.md`) for legal-domain questions.
+7. **The Founder** (via the AO). If 1–6 do not resolve it, escalate.
 
 Do not invent answers. Do not guess at intent. Stop, surface the question, wait for direction.
 
 ---
 
-*End of CLAUDE.md v6. Welcome to the project.*
+## Changelog
+
+### v7 — 2026-06-24
+
+**Added:**
+- Section 4 rules 11–18 (cursor pagination, append-only ledgers, platform-vs-tenant scope split, defense-in-depth invariants, no-secrets-in-audit, guard isolation, locale key parity, Stripe webhook idempotency)
+- Section 7 platform-level entity glossary (AdminUser, AdminActivityLog, Plan, Subscription, SubscriptionEvent, StripeWebhookEvent, AdminImpersonationSession) + subscription state machine diagram
+- Section 8 hardcoded-string prohibition, key parity enforcement, Arabic conventions (MSA, punctuation, Western numerals, password LTR)
+- Section 9 testing gates 6–13 (guard isolation, audit secret leakage, locale parity, no-hardcoded-strings, invariant tests, append-only enforcement, coverage gate)
+- Section 10 append-only ledger constraints, guard/auth constraints, admin seeder safety
+- Section 11 AODC pipeline roles + advisor precedence
+- Section 6 platform-level model naming, admin Filament namespace, webhook controller convention
+
+**Modified:**
+- Section 2: Laravel 11.x → 13.x, Filament v3.x → v5.x, Pest 2.x → 4.x, Billing: Cashier → direct Stripe SDK
+- Section 4 rule 3 (soft deletes): scoped to tenant-scoped entities only; ledgers and platform-level entities exempt
+- Section 5 folder structure: split Filament into Admin/App panels; added `config/admin.php`, `tests/Feature/Admin/`, `tests/Browser/__snapshots__/admin/`; documented `routes/web.php` Stripe webhook route
+- Section 5: `planning/` → `docs/` (canonical)
+- Section 11: AODC pipeline reference updated to reflect new path
+
+**Unchanged from v6:**
+- Product mission, wedge, MVP audience
+- Tenant-scoped architectural non-negotiables 1–10
+- Off-strategy schema constraints (no litigation, no native accounting, etc.)
+- Document editing client-side principle
+- Workspace scoping for tenant entities
+
+---
+
+*End of CLAUDE.md v7. Welcome to the project.*

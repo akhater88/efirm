@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
-use App\Models\Workspace;
+use App\Filament\Admin\Pages\Login;
+use App\Http\Middleware\Admin\EnforceAbsoluteTimeout;
+use App\Http\Middleware\Admin\EnforceIdleTimeout;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -11,8 +13,6 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\View\PanelsRenderHook;
-use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -20,41 +20,25 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class PlatformAdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('app')
-            ->path('app')
-            ->tenant(Workspace::class)
-            ->tenantRoutePrefix('workspace')
-            ->login(false)
-            ->registration(false)
+            ->id('platform-admin')
+            ->path('admin')
+            ->login(Login::class)
+            ->authGuard('admin')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Red,
             ])
-            ->navigationGroups([
-                __('navigation.groups.workspace'),
-                __('navigation.groups.contacts'),
-                __('navigation.groups.case_management'),
-                __('navigation.groups.practice'),
-                __('navigation.groups.documents'),
-            ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->brandName('Platform Admin')
+            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
+            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                AccountWidget::class,
-            ])
-            ->renderHook(
-                PanelsRenderHook::USER_MENU_BEFORE,
-                fn () => view('filament.hooks.locale-switcher'),
-            )
+            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -68,6 +52,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                EnforceIdleTimeout::class,
+                EnforceAbsoluteTimeout::class,
             ]);
     }
 }
