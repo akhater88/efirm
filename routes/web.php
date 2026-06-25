@@ -82,6 +82,7 @@ Route::middleware(['auth', 'workspace'])->group(function () {
 
     // Custom Livewire list pages
     Route::get('matters', MattersList::class)->name('matters.index');
+    Route::get('matters/{id}', \App\Livewire\Pages\MatterDetail::class)->name('matters.show');
     Route::get('contacts', ContactsList::class)->name('contacts.index');
     Route::get('tasks', TasksList::class)->name('tasks.index');
     Route::get('documents', DocumentsList::class)->name('documents.index');

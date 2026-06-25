@@ -50,7 +50,7 @@
                 <tbody>
                     @foreach ($matters as $matter)
                         <tr
-                            wire:click="openEdit('{{ $matter->id }}')"
+                            onclick="window.location='/matters/{{ $matter->id }}'"
                             style="border-bottom: 1px solid var(--border-default, #D6D3D1); cursor: pointer; transition: background 0.15s;"
                             onmouseover="this.style.background='var(--surface-subtle, #F5F5F4)'"
                             onmouseout="this.style.background='transparent'"
