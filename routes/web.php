@@ -105,6 +105,7 @@ Route::get('locale/{locale}', function (string $locale) {
 
 Route::middleware('guest')->group(function () {
     Route::get('login', fn () => view('auth.login'))->name('login');
+    Route::get('register', fn () => redirect()->route('login'))->name('register');
 
     // Email/password login
     Route::post('login', function (Request $request) {

@@ -28,7 +28,7 @@
                    class="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-md px-2 py-1">
                     {{ __('marketing.header.locale_toggle') }}
                 </a>
-                <a href="/app/login"
+                <a href="/login"
                    class="text-sm font-medium text-neutral-700 hover:text-neutral-900 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-md px-2 py-1">
                     {{ __('marketing.header.sign_in') }}
                 </a>
@@ -64,7 +64,7 @@
             <a href="#faq" @click="mobileOpen = false" class="block px-4 py-2 text-base font-medium text-neutral-700 hover:bg-neutral-50 rounded-md">{{ __('marketing.header.faq') }}</a>
             <div class="border-t border-neutral-200 pt-4 mt-4 space-y-2">
                 <a href="{{ app()->getLocale() === 'ar' ? '/' : '/ar' }}" class="block px-4 py-2 text-base font-medium text-neutral-700 hover:bg-neutral-50 rounded-md">{{ __('marketing.header.locale_toggle') }}</a>
-                <a href="/app/login" class="block px-4 py-2 text-base font-medium text-neutral-700 hover:bg-neutral-50 rounded-md">{{ __('marketing.header.sign_in') }}</a>
+                <a href="/login" class="block px-4 py-2 text-base font-medium text-neutral-700 hover:bg-neutral-50 rounded-md">{{ __('marketing.header.sign_in') }}</a>
                 <a href="/register?utm_source=landing_header" class="block mx-4 text-center px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-600">{{ __('marketing.header.start_trial') }}</a>
             </div>
         </div>
