@@ -3,6 +3,7 @@
 use App\Http\Middleware\BlockSuspendedWorkspace;
 use App\Http\Middleware\EnsureWorkspaceSelected;
 use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\SetPublicLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'workspace' => EnsureWorkspaceSelected::class,
             'subscription.active' => BlockSuspendedWorkspace::class,
+            'public.locale' => SetPublicLocale::class,
         ]);
         $middleware->web(append: [
             SetLocale::class,
