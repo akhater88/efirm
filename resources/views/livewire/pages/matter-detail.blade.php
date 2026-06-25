@@ -25,7 +25,7 @@
             {{ __('shell.back_to_matters') }}
         </a>
         <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;">
-            <div>
+            <div style="flex: 1;">
                 <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0 0 8px;">{{ $matter->title }}</h1>
                 <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                     <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 9999px; background: {{ $sc['bg'] }}; color: {{ $sc['text'] }}; text-transform: uppercase; letter-spacing: 0.04em;">
@@ -39,6 +39,13 @@
                     @endif
                 </div>
             </div>
+            @if (!$editing)
+                <button wire:click="startEditing"
+                    style="padding: 8px 16px; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                    {{ __('common.edit') }}
+                </button>
+            @endif
         </div>
     </div>
 
@@ -57,12 +64,102 @@
 
     {{-- Tab Content --}}
     @if ($activeTab === 'overview')
-        {{-- Overview --}}
+        @if ($editing)
+        {{-- Edit Form --}}
+        <form wire:submit="save">
+            <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; padding: 24px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    {{-- Title --}}
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matters_form_title') }}</label>
+                        <input type="text" wire:model="formTitle" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; outline: none;" onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'" onblur="this.style.borderColor='var(--border-default, #E7E5E4)'" />
+                        @error('formTitle') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Client --}}
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matters_form_client') }}</label>
+                        <select wire:model="formClientId" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #FFFFFF;">
+                            <option value="">--</option>
+                            @foreach ($clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->display_name }}</option>
+                            @endforeach
+                        </select>
+                        @error('formClientId') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Status --}}
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matters_form_status') }}</label>
+                        <select wire:model="formStatus" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #FFFFFF;">
+                            @foreach ($statuses as $status)
+                                <option value="{{ $status->value }}">{{ $status->label() }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Practice Area --}}
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matters_form_practice_area') }}</label>
+                        <select wire:model="formPracticeArea" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #FFFFFF;">
+                            <option value="">--</option>
+                            @foreach ($practiceAreas as $pa)
+                                <option value="{{ $pa->value }}">{{ $pa->label() }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Internal Reference --}}
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matter_internal_ref') }}</label>
+                        <input type="text" wire:model="formInternalReference" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+
+                    {{-- Stage --}}
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matter_stage') }}</label>
+                        <input type="text" wire:model="formStage" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+
+                    {{-- Opened At --}}
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matter_opened') }}</label>
+                        <input type="date" wire:model="formOpenedAt" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+
+                    {{-- Closed At --}}
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matter_closed') }}</label>
+                        <input type="date" wire:model="formClosedAt" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+
+                    {{-- Description --}}
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matter_description') }}</label>
+                        <textarea wire:model="formDescription" rows="4" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; resize: vertical;"></textarea>
+                    </div>
+                </div>
+
+                {{-- Actions --}}
+                <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-default, #E7E5E4);">
+                    <button type="button" wire:click="cancelEditing" style="padding: 8px 16px; background: #FFFFFF; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 13px; cursor: pointer;">
+                        {{ __('common.cancel') }}
+                    </button>
+                    <button type="submit" style="padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                        {{ __('common.save') }}
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        @else
+        {{-- Read-only Overview --}}
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
             <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; padding: 20px;">
                 <h3 style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin: 0 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border-default, #E7E5E4);">{{ __('shell.matter_details') }}</h3>
                 @foreach ([
                     __('shell.matter_internal_ref') => $matter->internal_reference,
+                    __('shell.matter_stage') => $matter->stage,
                     __('shell.matter_opened') => $matter->opened_at?->format('Y-m-d'),
                     __('shell.matter_closed') => $matter->closed_at?->format('Y-m-d'),
                     __('shell.matter_lead_lawyer') => $matter->leadLawyer?->name,
@@ -95,6 +192,7 @@
                 </div>
             @endif
         </div>
+        @endif
 
     @elseif ($activeTab === 'documents')
         {{-- Documents --}}
