@@ -78,6 +78,13 @@ return [
     'matters_form_client' => 'العميل',
     'matters_form_status' => 'الحالة',
     'matters_form_practice_area' => 'مجال الممارسة',
+    'matter_add_member' => 'إضافة عضو للفريق',
+    'matter_select_member' => 'اختر العضو',
+    'matter_member_role' => 'الدور',
+    'matter_remove_member' => 'إزالة',
+    'matter_promote_lead' => 'ترقية إلى رئيسي',
+    'matter_confirm_remove' => 'هل تريد إزالة هذا المحامي من الفريق؟',
+    'matter_confirm_promote' => 'هل تريد ترقية هذا المحامي إلى رئيسي؟ سيصبح الرئيسي الحالي مساعدا.',
 
     // Contacts list page
     'contacts_list_title' => 'جهات الاتصال',

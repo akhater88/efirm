@@ -284,6 +284,16 @@
 
     @elseif ($activeTab === 'team')
         {{-- Lawyer Team --}}
+        @if ($isLead)
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+                <button wire:click="openAddMember"
+                    style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                    {{ __('shell.matter_add_member') }}
+                </button>
+            </div>
+        @endif
+
         <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; overflow: hidden;">
             @forelse ($matter->matterLawyers as $ml)
                 <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-default, #E7E5E4);">
@@ -298,10 +308,64 @@
                         {{ $ml->role === 'lead' ? 'background: var(--color-brand-50, #ECFAF1); color: var(--color-brand-700, #072E17);' : 'background: #F5F5F4; color: #57534E;' }}">
                         {{ $ml->role === 'lead' ? __('shell.matter_role_lead') : __('shell.matter_role_supporting') }}
                     </span>
+
+                    @if ($isLead && $ml->role !== 'lead')
+                        <div style="display: flex; gap: 4px;">
+                            <button wire:click="promoteLead('{{ $ml->user_id }}')"
+                                wire:confirm="{{ __('shell.matter_confirm_promote') }}"
+                                title="{{ __('shell.matter_promote_lead') }}"
+                                style="padding: 4px 8px; background: none; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--color-brand-500, #0D5C2E);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+                            </button>
+                            <button wire:click="removeMember('{{ $ml->user_id }}')"
+                                wire:confirm="{{ __('shell.matter_confirm_remove') }}"
+                                title="{{ __('shell.matter_remove_member') }}"
+                                style="padding: 4px 8px; background: none; border: 1px solid var(--color-danger-500, #DC2626); border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--color-danger-500, #DC2626);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                            </button>
+                        </div>
+                    @endif
                 </div>
             @empty
                 <div style="padding: 40px; text-align: center; color: var(--text-tertiary, #78716C); font-size: 13px;">{{ __('shell.matter_no_team') }}</div>
             @endforelse
         </div>
+
+        {{-- Add Member Modal --}}
+        @if ($showAddMemberModal)
+            <div @keydown.escape.window="$wire.set('showAddMemberModal', false)"
+                 style="position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px;">
+                <div wire:click="$set('showAddMemberModal', false)" style="position: absolute; inset: 0; background: rgba(0,0,0,0.4);"></div>
+                <div style="position: relative; background: #FFFFFF; border-radius: 12px; box-shadow: var(--shadow-xl); width: 100%; max-width: 440px; padding: 24px;">
+                    <h2 style="font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0 0 20px;">{{ __('shell.matter_add_member') }}</h2>
+                    <form wire:submit="addMember">
+                        <div style="margin-bottom: 14px;">
+                            <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matter_select_member') }}</label>
+                            <select wire:model="addMemberUserId" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #FFFFFF;">
+                                <option value="">--</option>
+                                @foreach ($workspaceMembers as $member)
+                                    <option value="{{ $member->id }}">{{ $member->name }} ({{ $member->email }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 14px;">
+                            <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matter_member_role') }}</label>
+                            <select wire:model="addMemberRole" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #FFFFFF;">
+                                <option value="supporting">{{ __('shell.matter_role_supporting') }}</option>
+                                <option value="lead">{{ __('shell.matter_role_lead') }}</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-default, #E7E5E4);">
+                            <button type="button" wire:click="$set('showAddMemberModal', false)" style="padding: 8px 16px; background: #FFFFFF; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 13px; cursor: pointer;">
+                                {{ __('common.cancel') }}
+                            </button>
+                            <button type="submit" style="padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                                {{ __('shell.matter_add_member') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        @endif
     @endif
 </div>
