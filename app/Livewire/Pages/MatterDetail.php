@@ -118,19 +118,28 @@ class MatterDetail extends Component
         $this->editing = false;
     }
 
-    // --- Team management (lead lawyer only) ---
+    // --- Team management (lead lawyer or workspace owner/admin) ---
 
-    public function isCurrentUserLead(): bool
+    public function canManageTeam(): bool
     {
+        $user = auth()->user();
+
+        // Workspace Owner or Admin can always manage
+        $role = $user->currentRole();
+        if ($role && in_array($role->value, ['owner', 'admin'])) {
+            return true;
+        }
+
+        // Lead lawyer on this matter can manage
         return $this->matter->matterLawyers
-            ->where('role', 'lead')
-            ->where('user_id', auth()->id())
+            ->where('role', MatterLawyerRole::Lead)
+            ->where('user_id', $user->id)
             ->isNotEmpty();
     }
 
     public function openAddMember(): void
     {
-        if (! $this->isCurrentUserLead()) {
+        if (! $this->canManageTeam()) {
             return;
         }
 
@@ -141,7 +150,7 @@ class MatterDetail extends Component
 
     public function addMember(): void
     {
-        if (! $this->isCurrentUserLead()) {
+        if (! $this->canManageTeam()) {
             return;
         }
 
@@ -166,7 +175,7 @@ class MatterDetail extends Component
 
     public function removeMember(string $userId): void
     {
-        if (! $this->isCurrentUserLead()) {
+        if (! $this->canManageTeam()) {
             return;
         }
 
@@ -183,7 +192,7 @@ class MatterDetail extends Component
 
     public function promoteLead(string $userId): void
     {
-        if (! $this->isCurrentUserLead()) {
+        if (! $this->canManageTeam()) {
             return;
         }
 
@@ -216,7 +225,7 @@ class MatterDetail extends Component
             'statuses' => MatterStatus::cases(),
             'practiceAreas' => PracticeArea::cases(),
             'workspaceMembers' => $workspaceMembers,
-            'isLead' => $this->isCurrentUserLead(),
+            'isLead' => $this->canManageTeam(),
         ])->layout('components.layouts.dashboard');
     }
 }

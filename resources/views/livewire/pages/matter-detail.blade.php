@@ -305,11 +305,11 @@
                         <div style="font-size: 12px; color: var(--text-tertiary, #78716C);">{{ $ml->user?->email }}</div>
                     </div>
                     <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.04em;
-                        {{ $ml->role === 'lead' ? 'background: var(--color-brand-50, #ECFAF1); color: var(--color-brand-700, #072E17);' : 'background: #F5F5F4; color: #57534E;' }}">
-                        {{ $ml->role === 'lead' ? __('shell.matter_role_lead') : __('shell.matter_role_supporting') }}
+                        {{ $ml->role->value === 'lead' ? 'background: var(--color-brand-50, #ECFAF1); color: var(--color-brand-700, #072E17);' : 'background: #F5F5F4; color: #57534E;' }}">
+                        {{ $ml->role->value === 'lead' ? __('shell.matter_role_lead') : __('shell.matter_role_supporting') }}
                     </span>
 
-                    @if ($isLead && $ml->role !== 'lead')
+                    @if ($isLead && $ml->role->value !== 'lead')
                         <div style="display: flex; gap: 4px;">
                             <button wire:click="promoteLead('{{ $ml->user_id }}')"
                                 wire:confirm="{{ __('shell.matter_confirm_promote') }}"
