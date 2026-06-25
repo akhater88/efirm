@@ -127,7 +127,7 @@
 
     /* Brand logo — reversed (white) SVG used directly via panel brandLogo config */
 
-    /* Tenant menu text in sidebar */
+    /* Tenant menu in sidebar */
     .fi-tenant-menu-trigger {
         color: #D6D3D1 !important;
     }
@@ -137,8 +137,66 @@
         color: #FAFAF9 !important;
     }
 
+    /* Tenant name text */
+    .fi-tenant-menu-trigger-tenant-name {
+        color: #FAFAF9 !important;
+        font-weight: 600;
+    }
+
+    .fi-tenant-menu-trigger svg {
+        color: #D6D3D1 !important;
+    }
+
+    .fi-tenant-menu-trigger:hover svg {
+        color: #FAFAF9 !important;
+    }
+
+    /* User avatar in sidebar — light ring on dark background */
+    .fi-sidebar .fi-avatar,
+    .fi-sidebar .fi-user-avatar {
+        border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    /* User avatar in topbar — light ring on dark background */
+    .fi-topbar .fi-avatar,
+    .fi-topbar .fi-user-avatar {
+        border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    /* Avatar initials text — white on brand background */
+    .fi-avatar span,
+    .fi-user-avatar span {
+        color: #FFFFFF !important;
+    }
+
+    /* Avatar background — slightly lighter green for contrast */
+    .fi-sidebar .fi-avatar,
+    .fi-topbar .fi-avatar {
+        background-color: #094B26 !important;
+    }
+
+    /* User menu button text in topbar */
+    .fi-topbar .fi-user-menu button span {
+        color: #D6D3D1 !important;
+    }
+
+    .fi-topbar .fi-user-menu button:hover span {
+        color: #FFFFFF !important;
+    }
+
     /* Footer in sidebar */
     .fi-sidebar-footer {
         border-top-color: rgba(255, 255, 255, 0.1) !important;
+        color: #D6D3D1 !important;
+    }
+
+    .fi-sidebar-footer button,
+    .fi-sidebar-footer a {
+        color: #D6D3D1 !important;
+    }
+
+    .fi-sidebar-footer button:hover,
+    .fi-sidebar-footer a:hover {
+        color: #FAFAF9 !important;
     }
 </style>
