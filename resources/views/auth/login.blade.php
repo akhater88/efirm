@@ -21,7 +21,7 @@
     <div style="width: 100%; max-width: 420px; padding: 24px;">
         {{-- Logo --}}
         <div style="text-align: center; margin-bottom: 32px;">
-            <img src="{{ asset('img/brand/efirm-logo.svg') }}" alt="{{ __('brand.logo_alt') }}" style="height: 48px; width: auto; margin-bottom: 12px;">
+            <img src="{{ asset('img/brand/efirm-horizontal-dark.svg') }}" alt="{{ __('brand.logo_alt') }}" style="height: 48px; width: auto; margin-bottom: 12px;">
             <p style="color: var(--text-tertiary, #78716C); font-size: 14px; margin: 0;">{{ __('brand.tagline') }}</p>
         </div>
 

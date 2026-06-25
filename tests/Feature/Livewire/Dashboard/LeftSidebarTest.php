@@ -50,7 +50,7 @@ test('left sidebar can toggle collapse', function () {
 
 test('left sidebar shows logo variants based on collapse state', function () {
     Livewire::test(LeftSidebar::class)
-        ->assertSeeHtml('efirm-logo-reversed.svg')
+        ->assertSeeHtml('efirm-horizontal-compact-reversed.svg')
         ->call('toggleCollapse')
         ->assertSeeHtml('efirm-mark-reversed.svg');
 });

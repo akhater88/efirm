@@ -130,12 +130,12 @@
         <h2 class="section-title">Logo Assets</h2>
         <div style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center;">
             <div style="padding: 16px; background: #FAFAF9; border-radius: 8px; border: 1px solid #E7E5E4;">
-                <img src="{{ asset('img/brand/efirm-logo.svg') }}" alt="Logo" style="height: 40px;">
-                <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 8px;">efirm-logo.svg</div>
+                <img src="{{ asset('img/brand/efirm-horizontal-compact.svg') }}" alt="Logo" style="height: 40px;">
+                <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 8px;">efirm-horizontal-compact.svg</div>
             </div>
             <div style="padding: 16px; background: #072E17; border-radius: 8px;">
-                <img src="{{ asset('img/brand/efirm-logo-reversed.svg') }}" alt="Logo reversed" style="height: 40px;">
-                <div style="font-size: 11px; color: #D6D3D1; margin-top: 8px;">efirm-logo-reversed.svg</div>
+                <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="Logo reversed" style="height: 40px;">
+                <div style="font-size: 11px; color: #D6D3D1; margin-top: 8px;">efirm-horizontal-compact-reversed.svg</div>
             </div>
             <div style="padding: 16px; background: #FAFAF9; border-radius: 8px; border: 1px solid #E7E5E4;">
                 <img src="{{ asset('img/brand/efirm-mark.svg') }}" alt="Mark" style="height: 40px;">
