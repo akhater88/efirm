@@ -15,6 +15,7 @@ use App\Livewire\Pages\DocumentsList;
 use App\Livewire\Pages\LibraryClausesList;
 use App\Livewire\Pages\MattersList;
 use App\Livewire\Pages\ObligationsList;
+use App\Livewire\Pages\Settings\TaskTypesSettings;
 use App\Livewire\Pages\TasksList;
 use App\Livewire\Pages\TimeEntriesList;
 use App\Models\User;
@@ -87,6 +88,9 @@ Route::middleware(['auth', 'workspace'])->group(function () {
     Route::get('obligations', ObligationsList::class)->name('obligations.index');
     Route::get('library-clauses', LibraryClausesList::class)->name('library-clauses.index');
     Route::get('time-entries', TimeEntriesList::class)->name('time-entries.index');
+
+    // Settings pages
+    Route::get('settings/task-types', TaskTypesSettings::class)->name('settings.task-types');
 
     // Document editor (custom Livewire+Blade — outside Filament panel)
     Route::get('matters/{matter}/documents/{document}', DocumentEditor::class)

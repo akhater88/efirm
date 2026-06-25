@@ -155,4 +155,36 @@ return [
     'label_select' => '-- اختر --',
     'obligations_create' => 'التزام جديد',
     'library_clauses_create' => 'بند جديد',
+
+    // Settings navigation
+    'nav_settings' => 'الإعدادات',
+    'nav_task_types' => 'أنواع المهام',
+
+    // Task types settings page
+    'task_types_title' => 'أنواع المهام',
+    'task_type_create' => 'نوع مهمة جديد',
+    'task_type_name_en' => 'الاسم (إنجليزي)',
+    'task_type_name_ar' => 'الاسم (عربي)',
+    'task_type_slug' => 'المعرّف',
+    'task_type_icon' => 'الأيقونة',
+    'task_type_color' => 'اللون',
+    'task_type_workflow' => 'سير العمل الافتراضي',
+    'task_type_active' => 'نشط',
+    'task_type_sort' => 'الترتيب',
+    'task_type_custom_fields' => 'حقول مخصصة',
+    'task_type_add_field' => 'إضافة حقل',
+    'task_type_field_key' => 'المفتاح',
+    'task_type_field_label_en' => 'التسمية (إنجليزي)',
+    'task_type_field_label_ar' => 'التسمية (عربي)',
+    'task_type_field_type' => 'النوع',
+    'task_type_field_required' => 'مطلوب',
+    'task_type_field_options' => 'الخيارات',
+    'task_type_no_types' => 'لم يتم إعداد أنواع مهام بعد.',
+    'task_type_custom_field_count' => ':count حقول مخصصة|:count حقل مخصص|:count حقول مخصصة',
+    'task_type_none' => 'بدون نوع',
+
+    // Task type in tasks list
+    'tasks_task_type' => 'نوع المهمة',
+    'tasks_all_types' => 'جميع الأنواع',
+    'tasks_custom_fields' => 'حقول إضافية',
 ];

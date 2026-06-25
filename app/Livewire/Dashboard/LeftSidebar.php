@@ -106,6 +106,17 @@ class LeftSidebar extends Component
                     ],
                 ],
             ],
+            [
+                'group' => __('shell.nav_settings'),
+                'items' => [
+                    [
+                        'label' => __('shell.nav_task_types'),
+                        'icon' => 'settings',
+                        'url' => '/settings/task-types',
+                        'active' => str_starts_with($currentPath, 'settings'),
+                    ],
+                ],
+            ],
         ];
     }
 
