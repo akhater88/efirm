@@ -31,7 +31,6 @@ class LibraryClausesList extends Component
 
         return view('livewire.pages.library-clauses-list', [
             'clauses' => $clauses,
-        ])->layout('layouts.dashboard')
-            ->section('content');
+        ])->layout('components.layouts.dashboard');
     }
 }

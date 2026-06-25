@@ -45,7 +45,6 @@ class ObligationsList extends Component
         return view('livewire.pages.obligations-list', [
             'obligations' => $obligations,
             'statuses' => ObligationStatus::cases(),
-        ])->layout('layouts.dashboard')
-            ->section('content');
+        ])->layout('components.layouts.dashboard');
     }
 }

@@ -32,7 +32,6 @@ class TimeEntriesList extends Component
 
         return view('livewire.pages.time-entries-list', [
             'timeEntries' => $timeEntries,
-        ])->layout('layouts.dashboard')
-            ->section('content');
+        ])->layout('components.layouts.dashboard');
     }
 }

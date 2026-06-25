@@ -45,7 +45,6 @@ class ContactsList extends Component
 
         return view('livewire.pages.contacts-list', [
             'contacts' => $contacts,
-        ])->layout('layouts.dashboard')
-            ->section('content');
+        ])->layout('components.layouts.dashboard');
     }
 }

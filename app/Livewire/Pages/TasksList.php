@@ -58,7 +58,6 @@ class TasksList extends Component
             'tasks' => $tasks,
             'priorities' => TaskPriority::cases(),
             'statuses' => TaskStatus::cases(),
-        ])->layout('layouts.dashboard')
-            ->section('content');
+        ])->layout('components.layouts.dashboard');
     }
 }
