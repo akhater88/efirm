@@ -25,7 +25,7 @@ it('login page renders correctly in ar locale', function () {
 
     $response->assertOk();
     $response->assertSee('تسجيل الدخول باستخدام Google', false);
-    $response->assertSee('كود جوب', false);
+    $response->assertSee('eFirm', false);
 });
 
 it('login page renders correctly in en locale', function () {
@@ -33,7 +33,7 @@ it('login page renders correctly in en locale', function () {
 
     $response->assertOk();
     $response->assertSee('Sign in with Google', false);
-    $response->assertSee('Code Job', false);
+    $response->assertSee('eFirm', false);
 });
 
 it('dashboard renders correctly in ar locale', function () {

@@ -1,81 +1,79 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
-@section('title', __('profile.title') . ' — ' . __('common.app_name'))
+@section('title', __('profile.title') . ' — ' . __('brand.app_name'))
 
 @section('content')
-    <div class="max-w-lg mx-auto">
-        <h1 class="text-2xl font-bold text-gray-900 mb-8">{{ __('profile.title') }}</h1>
+    <div style="max-width: 560px;">
+        <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0 0 24px;">{{ __('profile.title') }}</h1>
 
-        {{-- Read-only fields (managed by Google) --}}
-        <div class="mb-8 space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-500 mb-1">
+        {{-- Read-only fields --}}
+        <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-tertiary, #78716C); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em;">
                     {{ __('profile.email') }}
                 </label>
-                <div class="flex items-center gap-2">
-                    <span class="text-gray-900">{{ $user->email }}</span>
-                    <span class="text-xs text-gray-400">({{ __('profile.managed_by_google') }})</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 14px; color: var(--text-primary, #1C1917);" dir="ltr">{{ $user->email }}</span>
+                    <span style="font-size: 11px; color: var(--text-tertiary, #78716C);">({{ __('profile.managed_by_google') }})</span>
                 </div>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-500 mb-1">
+                <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-tertiary, #78716C); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em;">
                     {{ __('profile.avatar') }}
                 </label>
-                <div class="flex items-center gap-3">
+                <div style="display: flex; align-items: center; gap: 12px;">
                     @if ($user->avatar_url)
-                        <img src="{{ $user->avatar_url }}" alt="" class="w-12 h-12 rounded-full">
+                        <img src="{{ $user->avatar_url }}" alt="" style="width: 48px; height: 48px; border-radius: 9999px; object-fit: cover;">
                     @else
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                            <span class="text-blue-700 font-medium">
+                        <div style="width: 48px; height: 48px; border-radius: 9999px; background: var(--color-brand-50, #ECFAF1); display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--color-brand-700, #072E17); font-weight: 600; font-size: 18px;">
                                 {{ mb_substr($user->name, 0, 1) }}
                             </span>
                         </div>
                     @endif
-                    <span class="text-xs text-gray-400">({{ __('profile.managed_by_google') }})</span>
+                    <span style="font-size: 11px; color: var(--text-tertiary, #78716C);">({{ __('profile.managed_by_google') }})</span>
                 </div>
             </div>
         </div>
 
         {{-- Editable fields --}}
-        <form method="POST" action="{{ route('profile.update') }}">
-            @csrf
-            @method('PUT')
+        <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; padding: 20px;">
+            <form method="POST" action="{{ route('profile.update') }}">
+                @csrf
+                @method('PUT')
 
-            <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-                    {{ __('profile.name') }}
-                </label>
-                <input type="text"
-                       id="name"
-                       name="name"
-                       value="{{ old('name', $user->name) }}"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
-                              focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                       required
-                       maxlength="255">
-                @error('name')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <div style="margin-bottom: 16px;">
+                    <label for="name" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 6px;">
+                        {{ __('profile.name') }}
+                    </label>
+                    <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required maxlength="255"
+                           style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box;"
+                           onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'; this.style.boxShadow='var(--ring-brand)'"
+                           onblur="this.style.borderColor='var(--border-default, #E7E5E4)'; this.style.boxShadow='none'">
+                    @error('name')
+                        <p style="margin: 4px 0 0; font-size: 12px; color: var(--color-danger-500, #DC2626);">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="mb-6">
-                <label for="preferred_locale" class="block text-sm font-medium text-gray-700 mb-1">
-                    {{ __('profile.preferred_locale') }}
-                </label>
-                <select id="preferred_locale"
-                        name="preferred_locale"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
-                               focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="ar" {{ $user->preferred_locale === 'ar' ? 'selected' : '' }}>العربية</option>
-                    <option value="en" {{ $user->preferred_locale === 'en' ? 'selected' : '' }}>English</option>
-                </select>
-            </div>
+                <div style="margin-bottom: 20px;">
+                    <label for="preferred_locale" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 6px;">
+                        {{ __('profile.preferred_locale') }}
+                    </label>
+                    <select id="preferred_locale" name="preferred_locale"
+                            style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box; background: var(--surface-card, #FFFFFF);"
+                            onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'"
+                            onblur="this.style.borderColor='var(--border-default, #E7E5E4)'">
+                        <option value="ar" {{ $user->preferred_locale === 'ar' ? 'selected' : '' }}>العربية</option>
+                        <option value="en" {{ $user->preferred_locale === 'en' ? 'selected' : '' }}>English</option>
+                    </select>
+                </div>
 
-            <button type="submit"
-                    class="px-6 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                {{ __('profile.update') }}
-            </button>
-        </form>
+                <button type="submit"
+                        style="padding: 10px 24px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                    {{ __('profile.update') }}
+                </button>
+            </form>
+        </div>
     </div>
 @endsection
