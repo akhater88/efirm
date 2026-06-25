@@ -2,8 +2,8 @@
 
 > This file is loaded by Claude Code on every session against this repository.
 > Read it first. It encodes everything you need to know before touching the codebase.
-> **Version: v7** • **Last meaningful update: 2026-06-24**
-> Changes since v6: stack version corrections (Laravel 13.x, Filament v5.x, Pest 4.x), direct Stripe SDK (not Cashier), planning path migration (`docs/`), SURGE-14 architectural decisions (admin guard, append-only ledgers, defense-in-depth invariants, no-secrets-in-audit, platform-vs-tenant scope split, locale key parity, no-hardcoded-strings enforcement).
+> **Version: v8** • **Last meaningful update: 2026-06-25**
+> Changes since v7: public marketing namespace conventions (SURGE-LP-01), cookie consent (PDPL Article 13), SEO/accessibility requirements, Linear integration, demo request pipeline, legal stubs framework.
 
 ---
 
@@ -513,7 +513,137 @@ Do not invent answers. Do not guess at intent. Stop, surface the question, wait 
 
 ---
 
+## 13. Public Marketing Namespace
+
+The repository contains **two distinct surfaces** served from the same Laravel monolith:
+
+- **Authenticated product surface** — Filament panel at `/app/*` + custom Livewire pages at `/*` (authenticated). Existing patterns apply.
+- **Public marketing surface** — Blade + Tailwind landing pages at `/*` (unauthenticated, public).
+
+The two surfaces share infrastructure (Laravel app, database, queue, cache) but use different patterns.
+
+### File location conventions
+
+| Layer | Path pattern | Notes |
+|---|---|---|
+| Public controllers | `app/Http/Controllers/Public/*` | Never mix with admin controllers |
+| Public FormRequests | `app/Http/Requests/Public/*` | |
+| Public middleware | `app/Http/Middleware/SetPublicLocale.php` | Prefix with `Public` if surface-specific |
+| Public Blade layouts | `resources/views/public/layouts/marketing.blade.php` | SEPARATE from authenticated layout |
+| Public Blade pages | `resources/views/public/*` | Mirror route name structure |
+| Public Blade components | `resources/views/components/marketing/*` | Namespaced under `marketing/` |
+| Public localization | `resources/lang/{en,ar}/marketing.php` | Top-level key `marketing.*` |
+| Public route group | Top of `routes/web.php`, middleware `public.locale` | |
+| Public API routes | `routes/api.php` under `prefix('v1/public')` | |
+| Markdown content (legal) | `resources/markdown/legal/{slug}-{locale}.md` | |
+| Public config | `config/marketing.php`, `config/seo.php` | Pricing, SEO defaults, founding-firm flag |
+
+### Locale handling on the public surface
+
+- **Default locale: English (LTR).** Arabic available at `/ar/*` route prefix.
+- **Cookie:** `efirm_locale`, values `en` or `ar` only, TTL 365 days, `SameSite=Lax`, `Secure=true` in production, `HttpOnly=false`.
+- **Middleware:** `app/Http/Middleware/SetPublicLocale.php`, alias `public.locale`.
+- **Detection priority:** `efirm_locale` cookie → `Accept-Language` header → English default.
+- **Translation:** `__('marketing.{section}.{key}')` everywhere; no hard-coded strings.
+- **Missing key fallback:** `Lang::fallback('en')`; missing AR keys fall back to EN with log warning to `marketing-i18n` channel.
+- **RTL:** Tailwind `rtl:*` prefix utilities. Directional icons use `rtl:scale-x-[-1]`.
+- **Numbers:** Western Arabic numerals (`0–9`) in both locales.
+- **Fonts:** EN uses `'Inter', system-ui, sans-serif`. AR uses `'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif`.
+
+### Public API conventions
+
+- **Path prefix:** `/api/v1/public/*`. No authentication. CSRF required for browser POSTs.
+- **Rate limiting:** `Limit::perMinute(60)->by($request->ip())`. Tighter per-endpoint: `throttle:5,60` for demo requests.
+- **Append-only audit:** `cookie_consent_records` follows the same append-only convention as `admin_activity_log`.
+- **OpenAPI spec:** Public endpoints carry `tags: ["Public", "Marketing"]` and `security: []`.
+
+### SEO and crawlability
+
+- **Sitemap:** `/sitemap.xml` lists every public route in both locales with `lastmod`, `changefreq: weekly`.
+- **Robots:** `/robots.txt` allows all crawlers, disallows `/app/*`, references sitemap.
+- **Meta tags:** Every public page must include `<title>` (≤ 60 chars), `meta description` (≤ 160 chars), canonical, OG tags, Twitter cards, `hreflang`.
+- **JSON-LD:** Every public page embeds `LegalService` schema with `areaServed: ["JO","LB","PS","IQ"]`.
+- **Pest enforcement:** `tests/Feature/Marketing/LandingCopyLimitsTest.php` asserts character limits. CI fails on violation.
+
+### Accessibility (WCAG 2.1 Level AA)
+
+- Enforced via axe-core in `tests/Browser/Marketing/AccessibilityTest.php`. CI fails on violation.
+- **Landmarks:** `<header>`, `<nav>`, `<main>`, `<footer>` required.
+- **Heading hierarchy:** One `h1` per page, sequential `h2`/`h3`. No skipped levels.
+- **Skip-to-content:** Top of `<body>`, visible on Tab focus.
+- **Focus indicators:** `focus:ring-2 focus:ring-slate-900 focus:ring-offset-2`.
+- **Touch targets:** ≥ 44×44 CSS pixels.
+- **Reduced motion:** Disable transitions/animations > 200ms when `prefers-reduced-motion: reduce`.
+
+### Cookie consent (PDPL Article 13)
+
+- Banner shown when `efirm_consent` cookie is absent.
+- **Cookie format:** JSON `{"essential":true,"analytics":bool,"marketing":bool,"timestamp":"ISO8601"}`, max 256 bytes, 365-day TTL.
+- **GA4 gating:** `window['ga-disable-{GA4_MEASUREMENT_ID}'] = true` unless `analytics: true` in cookie. IP anonymisation enforced.
+- **Audit trail:** Every consent writes to `cookie_consent_records` via `POST /api/v1/public/cookie-consent`. Append-only.
+- **Re-consent:** Footer link "Cookie Settings" / "إعدادات ملفات تعريف الارتباط" reopens the modal.
+
+### Legal pages (stubs)
+
+- **Location:** `resources/markdown/legal/{slug}-{locale}.md` — `terms`, `privacy`, `dpa`, `ai-disclaimer` × `en`, `ar` = 8 files.
+- **Rendering:** `LegalController@show` reads slug + locale, renders through `resources/views/public/legal/show.blade.php`.
+- **Disclaimer banner:** Every legal page MUST display persistent amber-100 banner: *"This document is a stub pending final legal review."* Removal only after founder approval in `docs/validation/02_advisor_meeting_log.md`.
+
+### New database tables
+
+| Table | Type | Notes |
+|---|---|---|
+| `demo_requests` | Standard CRUD | UUID PK, indexed on email + created_at. NOT append-only. |
+| `cookie_consent_records` | Append-only | Joins `admin_activity_log` + `subscription_events` family. |
+
+### New environment variables (production + staging)
+
+| Variable | Purpose |
+|---|---|
+| `LINEAR_API_KEY` | Linear personal API token |
+| `LINEAR_TEAM_ID` | Linear team UUID |
+| `LINEAR_LEADS_PROJECT_ID` | Linear "Leads" project UUID |
+| `GA4_MEASUREMENT_ID` | Google Analytics 4 measurement ID (`G-XXXXXXXXXX`) |
+| `MAIL_LEAD_NOTIFICATION` | Demo-request notification recipient (default `abdullah@efirm.io`) |
+
+### New queue + integration
+
+- **Queue:** `demo_requests`. Job: `CreateLinearLeadTicketJob` (3 retries, exponential backoff 30/60/120s). Failure does not block visitor.
+- **Linear:** `app/Services/Integrations/LinearClient.php`. GraphQL at `https://api.linear.app/graphql`. Auth via `LINEAR_API_KEY`. Failure logged to `linear-integration` channel; visitor experience never blocked.
+
+### Marketing-surface non-negotiables
+
+1. **No raw strings in marketing Blade.** All user-facing strings from `resources/lang/{en,ar}/marketing.php`. Exception: S-7 Arabic AI Demo content renders as static in both locales.
+2. **No analytics without consent.** GA4 gated by `efirm_consent` cookie. Unconditional loading is a PDPL Article 13 violation.
+3. **Persistent legal-stub disclaimer.** Every legal page shows disclaimer until founder approves removal in `docs/validation/02_advisor_meeting_log.md`.
+4. **Khaldoun pre-launch gate.** First public DNS cutover requires Khaldoun's written sign-off (48h before cutover). S-7 Arabic AI Demo + S-8 Jordanian procedural claims must be practitioner-validated.
+
+---
+
 ## Changelog
+
+### v8 — 2026-06-25
+
+**Added:**
+- Section 13: Public marketing namespace conventions (SURGE-LP-01)
+- File location conventions for public controllers, views, components, localization
+- Public locale handling (English default, Arabic at `/ar/*`, cookie-based detection)
+- Public API conventions (rate limiting, append-only audit, OpenAPI tags)
+- SEO requirements (sitemap, robots, meta tags, JSON-LD, Pest enforcement)
+- WCAG 2.1 Level AA accessibility requirements (axe-core CI enforcement)
+- Cookie consent (PDPL Article 13): banner, consent cookie, GA4 gating, audit trail
+- Legal page stubs framework with persistent disclaimer banner
+- New tables: `demo_requests` (CRUD), `cookie_consent_records` (append-only)
+- New env vars: `LINEAR_API_KEY`, `LINEAR_TEAM_ID`, `LINEAR_LEADS_PROJECT_ID`, `GA4_MEASUREMENT_ID`, `MAIL_LEAD_NOTIFICATION`
+- New queue: `demo_requests` with `CreateLinearLeadTicketJob`
+- New integration: Linear (GraphQL, failure-tolerant)
+- 4 marketing-surface non-negotiables (no raw strings, no analytics without consent, persistent legal disclaimer, Khaldoun pre-launch gate)
+
+**Unchanged from v7:**
+- All existing sections 1–12
+- Tenant-scoped and platform-level entity conventions
+- Admin panel conventions (SURGE-14)
+- Subscription lifecycle and Stripe integration
 
 ### v7 — 2026-06-24
 
@@ -542,4 +672,4 @@ Do not invent answers. Do not guess at intent. Stop, surface the question, wait 
 
 ---
 
-*End of CLAUDE.md v7. Welcome to the project.*
+*End of CLAUDE.md v8. Welcome to the project.*
