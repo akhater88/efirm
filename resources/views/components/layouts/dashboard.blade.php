@@ -24,6 +24,7 @@
     <meta property="og:site_name" content="{{ __('brand.app_name') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
     @livewireStyles
 </head>
 <body style="min-height: 100vh; background: var(--surface-page, #FAFAF9); margin: 0;">
