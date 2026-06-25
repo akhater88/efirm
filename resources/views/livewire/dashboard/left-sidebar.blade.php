@@ -30,11 +30,11 @@
     "
 >
     {{-- Logo block --}}
-    <div style="padding: 16px {{ $collapsed ? '12px' : '16px' }}; display: flex; align-items: center; {{ $collapsed ? 'justify-content: center;' : '' }} border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div style="padding: {{ $collapsed ? '16px 8px' : '20px 16px' }}; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
         @if ($collapsed)
-            <img src="{{ asset('img/brand/efirm-mark-reversed.svg') }}" alt="{{ __('brand.mark_alt') }}" style="width: 32px; height: 32px;">
+            <img src="{{ asset('img/brand/efirm-mark-reversed.svg') }}" alt="{{ __('brand.mark_alt') }}" style="width: 36px; height: 36px; padding: 4px;">
         @else
-            <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="{{ __('brand.logo_alt_dark') }}" style="height: 32px; width: auto;">
+            <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="{{ __('brand.logo_alt_dark') }}" style="height: 40px; width: auto; padding: 4px 8px;">
         @endif
     </div>
 
