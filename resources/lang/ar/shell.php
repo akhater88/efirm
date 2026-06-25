@@ -73,6 +73,11 @@ return [
     'matter_no_team' => 'لم يتم تعيين محامين.',
     'matter_role_lead' => 'رئيسي',
     'matter_role_supporting' => 'مساعد',
+    'matter_stage' => 'المرحلة',
+    'matters_form_title' => 'العنوان',
+    'matters_form_client' => 'العميل',
+    'matters_form_status' => 'الحالة',
+    'matters_form_practice_area' => 'مجال الممارسة',
 
     // Contacts list page
     'contacts_list_title' => 'جهات الاتصال',

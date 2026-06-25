@@ -73,6 +73,11 @@ return [
     'matter_no_team' => 'No lawyers assigned.',
     'matter_role_lead' => 'Lead',
     'matter_role_supporting' => 'Supporting',
+    'matter_stage' => 'Stage',
+    'matters_form_title' => 'Title',
+    'matters_form_client' => 'Client',
+    'matters_form_status' => 'Status',
+    'matters_form_practice_area' => 'Practice Area',
 
     // Contacts list page
     'contacts_list_title' => 'Contacts',
