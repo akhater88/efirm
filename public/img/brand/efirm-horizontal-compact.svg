@@ -1,5 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174 52" fill="none">
+  <defs><style>/* Font loaded via CSS — no external imports */</style></defs>
   
+  <g transform="scale(0.2364)">
+    
   <!-- ═══ PILLAR (drawn first, behind beam) ══════════════════════════════ -->
 
   <!-- Finial ball at top -->
@@ -76,4 +79,9 @@
   <rect x="100" y="187" width="80"  height="8"  rx="2" fill="#0D5C2E"/>
   <rect x="78"  y="195" width="124" height="8"  rx="2" fill="#0D5C2E"/>
   <rect x="54"  y="203" width="172" height="11" rx="2" fill="#0D5C2E"/>
+  </g>
+  <text x="75" y="37"
+    font-family="'Playfair Display', Georgia, serif"
+    font-weight="700" font-size="30" letter-spacing="3"
+    fill="#0D5C2E">eFirm</text>
 </svg>
