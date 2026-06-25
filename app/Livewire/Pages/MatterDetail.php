@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Pages;
 
+use App\Enums\MatterLawyerRole;
 use App\Enums\MatterStatus;
 use App\Enums\PracticeArea;
 use App\Models\Contact;
 use App\Models\Matter;
+use App\Models\User;
+use App\Services\MatterLawyerService;
 use Livewire\Component;
 
 class MatterDetail extends Component
@@ -14,6 +17,7 @@ class MatterDetail extends Component
 
     public string $activeTab = 'overview';
 
+    // Overview editing
     public bool $editing = false;
 
     public string $formTitle = '';
@@ -34,6 +38,13 @@ class MatterDetail extends Component
 
     public ?string $formStage = null;
 
+    // Team management
+    public bool $showAddMemberModal = false;
+
+    public ?string $addMemberUserId = null;
+
+    public string $addMemberRole = 'supporting';
+
     public function mount(string $id): void
     {
         $this->matter = Matter::with([
@@ -53,6 +64,8 @@ class MatterDetail extends Component
     {
         $this->activeTab = $tab;
     }
+
+    // --- Overview editing ---
 
     public function startEditing(): void
     {
@@ -105,16 +118,105 @@ class MatterDetail extends Component
         $this->editing = false;
     }
 
+    // --- Team management (lead lawyer only) ---
+
+    public function isCurrentUserLead(): bool
+    {
+        return $this->matter->matterLawyers
+            ->where('role', 'lead')
+            ->where('user_id', auth()->id())
+            ->isNotEmpty();
+    }
+
+    public function openAddMember(): void
+    {
+        if (! $this->isCurrentUserLead()) {
+            return;
+        }
+
+        $this->addMemberUserId = null;
+        $this->addMemberRole = 'supporting';
+        $this->showAddMemberModal = true;
+    }
+
+    public function addMember(): void
+    {
+        if (! $this->isCurrentUserLead()) {
+            return;
+        }
+
+        $this->validate([
+            'addMemberUserId' => 'required|exists:users,id',
+            'addMemberRole' => 'required|in:lead,supporting',
+        ]);
+
+        $user = User::findOrFail($this->addMemberUserId);
+        $role = MatterLawyerRole::from($this->addMemberRole);
+
+        app(MatterLawyerService::class)->assignLawyer(
+            $this->matter,
+            $user,
+            $role,
+            auth()->user()
+        );
+
+        $this->matter->load('matterLawyers.user');
+        $this->showAddMemberModal = false;
+    }
+
+    public function removeMember(string $userId): void
+    {
+        if (! $this->isCurrentUserLead()) {
+            return;
+        }
+
+        $user = User::findOrFail($userId);
+
+        app(MatterLawyerService::class)->unassignLawyer(
+            $this->matter,
+            $user,
+            auth()->user()
+        );
+
+        $this->matter->load('matterLawyers.user');
+    }
+
+    public function promoteLead(string $userId): void
+    {
+        if (! $this->isCurrentUserLead()) {
+            return;
+        }
+
+        $user = User::findOrFail($userId);
+
+        app(MatterLawyerService::class)->changeLeadLawyer(
+            $this->matter,
+            $user,
+            auth()->user()
+        );
+
+        $this->matter->load('matterLawyers.user');
+    }
+
     public function render()
     {
         $clients = $this->editing
             ? Contact::where('is_client', true)->get(['id', 'display_name'])
             : collect();
 
+        $workspace = auth()->user()->currentWorkspace();
+        $workspaceMembers = ($this->showAddMemberModal && $workspace)
+            ? User::whereHas('workspaces', fn ($q) => $q->where('workspaces.id', $workspace->id))
+                ->whereNotIn('id', $this->matter->matterLawyers->pluck('user_id')->toArray())
+                ->get(['id', 'name', 'email'])
+            : collect();
+
         return view('livewire.pages.matter-detail', [
             'clients' => $clients,
             'statuses' => MatterStatus::cases(),
             'practiceAreas' => PracticeArea::cases(),
+            'workspaceMembers' => $workspaceMembers,
+            'isLead' => $this->isCurrentUserLead(),
         ])->layout('components.layouts.dashboard');
     }
 }

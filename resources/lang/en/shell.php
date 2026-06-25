@@ -78,6 +78,13 @@ return [
     'matters_form_client' => 'Client',
     'matters_form_status' => 'Status',
     'matters_form_practice_area' => 'Practice Area',
+    'matter_add_member' => 'Add Team Member',
+    'matter_select_member' => 'Select Member',
+    'matter_member_role' => 'Role',
+    'matter_remove_member' => 'Remove',
+    'matter_promote_lead' => 'Promote to Lead',
+    'matter_confirm_remove' => 'Remove this lawyer from the team?',
+    'matter_confirm_promote' => 'Promote this lawyer to Lead? The current lead will become supporting.',
 
     // Contacts list page
     'contacts_list_title' => 'Contacts',
