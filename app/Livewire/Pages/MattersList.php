@@ -45,7 +45,6 @@ class MattersList extends Component
         return view('livewire.pages.matters-list', [
             'matters' => $matters,
             'statuses' => MatterStatus::cases(),
-        ])->layout('layouts.dashboard')
-            ->section('content');
+        ])->layout('components.layouts.dashboard');
     }
 }

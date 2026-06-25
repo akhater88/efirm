@@ -32,7 +32,6 @@ class DocumentsList extends Component
 
         return view('livewire.pages.documents-list', [
             'documents' => $documents,
-        ])->layout('layouts.dashboard')
-            ->section('content');
+        ])->layout('components.layouts.dashboard');
     }
 }
