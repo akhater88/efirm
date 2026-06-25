@@ -6,7 +6,10 @@ use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use App\Models\Task;
 use App\Models\TaskType;
+use App\Models\TaskWorkflow;
+use App\Models\TaskWorkflowStage;
 use App\Models\User;
+use App\Services\TaskTransitionService;
 use Livewire\Component;
 
 class TasksList extends Component
@@ -18,6 +21,12 @@ class TasksList extends Component
     public string $statusFilter = '';
 
     public string $taskTypeFilter = '';
+
+    public string $viewMode = 'list'; // 'list' or 'board'
+
+    public ?string $boardWorkflowId = null;
+
+    public array $boardColumns = [];
 
     public bool $showModal = false;
 
@@ -154,6 +163,118 @@ class TasksList extends Component
         $this->editingId = null;
     }
 
+    public function setViewMode(string $mode): void
+    {
+        $this->viewMode = $mode;
+
+        if ($mode === 'board') {
+            $this->loadBoard();
+        }
+    }
+
+    public function loadBoard(): void
+    {
+        if (! $this->boardWorkflowId) {
+            $defaultWorkflow = TaskWorkflow::where('is_default', true)->first();
+            $this->boardWorkflowId = $defaultWorkflow?->id;
+        }
+
+        if (! $this->boardWorkflowId) {
+            $this->boardColumns = [];
+
+            return;
+        }
+
+        $workflow = TaskWorkflow::with('stages')->find($this->boardWorkflowId);
+        if (! $workflow) {
+            $this->boardColumns = [];
+
+            return;
+        }
+
+        $stages = $workflow->stages->sortBy('sort_order');
+        $priorityColors = [
+            'urgent' => '#DC2626',
+            'high' => '#F59E0B',
+            'medium' => '#2563EB',
+            'normal' => '#78716C',
+            'low' => '#A8A29E',
+        ];
+
+        $this->boardColumns = $stages->map(function (TaskWorkflowStage $stage) use ($priorityColors) {
+            $query = Task::where(function ($q) use ($stage) {
+                $q->where('task_workflow_id', $this->boardWorkflowId)
+                    ->where('current_stage_id', $stage->id);
+
+                $legacyMap = [
+                    'todo' => ['todo'],
+                    'in_progress' => ['in_progress', 'blocked'],
+                    'done' => ['done', 'cancelled'],
+                ];
+                $matchingStatuses = $legacyMap[$stage->key] ?? [];
+                if (! empty($matchingStatuses)) {
+                    $q->orWhere(function ($q2) use ($matchingStatuses) {
+                        $q2->whereNull('task_workflow_id')
+                            ->whereIn('status', $matchingStatuses);
+                    });
+                }
+            })->with(['assignedTo', 'taskType']);
+
+            if ($this->search !== '') {
+                $query->where('title', 'like', '%'.$this->search.'%');
+            }
+            if ($this->priorityFilter !== '') {
+                $query->where('priority', $this->priorityFilter);
+            }
+            if ($this->taskTypeFilter !== '') {
+                $query->where('task_type_id', $this->taskTypeFilter);
+            }
+
+            $tasks = $query->orderBy('due_date')->limit(50)->get();
+
+            return [
+                'id' => $stage->id,
+                'name' => $stage->localizedName(),
+                'key' => $stage->key,
+                'color' => $stage->color,
+                'tasks' => $tasks->map(fn ($t) => [
+                    'id' => $t->id,
+                    'title' => $t->title,
+                    'assignee' => $t->assignedTo?->name,
+                    'due_date' => $t->due_date?->format('d/m'),
+                    'priority' => $t->priority?->value ?? 'normal',
+                    'priority_color' => $priorityColors[$t->priority?->value ?? 'normal'] ?? '#78716C',
+                    'type_name' => $t->taskType?->localizedName(),
+                    'type_color' => $t->taskType?->color ?? '#78716C',
+                ])->toArray(),
+                'count' => $tasks->count(),
+            ];
+        })->values()->toArray();
+    }
+
+    public function moveTask(string $taskId, string $toStageId): void
+    {
+        $task = Task::findOrFail($taskId);
+        $toStage = TaskWorkflowStage::findOrFail($toStageId);
+
+        try {
+            app(TaskTransitionService::class)->transition($task, $toStage, auth()->user());
+        } catch (\Exception $e) {
+            // Fallback: update status directly for legacy tasks
+            $statusMap = ['todo' => 'todo', 'in_progress' => 'in_progress', 'done' => 'done'];
+            if (isset($statusMap[$toStage->key])) {
+                $task->update(['status' => $statusMap[$toStage->key]]);
+            }
+        }
+
+        $this->loadBoard();
+    }
+
+    public function updatedBoardWorkflowId(): void
+    {
+        $this->loadBoard();
+    }
+
     public function render()
     {
         $query = Task::with(['assignedTo:id,name', 'taskType'])
@@ -188,11 +309,18 @@ class TasksList extends Component
             ? $taskTypes->firstWhere('id', $this->formTaskTypeId)
             : null;
 
+        $workflows = TaskWorkflow::orderBy('name')->get(['id', 'name']);
+
+        if ($this->viewMode === 'board' && empty($this->boardColumns)) {
+            $this->loadBoard();
+        }
+
         return view('livewire.pages.tasks-list', [
             'tasks' => $tasks,
             'priorities' => TaskPriority::cases(),
             'statuses' => TaskStatus::cases(),
             'workspaceMembers' => $workspaceMembers,
+            'workflows' => $workflows,
             'taskTypes' => $taskTypes,
             'selectedTaskType' => $selectedTaskType,
         ])->layout('components.layouts.dashboard');

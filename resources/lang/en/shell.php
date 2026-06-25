@@ -63,6 +63,9 @@ return [
     'tasks_search_placeholder' => 'Search tasks...',
     'tasks_empty_title' => 'No tasks yet',
     'tasks_empty_description' => 'Create your first task to get started.',
+    'tasks_select_workflow' => 'Select workflow...',
+    'tasks_column_empty' => 'No tasks',
+    'tasks_no_workflow' => 'No workflow configured. Create a workflow in settings first.',
 
     // Documents list page
     'documents_list_title' => 'Documents',

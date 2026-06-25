@@ -63,6 +63,9 @@ return [
     'tasks_search_placeholder' => 'بحث في المهام...',
     'tasks_empty_title' => 'لا توجد مهام بعد',
     'tasks_empty_description' => 'أنشئ أول مهمة للبدء.',
+    'tasks_select_workflow' => 'اختر سير العمل...',
+    'tasks_column_empty' => 'لا توجد مهام',
+    'tasks_no_workflow' => 'لم يتم إعداد سير عمل. أنشئ سير عمل في الإعدادات أولا.',
 
     // Documents list page
     'documents_list_title' => 'المستندات',
