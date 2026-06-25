@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', __('common.app_name'))</title>
+    <title>{{ $title ?? '' }}@yield('title', __('common.app_name'))</title>
     <link rel="manifest" href="/manifest.json">
 
     {{-- Font preload --}}
@@ -57,6 +57,7 @@
     {{-- Main Content (offset by sidebar + quick links rail) --}}
     <main class="dashboard-main" style="margin-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 240px; margin-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}: 72px; padding: 24px 24px; min-height: calc(100vh - 56px);">
         @yield('content')
+        {{ $slot ?? '' }}
     </main>
 
     @livewireScripts
