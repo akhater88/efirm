@@ -42,4 +42,88 @@ return [
     'collapse_sidebar' => 'Collapse',
     'expand_sidebar' => 'Expand',
     'quick_links' => 'Quick Links',
+
+    // Matters list page
+    'matters_list_title' => 'Matters',
+    'matters_create' => 'New Matter',
+    'matters_search_placeholder' => 'Search matters...',
+    'matters_empty_title' => 'No matters yet',
+    'matters_empty_description' => 'Create your first matter to get started.',
+
+    // Contacts list page
+    'contacts_list_title' => 'Contacts',
+    'contacts_create' => 'New Contact',
+    'contacts_search_placeholder' => 'Search contacts...',
+    'contacts_empty_title' => 'No contacts yet',
+    'contacts_empty_description' => 'Create your first contact to get started.',
+
+    // Tasks list page
+    'tasks_list_title' => 'Tasks',
+    'tasks_create' => 'New Task',
+    'tasks_search_placeholder' => 'Search tasks...',
+    'tasks_empty_title' => 'No tasks yet',
+    'tasks_empty_description' => 'Create your first task to get started.',
+
+    // Documents list page
+    'documents_list_title' => 'Documents',
+    'documents_search_placeholder' => 'Search documents...',
+    'documents_empty_title' => 'No documents yet',
+    'documents_empty_description' => 'Documents are created from within matters.',
+
+    // Obligations list page
+    'obligations_list_title' => 'Obligations',
+    'obligations_search_placeholder' => 'Search obligations...',
+    'obligations_empty_title' => 'No obligations yet',
+    'obligations_empty_description' => 'Obligations are extracted from contract documents.',
+
+    // Library clauses list page
+    'library_clauses_list_title' => 'Clause Library',
+    'library_clauses_search_placeholder' => 'Search clauses...',
+    'library_clauses_empty_title' => 'No clauses yet',
+    'library_clauses_empty_description' => 'Save clauses from documents to build your library.',
+
+    // Time entries list page
+    'time_entries_list_title' => 'Time Entries',
+    'time_entries_create' => 'New Time Entry',
+    'time_entries_search_placeholder' => 'Search time entries...',
+    'time_entries_empty_title' => 'No time entries yet',
+    'time_entries_empty_description' => 'Track your time to get started.',
+
+    // Shared list filters
+    'filter_all_statuses' => 'All statuses',
+    'filter_all_types' => 'All types',
+    'filter_all_priorities' => 'All priorities',
+
+    // Contact types
+    'contact_type_person' => 'Person',
+    'contact_type_organization' => 'Organization',
+
+    // Contact flags
+    'flag_client' => 'Client',
+    'flag_counterparty' => 'Counterparty',
+
+    // Table columns
+    'col_title' => 'Title',
+    'col_client' => 'Client',
+    'col_status' => 'Status',
+    'col_practice_area' => 'Practice Area',
+    'col_updated' => 'Updated',
+    'col_display_name' => 'Name',
+    'col_type' => 'Type',
+    'col_email' => 'Email',
+    'col_phone' => 'Phone',
+    'col_flags' => 'Flags',
+    'col_priority' => 'Priority',
+    'col_assigned_to' => 'Assigned To',
+    'col_due_date' => 'Due Date',
+    'col_matter' => 'Matter',
+    'col_document' => 'Document',
+    'col_category' => 'Category',
+    'col_language' => 'Language',
+    'col_risk_position' => 'Risk Position',
+    'col_description' => 'Description',
+    'col_user' => 'User',
+    'col_duration' => 'Duration',
+    'col_billable' => 'Billable',
+    'col_date' => 'Date',
 ];

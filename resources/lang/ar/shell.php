@@ -42,4 +42,88 @@ return [
     'collapse_sidebar' => 'طي',
     'expand_sidebar' => 'توسيع',
     'quick_links' => 'روابط سريعة',
+
+    // Matters list page
+    'matters_list_title' => 'القضايا',
+    'matters_create' => 'قضية جديدة',
+    'matters_search_placeholder' => 'بحث في القضايا...',
+    'matters_empty_title' => 'لا توجد قضايا بعد',
+    'matters_empty_description' => 'أنشئ أول قضية للبدء.',
+
+    // Contacts list page
+    'contacts_list_title' => 'جهات الاتصال',
+    'contacts_create' => 'جهة اتصال جديدة',
+    'contacts_search_placeholder' => 'بحث في جهات الاتصال...',
+    'contacts_empty_title' => 'لا توجد جهات اتصال بعد',
+    'contacts_empty_description' => 'أنشئ أول جهة اتصال للبدء.',
+
+    // Tasks list page
+    'tasks_list_title' => 'المهام',
+    'tasks_create' => 'مهمة جديدة',
+    'tasks_search_placeholder' => 'بحث في المهام...',
+    'tasks_empty_title' => 'لا توجد مهام بعد',
+    'tasks_empty_description' => 'أنشئ أول مهمة للبدء.',
+
+    // Documents list page
+    'documents_list_title' => 'المستندات',
+    'documents_search_placeholder' => 'بحث في المستندات...',
+    'documents_empty_title' => 'لا توجد مستندات بعد',
+    'documents_empty_description' => 'يتم إنشاء المستندات من داخل القضايا.',
+
+    // Obligations list page
+    'obligations_list_title' => 'الالتزامات',
+    'obligations_search_placeholder' => 'بحث في الالتزامات...',
+    'obligations_empty_title' => 'لا توجد التزامات بعد',
+    'obligations_empty_description' => 'يتم استخراج الالتزامات من مستندات العقود.',
+
+    // Library clauses list page
+    'library_clauses_list_title' => 'مكتبة البنود',
+    'library_clauses_search_placeholder' => 'بحث في البنود...',
+    'library_clauses_empty_title' => 'لا توجد بنود بعد',
+    'library_clauses_empty_description' => 'احفظ البنود من المستندات لبناء مكتبتك.',
+
+    // Time entries list page
+    'time_entries_list_title' => 'سجل الوقت',
+    'time_entries_create' => 'إدخال وقت جديد',
+    'time_entries_search_placeholder' => 'بحث في إدخالات الوقت...',
+    'time_entries_empty_title' => 'لا توجد إدخالات وقت بعد',
+    'time_entries_empty_description' => 'تتبع وقتك للبدء.',
+
+    // Shared list filters
+    'filter_all_statuses' => 'جميع الحالات',
+    'filter_all_types' => 'جميع الأنواع',
+    'filter_all_priorities' => 'جميع الأولويات',
+
+    // Contact types
+    'contact_type_person' => 'شخص',
+    'contact_type_organization' => 'مؤسسة',
+
+    // Contact flags
+    'flag_client' => 'عميل',
+    'flag_counterparty' => 'طرف مقابل',
+
+    // Table columns
+    'col_title' => 'العنوان',
+    'col_client' => 'العميل',
+    'col_status' => 'الحالة',
+    'col_practice_area' => 'مجال الممارسة',
+    'col_updated' => 'آخر تحديث',
+    'col_display_name' => 'الاسم',
+    'col_type' => 'النوع',
+    'col_email' => 'البريد الإلكتروني',
+    'col_phone' => 'الهاتف',
+    'col_flags' => 'التصنيفات',
+    'col_priority' => 'الأولوية',
+    'col_assigned_to' => 'مسند إلى',
+    'col_due_date' => 'تاريخ الاستحقاق',
+    'col_matter' => 'القضية',
+    'col_document' => 'المستند',
+    'col_category' => 'التصنيف',
+    'col_language' => 'اللغة',
+    'col_risk_position' => 'موقف المخاطر',
+    'col_description' => 'الوصف',
+    'col_user' => 'المستخدم',
+    'col_duration' => 'المدة',
+    'col_billable' => 'قابل للفوترة',
+    'col_date' => 'التاريخ',
 ];
