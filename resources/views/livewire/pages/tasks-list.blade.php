@@ -142,8 +142,7 @@
         </div>
     @endif
 
-    {{-- Drag-drop JS for board view --}}
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+    {{-- Drag-drop JS for board view (SortableJS loaded in layout head) --}}
     @script
     <script>
         function initSortable() {
