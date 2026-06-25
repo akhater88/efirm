@@ -93,12 +93,13 @@
                         <span style="font-size: 11px; font-weight: 600; color: var(--text-tertiary, #78716C); background: var(--surface-page, #FAFAF9); padding: 2px 8px; border-radius: 9999px;">{{ $column['count'] }}</span>
                     </div>
 
-                    {{-- Column tasks --}}
-                    <div style="padding: 8px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"
+                    {{-- Column tasks (droppable) --}}
+                    <div class="task-column" style="padding: 8px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; min-height: 60px;"
                          data-stage-id="{{ $column['id'] }}">
                         @foreach ($column['tasks'] as $task)
-                            <div wire:click="openEdit('{{ $task['id'] }}')"
-                                 style="padding: 10px 12px; background: var(--surface-page, #FAFAF9); border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; cursor: pointer; border-inline-start: 3px solid {{ $task['priority_color'] }};"
+                            <div data-task-id="{{ $task['id'] }}"
+                                 wire:click="openEdit('{{ $task['id'] }}')"
+                                 style="padding: 10px 12px; background: var(--surface-page, #FAFAF9); border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; cursor: grab; border-inline-start: 3px solid {{ $task['priority_color'] }};"
                                  onmouseover="this.style.background='#F5F5F4'"
                                  onmouseout="this.style.background='var(--surface-page, #FAFAF9)'">
                                 <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #1C1917); margin-bottom: 6px; line-height: 1.3;">
@@ -140,6 +141,58 @@
             {{ __('shell.tasks_no_workflow') }}
         </div>
     @endif
+
+    {{-- Drag-drop JS for board view --}}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+    @script
+    <script>
+        function initSortable() {
+            document.querySelectorAll('.task-column').forEach(column => {
+                if (column._sortable) return; // already initialized
+                column._sortable = Sortable.create(column, {
+                    group: 'tasks',
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    dragClass: 'sortable-drag',
+                    onStart: function() {
+                        // Prevent wire:click from firing during drag
+                        document.querySelectorAll('[data-task-id]').forEach(el => {
+                            el.style.cursor = 'grabbing';
+                        });
+                    },
+                    onEnd: function(evt) {
+                        document.querySelectorAll('[data-task-id]').forEach(el => {
+                            el.style.cursor = 'grab';
+                        });
+
+                        const taskId = evt.item.dataset.taskId;
+                        const toStageId = evt.to.dataset.stageId;
+                        const fromStageId = evt.from.dataset.stageId;
+
+                        if (toStageId !== fromStageId && taskId) {
+                            $wire.moveTask(taskId, toStageId);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Init on first load and after Livewire updates
+        initSortable();
+        Livewire.hook('morph.updated', () => {
+            setTimeout(initSortable, 100);
+        });
+    </script>
+    @endscript
+    <style>
+        .sortable-ghost {
+            opacity: 0.3;
+        }
+        .sortable-drag {
+            opacity: 0.9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
 
     @else
     {{-- List View (Table) --}}
