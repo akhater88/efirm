@@ -55,8 +55,6 @@ Route::middleware('guest')->group(function () {
             $workspace = $user->workspaces()->first();
             if ($workspace) {
                 $user->switchWorkspace($workspace);
-
-                return redirect("/app/workspace/{$workspace->slug}");
             }
 
             return redirect()->route('dashboard');
@@ -131,8 +129,6 @@ if (app()->environment('local')) {
         $workspace = $user->workspaces()->first();
         if ($workspace) {
             $user->switchWorkspace($workspace);
-
-            return redirect("/app/workspace/{$workspace->slug}");
         }
 
         return redirect()->route('dashboard');

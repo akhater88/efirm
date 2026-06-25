@@ -47,9 +47,8 @@ class GoogleOAuthController extends Controller
                 $invitation = $this->invitationService->accept($pendingToken, $result);
                 $result->switchWorkspace($invitation->workspace);
 
-                return redirect()->route('filament.admin.pages.dashboard', [
-                    'tenant' => $invitation->workspace,
-                ])->with('success', __('invitations.accepted'));
+                return redirect()->route('dashboard')
+                    ->with('success', __('invitations.accepted'));
             } catch (\RuntimeException $e) {
                 // Fall through to normal login flow
             }
