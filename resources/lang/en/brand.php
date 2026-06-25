@@ -2,7 +2,7 @@
 
 return [
     'app_name' => 'eFirm',
-    'tagline' => 'AI-native legal practice management for the Levant',
+    'tagline' => 'AI-native legal practice management',
     'description' => 'eFirm is a bilingual Arabic/English legal practice management platform built for small law firms in Jordan, Lebanon, Palestine, and Iraq. Designed for commercial-contract depth.',
     'logo_alt' => 'eFirm logo',
     'logo_alt_dark' => 'eFirm logo on dark background',
