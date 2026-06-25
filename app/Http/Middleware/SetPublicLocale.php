@@ -9,64 +9,63 @@ use Symfony\Component\HttpFoundation\Response;
 class SetPublicLocale
 {
     /**
-     * Handle an incoming request.
+     * Locale detection:
+     * - /ar/* path → Arabic
+     * - / path → English
+     * - First visit to / with cookie=ar → redirect to /ar
+     * - First visit to / with Accept-Language: ar → redirect to /ar
      *
-     * Locale detection order:
-     * 1. URL prefix (/ar/*) — highest priority
-     * 2. efirm_locale cookie
-     * 3. Accept-Language header
-     * 4. Default: en
+     * URL path is the source of truth once the user is on a page.
+     * Cookie remembers their choice for the NEXT visit.
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = $this->resolveLocale($request);
+        $isArPrefix = $request->segment(1) === 'ar';
 
-        app()->setLocale($locale);
+        // If on /ar/*, locale is Arabic
+        if ($isArPrefix) {
+            app()->setLocale('ar');
 
-        $response = $next($request);
+            return $this->withLocaleCookie($next($request), 'ar', $request);
+        }
 
-        // Set/refresh the locale cookie (365 days)
+        // If on root / — check if we should redirect to /ar
+        if ($request->path() === '/' && ! $request->has('lang')) {
+            $cookieLocale = $request->cookie('efirm_locale');
+
+            if ($cookieLocale === 'ar') {
+                return redirect('/ar');
+            }
+
+            // Check Accept-Language for first-time visitors (no cookie)
+            if (! $cookieLocale) {
+                $acceptLang = $request->header('Accept-Language', '');
+                if (preg_match('/^ar/i', $acceptLang)) {
+                    return redirect('/ar');
+                }
+            }
+        }
+
+        // Everything else: English
+        app()->setLocale('en');
+
+        return $this->withLocaleCookie($next($request), 'en', $request);
+    }
+
+    private function withLocaleCookie(Response $response, string $locale, Request $request): Response
+    {
         $response->cookie(
             'efirm_locale',
             $locale,
-            60 * 24 * 365, // 365 days
+            60 * 24 * 365,
             '/',
             null,
             $request->isSecure(),
-            false, // HttpOnly=false so JS can read it
+            false,
             false,
             'Lax',
         );
 
         return $response;
-    }
-
-    private function resolveLocale(Request $request): string
-    {
-        // 1. URL prefix takes highest priority
-        if ($request->segment(1) === 'ar') {
-            return 'ar';
-        }
-
-        // 2. Cookie
-        $cookieLocale = $request->cookie('efirm_locale');
-        if (in_array($cookieLocale, ['en', 'ar'], true)) {
-            // If cookie says 'ar' but we're on the root (non-ar) path,
-            // redirect to /ar
-            if ($cookieLocale === 'ar' && $request->path() === '/') {
-                return 'ar';
-            }
-
-            return $cookieLocale;
-        }
-
-        // 3. Accept-Language header
-        $acceptLanguage = $request->header('Accept-Language', '');
-        if (preg_match('/^ar/i', $acceptLanguage)) {
-            return 'ar';
-        }
-
-        // 4. Default: English
-        return 'en';
     }
 }
