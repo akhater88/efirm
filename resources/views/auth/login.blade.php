@@ -21,8 +21,8 @@
     <div style="width: 100%; max-width: 420px; padding: 24px;">
         {{-- Logo --}}
         <div style="text-align: center; margin-bottom: 32px;">
-            <div style="display: inline-block; background: var(--color-brand-700, #072E17); border-radius: 16px; padding: 20px 32px; margin-bottom: 12px;">
-                <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="{{ __('brand.logo_alt') }}" style="height: 48px; width: auto;">
+            <div style="display: inline-block; background: var(--color-brand-700, #072E17); border-radius: 16px; padding: 28px 40px; margin-bottom: 12px;">
+                <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="{{ __('brand.logo_alt') }}" style="height: 56px; width: auto; display: block;">
             </div>
             <p style="color: var(--text-tertiary, #78716C); font-size: 14px; margin: 0;">{{ __('brand.tagline') }}</p>
         </div>
