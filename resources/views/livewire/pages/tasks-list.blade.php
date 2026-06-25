@@ -43,6 +43,17 @@
                 @endforeach
             </select>
         </div>
+        <div>
+            <select
+                wire:model.live="taskTypeFilter"
+                style="padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #1C1917); outline: none; cursor: pointer;"
+            >
+                <option value="">{{ __('shell.tasks_all_types') }}</option>
+                @foreach ($taskTypes as $type)
+                    <option value="{{ $type->id }}">{{ $type->localizedName() }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     {{-- Table --}}
@@ -52,6 +63,7 @@
                 <thead>
                     <tr style="background: var(--surface-subtle, #F5F5F4); border-bottom: 1px solid var(--border-default, #D6D3D1);">
                         <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_title') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.tasks_task_type') }}</th>
                         <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_priority') }}</th>
                         <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_status') }}</th>
                         <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_assigned_to') }}</th>
@@ -78,6 +90,16 @@
                         >
                             <td style="padding: 12px 16px; color: var(--text-primary, #1C1917); font-weight: 500;">
                                 {{ $task->title }}
+                            </td>
+                            <td style="padding: 12px 16px; color: var(--text-secondary, #57534E);">
+                                @if ($task->taskType)
+                                    <span style="display: inline-flex; align-items: center; gap: 4px;">
+                                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: {{ $task->taskType->color }};"></span>
+                                        {{ $task->taskType->localizedName() }}
+                                    </span>
+                                @else
+                                    <span style="color: var(--text-muted, #A8A29E);">{{ __('shell.task_type_none') }}</span>
+                                @endif
                             </td>
                             <td style="padding: 12px 16px;">
                                 <span style="display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary, #57534E);">
@@ -172,6 +194,52 @@
                     <input type="date" wire:model="formDueDate" dir="ltr" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                     @error('formDueDate') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
+                <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.tasks_task_type') }}</label>
+                    <select wire:model.live="formTaskTypeId" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                        <option value="">{{ __('shell.task_type_none') }}</option>
+                        @foreach ($taskTypes as $type)
+                            <option value="{{ $type->id }}">{{ $type->localizedName() }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                @if ($selectedTaskType && is_array($selectedTaskType->custom_fields) && count($selectedTaskType->custom_fields) > 0)
+                    <div style="margin-bottom: 14px; padding: 12px; background: var(--surface-subtle, #F5F5F4); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-primary, #1C1917); margin-bottom: 8px;">{{ __('shell.tasks_custom_fields') }}</label>
+                        @foreach ($selectedTaskType->custom_fields as $field)
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 3px;">
+                                    {{ app()->getLocale() === 'ar' ? $field['label_ar'] : $field['label_en'] }}
+                                    @if ($field['required'] ?? false)
+                                        <span style="color: var(--color-danger-500);">*</span>
+                                    @endif
+                                </label>
+                                @if ($field['type'] === 'text')
+                                    <input type="text" wire:model="formCustomFieldValues.{{ $field['key'] }}" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+                                @elseif ($field['type'] === 'number')
+                                    <input type="number" wire:model="formCustomFieldValues.{{ $field['key'] }}" dir="ltr" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+                                @elseif ($field['type'] === 'date')
+                                    <input type="date" wire:model="formCustomFieldValues.{{ $field['key'] }}" dir="ltr" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+                                @elseif ($field['type'] === 'textarea')
+                                    <textarea wire:model="formCustomFieldValues.{{ $field['key'] }}" rows="2" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; box-sizing: border-box; resize: vertical;"></textarea>
+                                @elseif ($field['type'] === 'select' && is_array($field['options'] ?? null))
+                                    <select wire:model="formCustomFieldValues.{{ $field['key'] }}" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+                                        <option value="">{{ __('shell.label_select') }}</option>
+                                        @foreach ($field['options'] as $option)
+                                            <option value="{{ $option }}">{{ $option }}</option>
+                                        @endforeach
+                                    </select>
+                                @elseif ($field['type'] === 'checkbox')
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                        <input type="checkbox" wire:model="formCustomFieldValues.{{ $field['key'] }}" style="accent-color: var(--color-brand-500, #0D5C2E);" />
+                                    </label>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
                 <div style="margin-bottom: 14px;">
                     <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.label_assigned_to') }}</label>
                     <select wire:model="formAssignedToUserId" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;">

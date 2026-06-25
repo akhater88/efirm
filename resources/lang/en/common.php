@@ -20,4 +20,5 @@ return [
     'deleted' => 'Deleted successfully.',
     'saved' => 'Saved successfully.',
     'created' => 'Created successfully.',
+    'inactive' => 'Inactive',
 ];

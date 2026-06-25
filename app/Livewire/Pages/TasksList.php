@@ -5,6 +5,7 @@ namespace App\Livewire\Pages;
 use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use App\Models\Task;
+use App\Models\TaskType;
 use App\Models\User;
 use Livewire\Component;
 
@@ -15,6 +16,8 @@ class TasksList extends Component
     public string $priorityFilter = '';
 
     public string $statusFilter = '';
+
+    public string $taskTypeFilter = '';
 
     public bool $showModal = false;
 
@@ -34,6 +37,11 @@ class TasksList extends Component
 
     public ?string $formAssignedToUserId = null;
 
+    public ?string $formTaskTypeId = null;
+
+    /** @var array<string, mixed> */
+    public array $formCustomFieldValues = [];
+
     public function updatingSearch(): void
     {
         $this->resetPage();
@@ -49,6 +57,16 @@ class TasksList extends Component
         $this->resetPage();
     }
 
+    public function updatingTaskTypeFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFormTaskTypeId(): void
+    {
+        $this->formCustomFieldValues = [];
+    }
+
     public function resetPage(): void
     {
         // Reset cursor pagination by removing the cursor query param
@@ -56,7 +74,7 @@ class TasksList extends Component
 
     public function openCreate(): void
     {
-        $this->reset(['formTitle', 'formDescription', 'formPriority', 'formStatus', 'formDueDate', 'formAssignedToUserId', 'editingId']);
+        $this->reset(['formTitle', 'formDescription', 'formPriority', 'formStatus', 'formDueDate', 'formAssignedToUserId', 'formTaskTypeId', 'formCustomFieldValues', 'editingId']);
         $this->formStatus = TaskStatus::Todo->value;
         $this->formPriority = TaskPriority::Normal->value;
         $this->isEditing = false;
@@ -73,6 +91,8 @@ class TasksList extends Component
         $this->formStatus = $task->status?->value;
         $this->formDueDate = $task->due_date?->format('Y-m-d');
         $this->formAssignedToUserId = $task->assigned_to_user_id;
+        $this->formTaskTypeId = $task->task_type_id;
+        $this->formCustomFieldValues = $task->custom_field_values ?? [];
         $this->isEditing = true;
         $this->showModal = true;
     }
@@ -95,6 +115,8 @@ class TasksList extends Component
             'status' => $this->formStatus ?: null,
             'due_date' => $this->formDueDate ?: null,
             'assigned_to_user_id' => $this->formAssignedToUserId ?: null,
+            'task_type_id' => $this->formTaskTypeId ?: null,
+            'custom_field_values' => ! empty($this->formCustomFieldValues) ? $this->formCustomFieldValues : null,
         ];
 
         if ($this->isEditing && $this->editingId) {
@@ -134,7 +156,7 @@ class TasksList extends Component
 
     public function render()
     {
-        $query = Task::with('assignedTo:id,name')
+        $query = Task::with(['assignedTo:id,name', 'taskType'])
             ->orderByDesc('updated_at');
 
         if ($this->search !== '') {
@@ -149,6 +171,10 @@ class TasksList extends Component
             $query->where('status', $this->statusFilter);
         }
 
+        if ($this->taskTypeFilter !== '') {
+            $query->where('task_type_id', $this->taskTypeFilter);
+        }
+
         $tasks = $query->cursorPaginate(15);
 
         $workspace = auth()->user()->currentWorkspace();
@@ -156,11 +182,19 @@ class TasksList extends Component
             ? User::whereHas('workspaces', fn ($q) => $q->where('workspaces.id', $workspace->id))->get(['id', 'name'])
             : collect();
 
+        $taskTypes = TaskType::active()->orderBy('sort_order')->get();
+
+        $selectedTaskType = $this->formTaskTypeId
+            ? $taskTypes->firstWhere('id', $this->formTaskTypeId)
+            : null;
+
         return view('livewire.pages.tasks-list', [
             'tasks' => $tasks,
             'priorities' => TaskPriority::cases(),
             'statuses' => TaskStatus::cases(),
             'workspaceMembers' => $workspaceMembers,
+            'taskTypes' => $taskTypes,
+            'selectedTaskType' => $selectedTaskType,
         ])->layout('components.layouts.dashboard');
     }
 }

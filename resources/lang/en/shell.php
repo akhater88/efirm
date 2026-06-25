@@ -155,4 +155,36 @@ return [
     'label_select' => '-- Select --',
     'obligations_create' => 'New Obligation',
     'library_clauses_create' => 'New Clause',
+
+    // Settings navigation
+    'nav_settings' => 'Settings',
+    'nav_task_types' => 'Task Types',
+
+    // Task types settings page
+    'task_types_title' => 'Task Types',
+    'task_type_create' => 'New Task Type',
+    'task_type_name_en' => 'Name (English)',
+    'task_type_name_ar' => 'Name (Arabic)',
+    'task_type_slug' => 'Slug',
+    'task_type_icon' => 'Icon',
+    'task_type_color' => 'Color',
+    'task_type_workflow' => 'Default Workflow',
+    'task_type_active' => 'Active',
+    'task_type_sort' => 'Sort Order',
+    'task_type_custom_fields' => 'Custom Fields',
+    'task_type_add_field' => 'Add Field',
+    'task_type_field_key' => 'Key',
+    'task_type_field_label_en' => 'Label (EN)',
+    'task_type_field_label_ar' => 'Label (AR)',
+    'task_type_field_type' => 'Type',
+    'task_type_field_required' => 'Required',
+    'task_type_field_options' => 'Options',
+    'task_type_no_types' => 'No task types configured yet.',
+    'task_type_custom_field_count' => ':count custom fields|:count custom field|:count custom fields',
+    'task_type_none' => 'No Type',
+
+    // Task type in tasks list
+    'tasks_task_type' => 'Task Type',
+    'tasks_all_types' => 'All Types',
+    'tasks_custom_fields' => 'Additional Fields',
 ];

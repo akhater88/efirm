@@ -32,6 +32,8 @@ class Task extends Model
         'completed_at',
         'completed_by_user_id',
         'tags',
+        'task_type_id',
+        'custom_field_values',
         'task_workflow_id',
         'current_stage_id',
         'created_by_user_id',
@@ -46,6 +48,7 @@ class Task extends Model
             'due_date' => 'date',
             'completed_at' => 'datetime',
             'tags' => 'array',
+            'custom_field_values' => 'array',
             'deleted_at' => 'datetime',
         ];
     }
@@ -75,6 +78,11 @@ class Task extends Model
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by_user_id');
+    }
+
+    public function taskType(): BelongsTo
+    {
+        return $this->belongsTo(TaskType::class);
     }
 
     public function workflow(): BelongsTo
