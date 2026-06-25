@@ -10,6 +10,13 @@ use App\Http\Controllers\Web\ShareDownloadController;
 use App\Http\Controllers\Web\SsoController;
 use App\Http\Controllers\Webhooks\StripeWebhookController;
 use App\Livewire\Documents\DocumentEditor;
+use App\Livewire\Pages\ContactsList;
+use App\Livewire\Pages\DocumentsList;
+use App\Livewire\Pages\LibraryClausesList;
+use App\Livewire\Pages\MattersList;
+use App\Livewire\Pages\ObligationsList;
+use App\Livewire\Pages\TasksList;
+use App\Livewire\Pages\TimeEntriesList;
 use App\Models\User;
 use App\Services\AdminImpersonationService;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -71,6 +78,15 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'workspace'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+
+    // Custom Livewire list pages
+    Route::get('matters', MattersList::class)->name('matters.index');
+    Route::get('contacts', ContactsList::class)->name('contacts.index');
+    Route::get('tasks', TasksList::class)->name('tasks.index');
+    Route::get('documents', DocumentsList::class)->name('documents.index');
+    Route::get('obligations', ObligationsList::class)->name('obligations.index');
+    Route::get('library-clauses', LibraryClausesList::class)->name('library-clauses.index');
+    Route::get('time-entries', TimeEntriesList::class)->name('time-entries.index');
 
     // Document editor (custom Livewire+Blade — outside Filament panel)
     Route::get('matters/{matter}/documents/{document}', DocumentEditor::class)
