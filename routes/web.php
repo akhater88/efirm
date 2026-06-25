@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleOAuthController;
+use App\Http\Controllers\Public\LandingController;
+use App\Http\Controllers\Public\LegalController;
+use App\Http\Controllers\Public\SeoController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\HealthController;
 use App\Http\Controllers\Web\InvitationController;
@@ -24,6 +27,59 @@ use App\Services\AdminImpersonationService;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Public Marketing Routes
+|--------------------------------------------------------------------------
+| These routes serve the public landing page and supporting pages.
+| They MUST be defined before any auth routes so they take precedence.
+*/
+
+Route::middleware('public.locale')->group(function () {
+    Route::get('/', function (Request $request) {
+        // Authenticated users go to dashboard; guests see landing page
+        if (auth()->check()) {
+            return redirect()->route('dashboard');
+        }
+
+        // If cookie says 'ar', redirect to /ar
+        $cookieLocale = $request->cookie('efirm_locale');
+        if ($cookieLocale === 'ar') {
+            return redirect('/ar');
+        }
+
+        // If Accept-Language prefers Arabic, redirect
+        $acceptLanguage = $request->header('Accept-Language', '');
+        if (! $cookieLocale && preg_match('/^ar/i', $acceptLanguage)) {
+            return redirect('/ar');
+        }
+
+        return app(LandingController::class)->index($request);
+    })->name('landing');
+
+    Route::get('/demo-request', [LandingController::class, 'demoRequest'])->name('demo-request');
+    Route::get('/demo-request/thank-you', [LandingController::class, 'thankYou'])->name('demo-request.thanks');
+    Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+    Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
+});
+
+// Arabic prefix routes
+Route::prefix('ar')->middleware('public.locale')->group(function () {
+    Route::get('/', [LandingController::class, 'index'])->name('landing.ar');
+    Route::get('/demo-request', [LandingController::class, 'demoRequest'])->name('demo-request.ar');
+    Route::get('/demo-request/thank-you', [LandingController::class, 'thankYou'])->name('demo-request.thanks.ar');
+    Route::get('/{slug}', [LegalController::class, 'show'])
+        ->where('slug', 'terms|privacy|dpa|ai-disclaimer')
+        ->name('legal.show.ar');
+});
+
+// Legal pages (English)
+Route::middleware('public.locale')->group(function () {
+    Route::get('/{slug}', [LegalController::class, 'show'])
+        ->where('slug', 'terms|privacy|dpa|ai-disclaimer')
+        ->name('legal.show');
+});
 
 // Locale switch — available to all users (auth + guest)
 Route::post('locale/switch', [LocaleController::class, 'switch'])
@@ -132,8 +188,7 @@ Route::post('sso/{workspaceSlug}/acs', [SsoController::class, 'acs'])->name('sso
 // Health check — public, no auth
 Route::get('health', HealthController::class)->name('health');
 
-// Redirect root to dashboard
-Route::get('/', fn () => redirect()->route('dashboard'));
+// Root route handled by public marketing routes above (with auth check)
 
 // Dev-only login bypass — NEVER available in production
 if (app()->environment('local')) {
