@@ -17,14 +17,14 @@
                     flex-shrink: 0;
                     width: 40px;
                     text-align: center;
-                    background: var(--color-brand-50, #ECFAF1);
+                    background: var(--color-brand-50, #FDF2F2);
                     border-radius: 6px;
                     padding: 4px 0;
                 ">
-                    <div style="font-size: 16px; font-weight: 700; color: var(--color-brand-700, #072E17); line-height: 1;">
+                    <div style="font-size: 16px; font-weight: 700; color: var(--color-brand-700, #330000); line-height: 1;">
                         {{ $event->due_date->format('d') }}
                     </div>
-                    <div style="font-size: 10px; font-weight: 500; color: var(--color-brand-500, #0D5C2E); text-transform: uppercase;">
+                    <div style="font-size: 10px; font-weight: 500; color: var(--color-brand-500, #520000); text-transform: uppercase;">
                         {{ $event->due_date->translatedFormat('M') }}
                     </div>
                 </div>

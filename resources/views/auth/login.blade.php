@@ -7,7 +7,7 @@
     <link rel="icon" href="{{ asset('img/brand/efirm-favicon.svg') }}" type="image/svg+xml">
     <link rel="preload" href="{{ asset('fonts/source-sans-pro-v21-latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-arabic-v12-arabic-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <meta name="theme-color" content="#072E17">
+    <meta name="theme-color" content="#330000">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--surface-page, #FAFAF9); margin: 0;">
@@ -21,7 +21,7 @@
     <div style="width: 100%; max-width: 420px; padding: 24px;">
         {{-- Logo --}}
         <div style="text-align: center; margin-bottom: 32px;">
-            <div style="display: inline-block; background: var(--color-brand-700, #072E17); border-radius: 16px; padding: 28px 40px; margin-bottom: 12px;">
+            <div style="display: inline-block; background: var(--color-brand-700, #330000); border-radius: 16px; padding: 28px 40px; margin-bottom: 12px;">
                 <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="{{ __('brand.logo_alt') }}" style="height: 56px; width: auto; display: block;">
             </div>
             <p style="color: var(--text-tertiary, #78716C); font-size: 14px; margin: 0;">{{ __('brand.tagline') }}</p>
@@ -51,7 +51,7 @@
                     <label for="email" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 6px;">{{ __('auth.email') }}</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus dir="ltr"
                            style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box;"
-                           onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'; this.style.boxShadow='var(--ring-brand)'"
+                           onfocus="this.style.borderColor='var(--border-focus, #520000)'; this.style.boxShadow='var(--ring-brand)'"
                            onblur="this.style.borderColor='var(--border-default, #E7E5E4)'; this.style.boxShadow='none'"
                            placeholder="name@example.com">
                 </div>
@@ -60,17 +60,17 @@
                     <label for="password" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 6px;">{{ __('auth.password') }}</label>
                     <input type="password" id="password" name="password" required dir="ltr"
                            style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box;"
-                           onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'; this.style.boxShadow='var(--ring-brand)'"
+                           onfocus="this.style.borderColor='var(--border-focus, #520000)'; this.style.boxShadow='var(--ring-brand)'"
                            onblur="this.style.borderColor='var(--border-default, #E7E5E4)'; this.style.boxShadow='none'">
                 </div>
 
                 <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="remember" name="remember" style="width: 16px; height: 16px; accent-color: var(--color-brand-500, #0D5C2E);">
+                    <input type="checkbox" id="remember" name="remember" style="width: 16px; height: 16px; accent-color: var(--color-brand-500, #520000);">
                     <label for="remember" style="font-size: 13px; color: var(--text-tertiary, #78716C);">{{ __('auth.remember_me') }}</label>
                 </div>
 
                 <button type="submit"
-                        style="width: 100%; padding: 12px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                        style="width: 100%; padding: 12px; background: var(--color-brand-500, #520000); color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
                     {{ __('auth.sign_in') }}
                 </button>
             </form>

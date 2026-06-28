@@ -55,7 +55,7 @@
             <button wire:click="setTab('{{ $key }}')"
                 style="padding: 10px 16px; font-size: 13px; font-weight: 500; border: none; background: none; cursor: pointer; white-space: nowrap;
                     {{ $activeTab === $key
-                        ? 'color: var(--color-brand-500, #0D5C2E); border-bottom: 2px solid var(--color-brand-500, #0D5C2E); margin-bottom: -2px;'
+                        ? 'color: var(--color-brand-500, #520000); border-bottom: 2px solid var(--color-brand-500, #520000); margin-bottom: -2px;'
                         : 'color: var(--text-tertiary, #78716C);' }}">
                 {{ $label }}
             </button>
@@ -72,7 +72,7 @@
                     {{-- Title --}}
                     <div style="grid-column: span 2;">
                         <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.matters_form_title') }}</label>
-                        <input type="text" wire:model="formTitle" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; outline: none;" onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'" onblur="this.style.borderColor='var(--border-default, #E7E5E4)'" />
+                        <input type="text" wire:model="formTitle" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; outline: none;" onfocus="this.style.borderColor='var(--border-focus, #520000)'" onblur="this.style.borderColor='var(--border-default, #E7E5E4)'" />
                         @error('formTitle') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                     </div>
 
@@ -145,7 +145,7 @@
                     <button type="button" wire:click="cancelEditing" style="padding: 8px 16px; background: #FFFFFF; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 13px; cursor: pointer;">
                         {{ __('common.cancel') }}
                     </button>
-                    <button type="submit" style="padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    <button type="submit" style="padding: 8px 16px; background: var(--color-brand-500, #520000); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
                         {{ __('common.save') }}
                     </button>
                 </div>
@@ -238,8 +238,8 @@
         <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; overflow: hidden;">
             @forelse ($matter->hearings->sortByDesc('hearing_date') as $hearing)
                 <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-default, #E7E5E4);">
-                    <div style="flex-shrink: 0; width: 44px; text-align: center; background: var(--color-brand-50, #ECFAF1); border-radius: 6px; padding: 6px 0;">
-                        <div style="font-size: 16px; font-weight: 700; color: var(--color-brand-700, #072E17); line-height: 1;">{{ $hearing->hearing_date?->format('d') }}</div>
+                    <div style="flex-shrink: 0; width: 44px; text-align: center; background: var(--color-brand-50, #FDF2F2); border-radius: 6px; padding: 6px 0;">
+                        <div style="font-size: 16px; font-weight: 700; color: var(--color-brand-700, #330000); line-height: 1;">{{ $hearing->hearing_date?->format('d') }}</div>
                         <div style="font-size: 10px; font-weight: 500; color: var(--color-brand-500); text-transform: uppercase;">{{ $hearing->hearing_date?->translatedFormat('M') }}</div>
                     </div>
                     <div style="flex: 1; min-width: 0;">
@@ -263,14 +263,14 @@
         <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; overflow: hidden;">
             @forelse ($matter->aiDocumentGenerations as $gen)
                 <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-default, #E7E5E4);">
-                    <div style="flex-shrink: 0; width: 32px; height: 32px; background: var(--color-brand-50, #ECFAF1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <div style="flex-shrink: 0; width: 32px; height: 32px; background: var(--color-brand-50, #FDF2F2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-brand-500)" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/></svg>
                     </div>
                     <div style="flex: 1; min-width: 0;">
                         <div style="font-size: 14px; font-weight: 500; color: var(--text-primary, #1C1917);">{{ $gen->template_key }}</div>
                         <div style="font-size: 12px; color: var(--text-tertiary, #78716C);">
                             {{ $gen->created_at->diffForHumans() }}
-                            @if ($gen->generatedDocument) — <a href="/matters/{{ $matter->id }}/documents/{{ $gen->generatedDocument->id }}" style="color: var(--text-link, #0D5C2E);">{{ $gen->generatedDocument->title }}</a> @endif
+                            @if ($gen->generatedDocument) — <a href="/matters/{{ $matter->id }}/documents/{{ $gen->generatedDocument->id }}" style="color: var(--text-link, #520000);">{{ $gen->generatedDocument->title }}</a> @endif
                         </div>
                     </div>
                     <span style="font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 9999px; background: {{ $gen->status === 'completed' ? '#F0FDF4' : ($gen->status === 'failed' ? '#FEF2F2' : '#FFFBEB') }}; color: {{ $gen->status === 'completed' ? '#166534' : ($gen->status === 'failed' ? '#B91C1C' : '#B45309') }};">
@@ -287,7 +287,7 @@
         @if ($isLead)
             <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
                 <button wire:click="openAddMember"
-                    style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--color-brand-500, #520000); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
                     {{ __('shell.matter_add_member') }}
                 </button>
@@ -297,15 +297,15 @@
         <div style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; overflow: hidden;">
             @forelse ($matter->matterLawyers as $ml)
                 <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-default, #E7E5E4);">
-                    <div style="width: 36px; height: 36px; border-radius: 9999px; background: var(--color-brand-50, #ECFAF1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <span style="font-weight: 600; font-size: 14px; color: var(--color-brand-700, #072E17);">{{ mb_substr($ml->user?->name ?? '?', 0, 1) }}</span>
+                    <div style="width: 36px; height: 36px; border-radius: 9999px; background: var(--color-brand-50, #FDF2F2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <span style="font-weight: 600; font-size: 14px; color: var(--color-brand-700, #330000);">{{ mb_substr($ml->user?->name ?? '?', 0, 1) }}</span>
                     </div>
                     <div style="flex: 1;">
                         <div style="font-size: 14px; font-weight: 500; color: var(--text-primary, #1C1917);">{{ $ml->user?->name }}</div>
                         <div style="font-size: 12px; color: var(--text-tertiary, #78716C);">{{ $ml->user?->email }}</div>
                     </div>
                     <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.04em;
-                        {{ $ml->role->value === 'lead' ? 'background: var(--color-brand-50, #ECFAF1); color: var(--color-brand-700, #072E17);' : 'background: #F5F5F4; color: #57534E;' }}">
+                        {{ $ml->role->value === 'lead' ? 'background: var(--color-brand-50, #FDF2F2); color: var(--color-brand-700, #330000);' : 'background: #F5F5F4; color: #57534E;' }}">
                         {{ $ml->role->value === 'lead' ? __('shell.matter_role_lead') : __('shell.matter_role_supporting') }}
                     </span>
 
@@ -314,7 +314,7 @@
                             <button wire:click="promoteLead('{{ $ml->user_id }}')"
                                 wire:confirm="{{ __('shell.matter_confirm_promote') }}"
                                 title="{{ __('shell.matter_promote_lead') }}"
-                                style="padding: 4px 8px; background: none; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--color-brand-500, #0D5C2E);">
+                                style="padding: 4px 8px; background: none; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--color-brand-500, #520000);">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
                             </button>
                             <button wire:click="removeMember('{{ $ml->user_id }}')"
@@ -359,7 +359,7 @@
                             <button type="button" wire:click="$set('showAddMemberModal', false)" style="padding: 8px 16px; background: #FFFFFF; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 13px; cursor: pointer;">
                                 {{ __('common.cancel') }}
                             </button>
-                            <button type="submit" style="padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                            <button type="submit" style="padding: 8px 16px; background: var(--color-brand-500, #520000); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
                                 {{ __('shell.matter_add_member') }}
                             </button>
                         </div>

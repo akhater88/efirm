@@ -28,7 +28,7 @@
             wire:model.live.debounce.300ms="search"
             placeholder="{{ __('dashboard.search_obligations') }}"
             style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; color: var(--text-primary, #1C1917); box-sizing: border-box; outline: none;"
-            onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'"
+            onfocus="this.style.borderColor='var(--border-focus, #520000)'"
             onblur="this.style.borderColor='var(--border-default, #E7E5E4)'"
         >
     </div>
@@ -40,13 +40,13 @@
                 @php $daysLeft = (int) now()->diffInDays($obligation->due_date, false); @endphp
                 <div style="
                     flex-shrink: 0; width: 40px; text-align: center;
-                    background: {{ $daysLeft <= 3 ? 'var(--color-danger-50, #FEF2F2)' : 'var(--color-brand-50, #ECFAF1)' }};
+                    background: {{ $daysLeft <= 3 ? 'var(--color-danger-50, #FEF2F2)' : 'var(--color-brand-50, #FDF2F2)' }};
                     border-radius: 6px; padding: 4px 0;
                 ">
-                    <div style="font-size: 16px; font-weight: 700; color: {{ $daysLeft <= 3 ? 'var(--color-danger-700, #B91C1C)' : 'var(--color-brand-700, #072E17)' }}; line-height: 1;">
+                    <div style="font-size: 16px; font-weight: 700; color: {{ $daysLeft <= 3 ? 'var(--color-danger-700, #B91C1C)' : 'var(--color-brand-700, #330000)' }}; line-height: 1;">
                         {{ $obligation->due_date->format('d') }}
                     </div>
-                    <div style="font-size: 10px; font-weight: 500; color: {{ $daysLeft <= 3 ? 'var(--color-danger-500, #DC2626)' : 'var(--color-brand-500, #0D5C2E)' }}; text-transform: uppercase;">
+                    <div style="font-size: 10px; font-weight: 500; color: {{ $daysLeft <= 3 ? 'var(--color-danger-500, #DC2626)' : 'var(--color-brand-500, #520000)' }}; text-transform: uppercase;">
                         {{ $obligation->due_date->translatedFormat('M') }}
                     </div>
                 </div>
@@ -74,7 +74,7 @@
     {{-- Pagination --}}
     @if ($obligations->hasMorePages())
         <div style="padding: 10px 16px; border-top: 1px solid var(--border-default, #E7E5E4); text-align: center;">
-            <button wire:click="nextPage" style="font-size: 13px; font-weight: 500; color: var(--text-link, #0D5C2E); background: none; border: none; cursor: pointer;">
+            <button wire:click="nextPage" style="font-size: 13px; font-weight: 500; color: var(--text-link, #520000); background: none; border: none; cursor: pointer;">
                 {{ __('common.view_all') }}
             </button>
         </div>

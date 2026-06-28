@@ -5,7 +5,7 @@
             {{ __('shell.task_types_title') }}
         </h1>
         <button wire:click="openCreate"
-           style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none;">
+           style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--color-brand-500, #520000); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             {{ __('shell.task_type_create') }}
         </button>
@@ -25,7 +25,7 @@
                 <div
                     wire:click="openEdit('{{ $taskType->id }}')"
                     style="background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #D6D3D1); border-radius: 12px; padding: 20px; cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; position: relative;"
-                    onmouseover="this.style.borderColor='var(--color-brand-300, #5FC588)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+                    onmouseover="this.style.borderColor='var(--color-brand-300, #E07070)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
                     onmouseout="this.style.borderColor='var(--border-default, #D6D3D1)'; this.style.boxShadow='none'"
                 >
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
@@ -83,7 +83,7 @@
                 {{ __('shell.task_type_no_types') }}
             </h3>
             <button wire:click="openCreate"
-               style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; margin-top: 16px;">
+               style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--color-brand-500, #520000); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; margin-top: 16px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 {{ __('shell.task_type_create') }}
             </button>
@@ -154,7 +154,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
                     <div>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); cursor: pointer;">
-                            <input type="checkbox" wire:model="formIsActive" style="width: 16px; height: 16px; accent-color: var(--color-brand-500, #0D5C2E);" />
+                            <input type="checkbox" wire:model="formIsActive" style="width: 16px; height: 16px; accent-color: var(--color-brand-500, #520000);" />
                             {{ __('shell.task_type_active') }}
                         </label>
                     </div>
@@ -210,7 +210,7 @@
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px; padding-bottom: 2px;">
                                     <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-secondary, #57534E); cursor: pointer;">
-                                        <input type="checkbox" wire:model="formCustomFields.{{ $index }}.required" style="accent-color: var(--color-brand-500, #0D5C2E);" />
+                                        <input type="checkbox" wire:model="formCustomFields.{{ $index }}.required" style="accent-color: var(--color-brand-500, #520000);" />
                                         {{ __('shell.task_type_field_required') }}
                                     </label>
                                     <button type="button" wire:click="removeCustomField({{ $index }})"
@@ -240,7 +240,7 @@
                         {{ __('common.cancel') }}
                     </button>
                     <button type="submit"
-                        style="padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                        style="padding: 8px 16px; background: var(--color-brand-500, #520000); color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
                         {{ __('common.save') }}
                     </button>
                 </div>

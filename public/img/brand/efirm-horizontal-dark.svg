@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 228 68" fill="none">
   <defs><style>/* Font loaded via CSS */</style></defs>
-  <rect width="228" height="68" fill="#0D5C2E"/>
+  <rect width="228" height="68" fill="#520000"/>
   <g transform="scale(0.3091)">
     
   <!-- ═══ PILLAR (drawn first, behind beam) ══════════════════════════════ -->
@@ -43,18 +43,18 @@
 
   <!-- ═══ HUB (center pivot, over beam) ══════════════════════════════════ -->
   <circle cx="140" cy="67" r="13" fill="#FFFFFF"/>
-  <circle cx="140" cy="67" r="8"  fill="#0D5C2E"/>
+  <circle cx="140" cy="67" r="8"  fill="#520000"/>
   <circle cx="140" cy="67" r="4"  fill="#FFFFFF"/>
 
   <!-- ═══ SCROLL TERMINALS at beam ends ═══════════════════════════════════ -->
   <!-- Left terminal ring -->
   <circle cx="52" cy="67" r="9"  fill="#FFFFFF"/>
-  <circle cx="52" cy="67" r="5"  fill="#0D5C2E"/>
+  <circle cx="52" cy="67" r="5"  fill="#520000"/>
   <circle cx="52" cy="67" r="2.5" fill="#FFFFFF"/>
 
   <!-- Right terminal ring -->
   <circle cx="228" cy="67" r="9"  fill="#FFFFFF"/>
-  <circle cx="228" cy="67" r="5"  fill="#0D5C2E"/>
+  <circle cx="228" cy="67" r="5"  fill="#520000"/>
   <circle cx="228" cy="67" r="2.5" fill="#FFFFFF"/>
 
   <!-- ═══ CHAINS — 3 per side, fanning out to pan rim ════════════════════ -->

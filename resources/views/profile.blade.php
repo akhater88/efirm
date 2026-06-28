@@ -26,8 +26,8 @@
                     @if ($user->avatar_url)
                         <img src="{{ $user->avatar_url }}" alt="" style="width: 48px; height: 48px; border-radius: 9999px; object-fit: cover;">
                     @else
-                        <div style="width: 48px; height: 48px; border-radius: 9999px; background: var(--color-brand-50, #ECFAF1); display: flex; align-items: center; justify-content: center;">
-                            <span style="color: var(--color-brand-700, #072E17); font-weight: 600; font-size: 18px;">
+                        <div style="width: 48px; height: 48px; border-radius: 9999px; background: var(--color-brand-50, #FDF2F2); display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--color-brand-700, #330000); font-weight: 600; font-size: 18px;">
                                 {{ mb_substr($user->name, 0, 1) }}
                             </span>
                         </div>
@@ -49,7 +49,7 @@
                     </label>
                     <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required maxlength="255"
                            style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box;"
-                           onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'; this.style.boxShadow='var(--ring-brand)'"
+                           onfocus="this.style.borderColor='var(--border-focus, #520000)'; this.style.boxShadow='var(--ring-brand)'"
                            onblur="this.style.borderColor='var(--border-default, #E7E5E4)'; this.style.boxShadow='none'">
                     @error('name')
                         <p style="margin: 4px 0 0; font-size: 12px; color: var(--color-danger-500, #DC2626);">{{ $message }}</p>
@@ -62,7 +62,7 @@
                     </label>
                     <select id="preferred_locale" name="preferred_locale"
                             style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box; background: var(--surface-card, #FFFFFF);"
-                            onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'"
+                            onfocus="this.style.borderColor='var(--border-focus, #520000)'"
                             onblur="this.style.borderColor='var(--border-default, #E7E5E4)'">
                         <option value="ar" {{ $user->preferred_locale === 'ar' ? 'selected' : '' }}>العربية</option>
                         <option value="en" {{ $user->preferred_locale === 'en' ? 'selected' : '' }}>English</option>
@@ -70,7 +70,7 @@
                 </div>
 
                 <button type="submit"
-                        style="padding: 10px 24px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                        style="padding: 10px 24px; background: var(--color-brand-500, #520000); color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
                     {{ __('profile.update') }}
                 </button>
             </form>

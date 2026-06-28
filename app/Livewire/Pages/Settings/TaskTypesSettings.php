@@ -25,7 +25,7 @@ class TaskTypesSettings extends Component
 
     public string $formIcon = 'clipboard';
 
-    public string $formColor = '#0D5C2E';
+    public string $formColor = '#520000';
 
     public ?string $formDefaultWorkflowId = null;
 
@@ -44,7 +44,7 @@ class TaskTypesSettings extends Component
             'formCustomFields', 'editingId',
         ]);
         $this->formIcon = 'clipboard';
-        $this->formColor = '#0D5C2E';
+        $this->formColor = '#520000';
         $this->formIsActive = true;
         $this->formSortOrder = 0;
         $this->isEditing = false;

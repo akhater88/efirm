@@ -40,6 +40,6 @@ test('dashboard layout does not reference Google Fonts', function () {
 test('dashboard layout uses brand theme color', function () {
     $layout = file_get_contents(resource_path('views/layouts/dashboard.blade.php'));
 
-    expect($layout)->toContain('#072E17');
+    expect($layout)->toContain('#330000');
     expect($layout)->not->toContain('#2563eb');
 });

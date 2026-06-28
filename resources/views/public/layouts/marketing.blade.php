@@ -57,7 +57,7 @@
     <link rel="apple-touch-icon" href="{{ asset('img/brand/efirm-favicon-192.png') }}">
 
     {{-- Theme --}}
-    <meta name="theme-color" content="#072E17">
+    <meta name="theme-color" content="#330000">
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">

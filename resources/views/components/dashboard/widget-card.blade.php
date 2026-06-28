@@ -51,7 +51,7 @@
                     {{ $emptyMessage ?: __('common.no_items') }}
                 </p>
                 @if ($createUrl)
-                    <a href="{{ $createUrl }}" style="margin-top: 12px; font-size: 13px; font-weight: 500; color: var(--text-link, #0D5C2E); text-decoration: none;">
+                    <a href="{{ $createUrl }}" style="margin-top: 12px; font-size: 13px; font-weight: 500; color: var(--text-link, #520000); text-decoration: none;">
                         + {{ $createLabel ?: __('common.create') }}
                     </a>
                 @endif
@@ -71,7 +71,7 @@
             border-top: 1px solid var(--border-default, #E7E5E4);
         ">
             @if ($viewAllUrl)
-                <a href="{{ $viewAllUrl }}" style="font-size: 13px; font-weight: 500; color: var(--text-link, #0D5C2E); text-decoration: none;">
+                <a href="{{ $viewAllUrl }}" style="font-size: 13px; font-weight: 500; color: var(--text-link, #520000); text-decoration: none;">
                     {{ $viewAllLabel ?: __('common.view_all') }}
                 </a>
             @else
@@ -79,7 +79,7 @@
             @endif
 
             @if ($createUrl && $state !== 'empty')
-                <a href="{{ $createUrl }}" style="font-size: 13px; font-weight: 500; color: var(--text-link, #0D5C2E); text-decoration: none;">
+                <a href="{{ $createUrl }}" style="font-size: 13px; font-weight: 500; color: var(--text-link, #520000); text-decoration: none;">
                     + {{ $createLabel ?: __('common.create') }}
                 </a>
             @endif

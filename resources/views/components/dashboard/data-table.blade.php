@@ -6,7 +6,7 @@
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
         <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0;">{{ $title }}</h1>
         @if ($createUrl)
-            <a href="{{ $createUrl }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;">
+            <a href="{{ $createUrl }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--color-brand-500, #520000); color: #FFFFFF; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                 {{ $createLabel }}
             </a>

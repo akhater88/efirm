@@ -24,10 +24,10 @@
         <h2 class="section-title">Brand Colors</h2>
         <div class="swatch-grid">
             @foreach ([
-                ['50', '#ECFAF1', '#000'], ['100', '#C8EFD6', '#000'], ['200', '#94DDB0', '#000'],
-                ['300', '#5FC588', '#000'], ['400', '#2DA763', '#FFF'], ['500', '#0D5C2E', '#FFF'],
-                ['600', '#094B26', '#FFF'], ['700', '#072E17', '#FFF'], ['800', '#052015', '#FFF'],
-                ['900', '#03150E', '#FFF'], ['950', '#010A05', '#FFF'],
+                ['50', '#FDF2F2', '#000'], ['100', '#F9DADA', '#000'], ['200', '#F0ABAB', '#000'],
+                ['300', '#E07070', '#000'], ['400', '#C93A3A', '#FFF'], ['500', '#520000', '#FFF'],
+                ['600', '#440000', '#FFF'], ['700', '#330000', '#FFF'], ['800', '#260000', '#FFF'],
+                ['900', '#1A0000', '#FFF'], ['950', '#0D0000', '#FFF'],
             ] as [$shade, $hex, $fg])
                 <div class="swatch" style="background: {{ $hex }}; color: {{ $fg }};">
                     <span>brand-{{ $shade }}</span>
@@ -78,7 +78,7 @@
         <h2 class="section-title">Tier Badges</h2>
         <div style="display: flex; gap: 12px;">
             <span style="background: #64748B; color: #FFF; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 4px;">Starter</span>
-            <span style="background: #0D5C2E; color: #FFF; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 4px;">Pro</span>
+            <span style="background: #520000; color: #FFF; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 4px;">Pro</span>
             <span style="background: #D97706; color: #FFF; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 4px;">Enterprise</span>
         </div>
     </div>
@@ -133,7 +133,7 @@
                 <img src="{{ asset('img/brand/efirm-horizontal-compact.svg') }}" alt="Logo" style="height: 40px;">
                 <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 8px;">efirm-horizontal-compact.svg</div>
             </div>
-            <div style="padding: 16px; background: #072E17; border-radius: 8px;">
+            <div style="padding: 16px; background: #330000; border-radius: 8px;">
                 <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="Logo reversed" style="height: 40px;">
                 <div style="font-size: 11px; color: #D6D3D1; margin-top: 8px;">efirm-horizontal-compact-reversed.svg</div>
             </div>
@@ -141,7 +141,7 @@
                 <img src="{{ asset('img/brand/efirm-mark.svg') }}" alt="Mark" style="height: 40px;">
                 <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 8px;">efirm-mark.svg</div>
             </div>
-            <div style="padding: 16px; background: #072E17; border-radius: 8px;">
+            <div style="padding: 16px; background: #330000; border-radius: 8px;">
                 <img src="{{ asset('img/brand/efirm-mark-reversed.svg') }}" alt="Mark reversed" style="height: 40px;">
                 <div style="font-size: 11px; color: #D6D3D1; margin-top: 8px;">efirm-mark-reversed.svg</div>
             </div>

@@ -74,5 +74,5 @@ test('layout head contains font preload and favicon links', function () {
     expect($layout)->toContain('efirm-favicon.svg');
     expect($layout)->toContain('efirm-favicon-32.png');
     expect($layout)->toContain('theme-color');
-    expect($layout)->toContain('#072E17');
+    expect($layout)->toContain('#330000');
 });

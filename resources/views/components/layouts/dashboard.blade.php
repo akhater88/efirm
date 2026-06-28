@@ -17,7 +17,7 @@
     <link rel="apple-touch-icon" href="{{ asset('img/brand/efirm-favicon-192.png') }}">
 
     {{-- PWA / theme color --}}
-    <meta name="theme-color" content="#072E17">
+    <meta name="theme-color" content="#330000">
 
     {{-- SEO / brand --}}
     <meta name="description" content="{{ __('brand.tagline') }}">

@@ -60,9 +60,9 @@ test('left sidebar uses brand tokens for styling', function () {
     $html = $component->html();
 
     // Sidebar uses brand-700 for background
-    expect($html)->toContain('#072E17');
+    expect($html)->toContain('#330000');
     // Sidebar uses brand-800 for hover state
-    expect($html)->toContain('#052015');
+    expect($html)->toContain('#260000');
 });
 
 test('shell sidebar lang keys have parity', function () {
