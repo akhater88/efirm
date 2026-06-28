@@ -19,8 +19,10 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip if SetPublicLocale already handled this request
-        if ($request->attributes->get('public_locale_handled')) {
+        // Skip public marketing pages — SetPublicLocale (route middleware) handles them
+        $path = trim($request->getPathInfo(), '/');
+        if ($path === '' || $path === 'ar' || str_starts_with($path, 'ar/')
+            || in_array($path, ['terms', 'privacy', 'dpa', 'ai-disclaimer', 'demo-request', 'demo-request/thank-you', 'sitemap.xml', 'robots.txt'])) {
             return $next($request);
         }
 
