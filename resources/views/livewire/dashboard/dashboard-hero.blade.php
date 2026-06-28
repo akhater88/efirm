@@ -1,10 +1,10 @@
 <section style="margin-bottom: 24px;">
     {{-- Greeting + Date --}}
     <div style="margin-bottom: 16px;">
-        <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0 0 4px;">
+        <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #2D0A0A); margin: 0 0 4px;">
             {{ $greeting }}
         </h1>
-        <p style="font-size: 14px; color: var(--text-tertiary, #78716C); margin: 0;">
+        <p style="font-size: 14px; color: var(--text-tertiary, #7A5050); margin: 0;">
             {{ $formattedDate }}
         </p>
     </div>
@@ -68,22 +68,22 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brand-500, #520000)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
                     </div>
                     <div>
-                        <h2 id="ai-twin-modal-title" style="font-size: 18px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0;">
+                        <h2 id="ai-twin-modal-title" style="font-size: 18px; font-weight: 700; color: var(--text-primary, #2D0A0A); margin: 0;">
                             {{ __('brand.ai_twin_title') }}
                         </h2>
-                        <p style="font-size: 13px; color: var(--text-tertiary, #78716C); margin: 0;">
+                        <p style="font-size: 13px; color: var(--text-tertiary, #7A5050); margin: 0;">
                             {{ __('brand.ai_twin_coming_soon') }}
                         </p>
                     </div>
                 </div>
-                <p style="font-size: 14px; color: var(--text-secondary, #44403C); margin: 12px 0 0; line-height: 1.5;">
+                <p style="font-size: 14px; color: var(--text-secondary, #4A2020); margin: 12px 0 0; line-height: 1.5;">
                     {{ __('dashboard.ai_twin_modal_description') }}
                 </p>
             </div>
 
             {{-- Form --}}
             <form wire:submit="submitWaitlist" style="padding: 16px 24px 24px;">
-                <label for="waitlist-email" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 6px;">
+                <label for="waitlist-email" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 6px;">
                     {{ __('brand.ai_twin_email_placeholder') }}
                 </label>
                 <input
@@ -99,7 +99,7 @@
                         border: 1px solid var(--border-default, #E7E5E4);
                         border-radius: 8px;
                         font-size: 14px;
-                        color: var(--text-primary, #1C1917);
+                        color: var(--text-primary, #2D0A0A);
                         outline: none;
                         box-sizing: border-box;
                     "
@@ -114,7 +114,7 @@
                     <button
                         type="button"
                         wire:click="$set('showAiTwinModal', false)"
-                        style="flex: 1; padding: 10px; background: #FFFFFF; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary, #44403C); cursor: pointer;"
+                        style="flex: 1; padding: 10px; background: #FFFFFF; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary, #4A2020); cursor: pointer;"
                     >
                         {{ __('common.cancel') }}
                     </button>

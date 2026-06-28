@@ -2,8 +2,8 @@
     $statusColors = [
         'active' => ['bg' => '#F0FDF4', 'text' => '#166534'],
         'on_hold' => ['bg' => '#FFFBEB', 'text' => '#B45309'],
-        'closed' => ['bg' => '#F5F5F4', 'text' => '#57534E'],
-        'archived' => ['bg' => '#F5F5F4', 'text' => '#78716C'],
+        'closed' => ['bg' => '#F5F5F4', 'text' => '#5C3535'],
+        'archived' => ['bg' => '#F5F5F4', 'text' => '#7A5050'],
     ];
 @endphp
 
@@ -31,11 +31,11 @@
                 onmouseout="this.style.background='transparent'"
             >
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #1C1917); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #2D0A0A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         {{ $matter->title }}
                     </div>
                     @if ($matter->client)
-                        <div style="font-size: 12px; color: var(--text-tertiary, #78716C); margin-top: 2px;">
+                        <div style="font-size: 12px; color: var(--text-tertiary, #7A5050); margin-top: 2px;">
                             {{ $matter->client->display_name }}
                         </div>
                     @endif

@@ -24,17 +24,17 @@
     --color-brand-950: #0D0000;
 
     /* ─── Neutral colors (warm gray) ─── */
-    --color-neutral-50:  #FAFAF9;
-    --color-neutral-100: #F5F5F4;
-    --color-neutral-200: #E7E5E4;
-    --color-neutral-300: #D6D3D1;
-    --color-neutral-400: #A8A29E;
-    --color-neutral-500: #78716C;
-    --color-neutral-600: #57534E;
-    --color-neutral-700: #44403C;
-    --color-neutral-800: #292524;
-    --color-neutral-900: #1C1917;
-    --color-neutral-950: #0C0A09;
+    --color-neutral-50:  #FAF8F8;
+    --color-neutral-100: #F5F2F2;
+    --color-neutral-200: #E8E2E2;
+    --color-neutral-300: #D6CDCD;
+    --color-neutral-400: #A89090;
+    --color-neutral-500: #7A5050;
+    --color-neutral-600: #5C3535;
+    --color-neutral-700: #4A2020;
+    --color-neutral-800: #3D1515;
+    --color-neutral-900: #2D0A0A;
+    --color-neutral-950: #1A0000;
 
     /* ─── Semantic colors ─── */
     --color-success-50:  #F0FDF4;
@@ -61,7 +61,7 @@
     --shadow-md:  0 4px 6px -1px rgba(28, 25, 23, 0.1), 0 2px 4px -2px rgba(28, 25, 23, 0.1);
     --shadow-lg:  0 10px 15px -3px rgba(28, 25, 23, 0.1), 0 4px 6px -4px rgba(28, 25, 23, 0.1);
     --shadow-xl:  0 20px 25px -5px rgba(28, 25, 23, 0.1), 0 8px 10px -6px rgba(28, 25, 23, 0.1);
-    --shadow-focus-brand: 0 0 0 3px rgba(13, 92, 46, 0.2);
+    --shadow-focus-brand: 0 0 0 3px rgba(82, 0, 0, 0.2);
 
     /* ─── Border radius ─── */
     --radius-xs:  2px;
@@ -149,10 +149,10 @@
   --surface-sidebar-hover:  #260000;
   --surface-sidebar-active: #440000;
 
-  /* Semantic text */
-  --text-primary:     #1C1917;
-  --text-secondary:   #44403C;
-  --text-tertiary:    #78716C;
+  /* Semantic text (wine-tinted darks) */
+  --text-primary:     #2D0A0A;
+  --text-secondary:   #4A2020;
+  --text-tertiary:    #7A5050;
   --text-on-dark:     #FAFAF9;
   --text-on-dark-dim: #D6D3D1;
   --text-on-brand:    #FFFFFF;
@@ -165,7 +165,7 @@
   --border-focus:   #520000;
 
   /* Focus ring */
-  --ring-brand: 0 0 0 3px rgba(13, 92, 46, 0.2);
+  --ring-brand: 0 0 0 3px rgba(82, 0, 0, 0.2);
 }
 
 /* ─── Base body styling ─── */

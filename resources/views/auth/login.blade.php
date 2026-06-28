@@ -13,7 +13,7 @@
 <body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--surface-page, #FAFAF9); margin: 0;">
     {{-- Locale switcher --}}
     <div style="position: absolute; top: 16px; {{ app()->getLocale() === 'ar' ? 'left: 16px;' : 'right: 16px;' }}">
-        <a href="{{ url('/locale/' . (app()->getLocale() === 'ar' ? 'en' : 'ar')) }}" style="font-size: 13px; color: var(--text-tertiary, #78716C); text-decoration: none; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-default, #E7E5E4);">
+        <a href="{{ url('/locale/' . (app()->getLocale() === 'ar' ? 'en' : 'ar')) }}" style="font-size: 13px; color: var(--text-tertiary, #7A5050); text-decoration: none; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-default, #E7E5E4);">
             {{ app()->getLocale() === 'ar' ? 'English' : 'العربية' }}
         </a>
     </div>
@@ -24,11 +24,11 @@
             <div style="display: inline-block; background: var(--color-brand-700, #330000); border-radius: 16px; padding: 28px 40px; margin-bottom: 12px;">
                 <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="{{ __('brand.logo_alt') }}" style="height: 56px; width: auto; display: block;">
             </div>
-            <p style="color: var(--text-tertiary, #78716C); font-size: 14px; margin: 0;">{{ __('brand.tagline') }}</p>
+            <p style="color: var(--text-tertiary, #7A5050); font-size: 14px; margin: 0;">{{ __('brand.tagline') }}</p>
         </div>
 
         <div style="background: var(--surface-card, #FFFFFF); border-radius: 12px; box-shadow: var(--shadow-md); border: 1px solid var(--border-default, #E7E5E4); padding: 32px;">
-            <h1 style="font-size: 20px; font-weight: 700; margin: 0 0 24px; color: var(--text-primary, #1C1917); text-align: center;">{{ __('auth.login') }}</h1>
+            <h1 style="font-size: 20px; font-weight: 700; margin: 0 0 24px; color: var(--text-primary, #2D0A0A); text-align: center;">{{ __('auth.login') }}</h1>
 
             @if ($errors->any())
                 <div style="margin-bottom: 16px; padding: 12px; background: var(--color-danger-50, #FEF2F2); border: 1px solid var(--color-danger-500, #DC2626); border-radius: 8px; color: var(--color-danger-700, #B91C1C); font-size: 13px; text-align: start;">
@@ -48,25 +48,25 @@
             <form method="POST" action="{{ route('login.submit') }}" style="text-align: start;">
                 @csrf
                 <div style="margin-bottom: 16px;">
-                    <label for="email" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 6px;">{{ __('auth.email') }}</label>
+                    <label for="email" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 6px;">{{ __('auth.email') }}</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus dir="ltr"
-                           style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box;"
+                           style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #2D0A0A); outline: none; box-sizing: border-box;"
                            onfocus="this.style.borderColor='var(--border-focus, #520000)'; this.style.boxShadow='var(--ring-brand)'"
                            onblur="this.style.borderColor='var(--border-default, #E7E5E4)'; this.style.boxShadow='none'"
                            placeholder="name@example.com">
                 </div>
 
                 <div style="margin-bottom: 16px;">
-                    <label for="password" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 6px;">{{ __('auth.password') }}</label>
+                    <label for="password" style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 6px;">{{ __('auth.password') }}</label>
                     <input type="password" id="password" name="password" required dir="ltr"
-                           style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box;"
+                           style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; font-size: 14px; color: var(--text-primary, #2D0A0A); outline: none; box-sizing: border-box;"
                            onfocus="this.style.borderColor='var(--border-focus, #520000)'; this.style.boxShadow='var(--ring-brand)'"
                            onblur="this.style.borderColor='var(--border-default, #E7E5E4)'; this.style.boxShadow='none'">
                 </div>
 
                 <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
                     <input type="checkbox" id="remember" name="remember" style="width: 16px; height: 16px; accent-color: var(--color-brand-500, #520000);">
-                    <label for="remember" style="font-size: 13px; color: var(--text-tertiary, #78716C);">{{ __('auth.remember_me') }}</label>
+                    <label for="remember" style="font-size: 13px; color: var(--text-tertiary, #7A5050);">{{ __('auth.remember_me') }}</label>
                 </div>
 
                 <button type="submit"
@@ -78,13 +78,13 @@
             {{-- Divider --}}
             <div style="display: flex; align-items: center; gap: 12px; margin: 24px 0;">
                 <div style="flex: 1; height: 1px; background: var(--border-default, #E7E5E4);"></div>
-                <span style="font-size: 12px; color: var(--text-tertiary, #78716C);">{{ __('auth.or') }}</span>
+                <span style="font-size: 12px; color: var(--text-tertiary, #7A5050);">{{ __('auth.or') }}</span>
                 <div style="flex: 1; height: 1px; background: var(--border-default, #E7E5E4);"></div>
             </div>
 
             {{-- Google OAuth --}}
             <a href="{{ route('auth.google.redirect') }}"
-               style="display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 12px; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; color: var(--text-primary, #1C1917); font-size: 14px; font-weight: 500; text-decoration: none; box-sizing: border-box;">
+               style="display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 12px; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; color: var(--text-primary, #2D0A0A); font-size: 14px; font-weight: 500; text-decoration: none; box-sizing: border-box;">
                 <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -96,7 +96,7 @@
         </div>
 
         {{-- Footer --}}
-        <p style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-tertiary, #78716C);">
+        <p style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-tertiary, #7A5050);">
             {{ str_replace(':year', date('Y'), __('brand.copyright')) }}
         </p>
     </div>

@@ -26,7 +26,7 @@
     z-index: 20;
     overflow-y: auto;
 ">
-    <div style="font-size: 10px; font-weight: 600; color: var(--text-tertiary, #78716C); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; writing-mode: horizontal-tb;">
+    <div style="font-size: 10px; font-weight: 600; color: var(--text-tertiary, #7A5050); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; writing-mode: horizontal-tb;">
         {{ __('shell.quick_links') }}
     </div>
 
@@ -41,13 +41,13 @@
                 padding: 8px 4px;
                 border-radius: 6px;
                 text-decoration: none;
-                color: var(--text-tertiary, #78716C);
+                color: var(--text-tertiary, #7A5050);
                 width: 60px;
                 text-align: center;
             "
             title="{{ $link['label'] }}"
             onmouseover="this.style.background='var(--surface-card-hover, #F5F5F4)'; this.style.color='var(--color-brand-500, #520000)'"
-            onmouseout="this.style.background='transparent'; this.style.color='var(--text-tertiary, #78716C)'"
+            onmouseout="this.style.background='transparent'; this.style.color='var(--text-tertiary, #7A5050)'"
         >
             <span style="display: flex; align-items: center; justify-content: center;">
                 {!! $icons[$link['icon']] !!}

@@ -3,7 +3,7 @@
         'urgent' => '#DC2626',
         'high' => '#F59E0B',
         'medium' => '#2563EB',
-        'low' => '#78716C',
+        'low' => '#7A5050',
     ];
 @endphp
 
@@ -30,16 +30,16 @@
                     width: 8px;
                     height: 8px;
                     border-radius: 9999px;
-                    background: {{ $priorityColors[$task->priority->value ?? $task->priority] ?? '#78716C' }};
+                    background: {{ $priorityColors[$task->priority->value ?? $task->priority] ?? '#7A5050' }};
                 "></span>
 
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #1C1917); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #2D0A0A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         {{ $task->title }}
                     </div>
                 </div>
 
-                <span style="flex-shrink: 0; font-size: 11px; color: var(--text-tertiary, #78716C);">
+                <span style="flex-shrink: 0; font-size: 11px; color: var(--text-tertiary, #7A5050);">
                     {{ $task->updated_at->diffForHumans() }}
                 </span>
             </div>

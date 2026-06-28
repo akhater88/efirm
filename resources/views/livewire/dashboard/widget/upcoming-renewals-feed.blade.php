@@ -10,12 +10,12 @@
     {{-- Header --}}
     <div style="padding: 14px 16px; border-bottom: 1px solid var(--border-default, #E7E5E4);">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-            <h3 style="font-size: 14px; font-weight: 600; color: var(--text-primary, #1C1917); margin: 0;">
+            <h3 style="font-size: 14px; font-weight: 600; color: var(--text-primary, #2D0A0A); margin: 0;">
                 {{ __('dashboard.widget_renewals') }}
             </h3>
             <select
                 wire:model.live="daysAhead"
-                style="font-size: 12px; padding: 4px 8px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; background: #FFFFFF; color: var(--text-secondary, #44403C);"
+                style="font-size: 12px; padding: 4px 8px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; background: #FFFFFF; color: var(--text-secondary, #4A2020);"
             >
                 <option value="30">30 {{ __('dashboard.days') }}</option>
                 <option value="60">60 {{ __('dashboard.days') }}</option>
@@ -27,7 +27,7 @@
             type="text"
             wire:model.live.debounce.300ms="search"
             placeholder="{{ __('dashboard.search_renewals') }}"
-            style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; color: var(--text-primary, #1C1917); box-sizing: border-box; outline: none;"
+            style="width: 100%; padding: 8px 10px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; color: var(--text-primary, #2D0A0A); box-sizing: border-box; outline: none;"
             onfocus="this.style.borderColor='var(--border-focus, #520000)'"
             onblur="this.style.borderColor='var(--border-default, #E7E5E4)'"
         >
@@ -51,21 +51,21 @@
                     </div>
                 </div>
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #1C1917); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #2D0A0A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         {{ $renewal->document?->title ?? '—' }}
                     </div>
                     @if ($renewal->document?->matter)
-                        <div style="font-size: 12px; color: var(--text-tertiary, #78716C); margin-top: 1px;">
+                        <div style="font-size: 12px; color: var(--text-tertiary, #7A5050); margin-top: 1px;">
                             {{ $renewal->document->matter->title }}
                         </div>
                     @endif
                 </div>
-                <span style="flex-shrink: 0; font-size: 11px; font-weight: 500; color: {{ $daysLeft <= 14 ? 'var(--color-warning-700, #B45309)' : 'var(--text-tertiary, #78716C)' }};">
+                <span style="flex-shrink: 0; font-size: 11px; font-weight: 500; color: {{ $daysLeft <= 14 ? 'var(--color-warning-700, #B45309)' : 'var(--text-tertiary, #7A5050)' }};">
                     {{ trans_choice('dashboard.days_left', $daysLeft, ['count' => $daysLeft]) }}
                 </span>
             </div>
         @empty
-            <div style="display: flex; align-items: center; justify-content: center; padding: 48px 16px; color: var(--text-tertiary, #78716C); font-size: 13px;">
+            <div style="display: flex; align-items: center; justify-content: center; padding: 48px 16px; color: var(--text-tertiary, #7A5050); font-size: 13px;">
                 {{ __('dashboard.no_upcoming_renewals') }}
             </div>
         @endforelse
