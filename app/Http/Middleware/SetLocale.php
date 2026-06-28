@@ -19,6 +19,11 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip for public marketing routes — SetPublicLocale handles those
+        if ($request->routeIs('landing*') || $request->routeIs('legal.*') || $request->routeIs('demo-request*') || $request->routeIs('sitemap') || $request->routeIs('robots') || $request->is('ar') || $request->is('ar/*')) {
+            return $next($request);
+        }
+
         $locale = $this->resolveLocale($request);
 
         app()->setLocale($locale);
