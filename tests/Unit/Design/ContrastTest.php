@@ -48,23 +48,23 @@ test('text-primary on surface-page meets WCAG AA body', function () {
 });
 
 test('text-on-dark on surface-sidebar meets WCAG AA body', function () {
-    expect(contrastRatio('#FAFAF9', '#072E17'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#FAFAF9', '#330000'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('text-on-dark-dim on surface-sidebar meets WCAG AA body', function () {
-    expect(contrastRatio('#D6D3D1', '#072E17'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#D6D3D1', '#330000'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('white on brand-500 meets WCAG AA body', function () {
-    expect(contrastRatio('#FFFFFF', '#0D5C2E'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#FFFFFF', '#520000'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('white on brand-600 meets WCAG AA body', function () {
-    expect(contrastRatio('#FFFFFF', '#094B26'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#FFFFFF', '#440000'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('white on brand-700 meets WCAG AA body', function () {
-    expect(contrastRatio('#FFFFFF', '#072E17'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#FFFFFF', '#330000'))->toBeGreaterThanOrEqual(4.5);
 });
 
 // Semantic colors on white
@@ -102,7 +102,7 @@ test('white on tier-starter meets WCAG AA large text', function () {
 });
 
 test('white on tier-pro meets WCAG AA large text', function () {
-    expect(contrastRatio('#FFFFFF', '#0D5C2E'))->toBeGreaterThanOrEqual(3.0);
+    expect(contrastRatio('#FFFFFF', '#520000'))->toBeGreaterThanOrEqual(3.0);
 });
 
 test('white on tier-enterprise meets WCAG AA large text', function () {
@@ -111,9 +111,9 @@ test('white on tier-enterprise meets WCAG AA large text', function () {
 
 // Link text
 test('text-link on surface-card meets WCAG AA body', function () {
-    expect(contrastRatio('#0D5C2E', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#520000', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('text-link-hover on surface-card meets WCAG AA body', function () {
-    expect(contrastRatio('#094B26', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#440000', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
 });

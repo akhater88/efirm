@@ -18,7 +18,7 @@
             align-items: center;
             gap: 16px;
             padding: 16px 20px;
-            background: linear-gradient(135deg, var(--color-brand-700, #072E17) 0%, var(--color-brand-500, #0D5C2E) 100%);
+            background: linear-gradient(135deg, var(--color-brand-700, #330000) 0%, var(--color-brand-500, #520000) 100%);
             border: none;
             border-radius: 12px;
             cursor: pointer;
@@ -64,8 +64,8 @@
             {{-- Header --}}
             <div style="padding: 20px 24px 0;">
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                    <div style="width: 40px; height: 40px; background: var(--color-brand-50, #ECFAF1); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brand-500, #0D5C2E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                    <div style="width: 40px; height: 40px; background: var(--color-brand-50, #FDF2F2); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brand-500, #520000)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
                     </div>
                     <div>
                         <h2 id="ai-twin-modal-title" style="font-size: 18px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0;">
@@ -103,7 +103,7 @@
                         outline: none;
                         box-sizing: border-box;
                     "
-                    onfocus="this.style.borderColor='var(--border-focus, #0D5C2E)'; this.style.boxShadow='var(--ring-brand, 0 0 0 3px rgba(13, 92, 46, 0.2))'"
+                    onfocus="this.style.borderColor='var(--border-focus, #520000)'; this.style.boxShadow='var(--ring-brand, 0 0 0 3px rgba(13, 92, 46, 0.2))'"
                     onblur="this.style.borderColor='var(--border-default, #E7E5E4)'; this.style.boxShadow='none'"
                 >
                 @error('waitlistEmail')
@@ -120,7 +120,7 @@
                     </button>
                     <button
                         type="submit"
-                        style="flex: 1; padding: 10px; background: var(--color-brand-500, #0D5C2E); border: none; border-radius: 8px; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer;"
+                        style="flex: 1; padding: 10px; background: var(--color-brand-500, #520000); border: none; border-radius: 8px; font-size: 14px; font-weight: 500; color: #FFFFFF; cursor: pointer;"
                     >
                         {{ __('brand.ai_twin_submit') }}
                     </button>

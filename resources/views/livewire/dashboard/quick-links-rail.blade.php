@@ -46,7 +46,7 @@
                 text-align: center;
             "
             title="{{ $link['label'] }}"
-            onmouseover="this.style.background='var(--surface-card-hover, #F5F5F4)'; this.style.color='var(--color-brand-500, #0D5C2E)'"
+            onmouseover="this.style.background='var(--surface-card-hover, #F5F5F4)'; this.style.color='var(--color-brand-500, #520000)'"
             onmouseout="this.style.background='transparent'; this.style.color='var(--text-tertiary, #78716C)'"
         >
             <span style="display: flex; align-items: center; justify-content: center;">

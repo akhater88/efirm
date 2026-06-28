@@ -38,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('32px')
             ->favicon(asset('img/brand/efirm-favicon.svg'))
             ->colors([
-                'primary' => Color::hex('#0D5C2E'),
+                'primary' => Color::hex('#520000'),
             ])
             ->navigationGroups([
                 __('navigation.groups.workspace'),

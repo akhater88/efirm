@@ -8,7 +8,7 @@ return [
     'logo_alt_dark' => 'شعار eFirm على خلفية داكنة',
     'mark_alt' => 'علامة eFirm',
     'favicon_alt' => 'eFirm',
-    'theme_color' => '#072E17',
+    'theme_color' => '#330000',
     'support_email' => 'support@efirm.com',
     'copyright' => '© :year eFirm. جميع الحقوق محفوظة.',
     'waitlist_success' => 'شكرا لك! سنتواصل معك قريبا.',

@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', __('common.app_name'))</title>
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#072E17">
+    <meta name="theme-color" content="#330000">
 
     {{-- Font preload --}}
     <link rel="preload" href="{{ asset('fonts/source-sans-pro-v21-latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>

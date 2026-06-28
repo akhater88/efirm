@@ -25,7 +25,7 @@
     <div x-data="{ open: false }" style="position: relative;">
         <button
             @click="open = !open"
-            style="display: flex; align-items: center; gap: 4px; padding: 6px 12px; background: var(--color-brand-500, #0D5C2E); color: #FFFFFF; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer;"
+            style="display: flex; align-items: center; gap: 4px; padding: 6px 12px; background: var(--color-brand-500, #520000); color: #FFFFFF; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer;"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
             {{ __('shell.quick_add') }}
@@ -152,8 +152,8 @@
             @if ($user->avatar_url)
                 <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" style="width: 32px; height: 32px; border-radius: 9999px; object-fit: cover;">
             @else
-                <div style="width: 32px; height: 32px; border-radius: 9999px; background: var(--color-brand-50, #ECFAF1); display: flex; align-items: center; justify-content: center;">
-                    <span style="color: var(--color-brand-700, #072E17); font-weight: 600; font-size: 13px;">{{ mb_substr($user->name, 0, 1) }}</span>
+                <div style="width: 32px; height: 32px; border-radius: 9999px; background: var(--color-brand-50, #FDF2F2); display: flex; align-items: center; justify-content: center;">
+                    <span style="color: var(--color-brand-700, #330000); font-weight: 600; font-size: 13px;">{{ mb_substr($user->name, 0, 1) }}</span>
                 </div>
             @endif
             <span style="font-size: 13px; color: var(--text-primary, #1C1917); font-weight: 500; display: none;" class="sm:inline">{{ $user->name }}</span>

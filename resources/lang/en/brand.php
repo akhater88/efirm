@@ -8,7 +8,7 @@ return [
     'logo_alt_dark' => 'eFirm logo on dark background',
     'mark_alt' => 'eFirm mark',
     'favicon_alt' => 'eFirm',
-    'theme_color' => '#072E17',
+    'theme_color' => '#330000',
     'support_email' => 'support@efirm.com',
     'copyright' => '© :year eFirm. All rights reserved.',
     'waitlist_success' => 'Thank you! We will be in touch.',

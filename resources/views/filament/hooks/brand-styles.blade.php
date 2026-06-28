@@ -4,16 +4,16 @@
     /* Sidebar: brand-700 background with white text */
     .fi-sidebar {
         --sidebar-width: 16rem;
-        background-color: #072E17 !important;
+        background-color: #330000 !important;
     }
 
     .fi-sidebar-header {
-        background-color: #072E17 !important;
+        background-color: #330000 !important;
         border-bottom-color: rgba(255, 255, 255, 0.1) !important;
     }
 
     .fi-sidebar-nav-groups {
-        background-color: #072E17 !important;
+        background-color: #330000 !important;
     }
 
     /* Sidebar text: white/light */
@@ -27,13 +27,13 @@
     }
 
     .fi-sidebar-item-button:hover {
-        background-color: #052015 !important;
+        background-color: #260000 !important;
         color: #FAFAF9 !important;
     }
 
     /* Active sidebar item */
     .fi-sidebar-item-active .fi-sidebar-item-button {
-        background-color: #094B26 !important;
+        background-color: #440000 !important;
         color: #FFFFFF !important;
     }
 
@@ -72,17 +72,17 @@
 
     .fi-sidebar-close-btn:hover,
     .fi-sidebar-open-btn:hover {
-        background-color: #052015 !important;
+        background-color: #260000 !important;
     }
 
     /* Topbar: brand-700 background with white text */
     .fi-topbar {
-        background-color: #072E17 !important;
+        background-color: #330000 !important;
         border-bottom-color: rgba(255, 255, 255, 0.1) !important;
     }
 
     .fi-topbar nav {
-        background-color: #072E17 !important;
+        background-color: #330000 !important;
     }
 
     /* Topbar text and icons: white */
@@ -133,7 +133,7 @@
     }
 
     .fi-tenant-menu-trigger:hover {
-        background-color: #052015 !important;
+        background-color: #260000 !important;
         color: #FAFAF9 !important;
     }
 
@@ -172,7 +172,7 @@
     /* Avatar background — slightly lighter green for contrast */
     .fi-sidebar .fi-avatar,
     .fi-topbar .fi-avatar {
-        background-color: #094B26 !important;
+        background-color: #440000 !important;
     }
 
     /* User menu button text in topbar */

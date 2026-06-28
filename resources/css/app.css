@@ -11,17 +11,17 @@
     --font-mono: ui-monospace, 'Cascadia Code', Menlo, Monaco, Consolas, monospace;
 
     /* ─── Brand colors ─── */
-    --color-brand-50:  #ECFAF1;
-    --color-brand-100: #C8EFD6;
-    --color-brand-200: #94DDB0;
-    --color-brand-300: #5FC588;
-    --color-brand-400: #2DA763;
-    --color-brand-500: #0D5C2E;
-    --color-brand-600: #094B26;
-    --color-brand-700: #072E17;
-    --color-brand-800: #052015;
-    --color-brand-900: #03150E;
-    --color-brand-950: #010A05;
+    --color-brand-50:  #FDF2F2;
+    --color-brand-100: #F9DADA;
+    --color-brand-200: #F0ABAB;
+    --color-brand-300: #E07070;
+    --color-brand-400: #C93A3A;
+    --color-brand-500: #520000;
+    --color-brand-600: #440000;
+    --color-brand-700: #330000;
+    --color-brand-800: #260000;
+    --color-brand-900: #1A0000;
+    --color-brand-950: #0D0000;
 
     /* ─── Neutral colors (warm gray) ─── */
     --color-neutral-50:  #FAFAF9;
@@ -52,7 +52,7 @@
 
     /* ─── Tier colors ─── */
     --color-tier-starter:    #64748B;
-    --color-tier-pro:        #0D5C2E;
+    --color-tier-pro:        #520000;
     --color-tier-enterprise: #D97706;
 
     /* ─── Shadows (warm-tinted) ─── */
@@ -145,9 +145,9 @@
   --surface-page:           #FAFAF9;
   --surface-card:           #FFFFFF;
   --surface-card-hover:     #F5F5F4;
-  --surface-sidebar:        #072E17;
-  --surface-sidebar-hover:  #052015;
-  --surface-sidebar-active: #094B26;
+  --surface-sidebar:        #330000;
+  --surface-sidebar-hover:  #260000;
+  --surface-sidebar-active: #440000;
 
   /* Semantic text */
   --text-primary:     #1C1917;
@@ -156,13 +156,13 @@
   --text-on-dark:     #FAFAF9;
   --text-on-dark-dim: #D6D3D1;
   --text-on-brand:    #FFFFFF;
-  --text-link:        #0D5C2E;
-  --text-link-hover:  #094B26;
+  --text-link:        #520000;
+  --text-link-hover:  #440000;
 
   /* Borders */
   --border-default: #E7E5E4;
   --border-hover:   #D6D3D1;
-  --border-focus:   #0D5C2E;
+  --border-focus:   #520000;
 
   /* Focus ring */
   --ring-brand: 0 0 0 3px rgba(13, 92, 46, 0.2);

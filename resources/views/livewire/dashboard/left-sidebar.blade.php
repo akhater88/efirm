@@ -20,7 +20,7 @@
         {{ app()->getLocale() === 'ar' ? 'right: 0;' : 'left: 0;' }}
         bottom: 0;
         width: {{ $collapsed ? '64px' : '240px' }};
-        background: var(--surface-sidebar, #072E17);
+        background: var(--surface-sidebar, #330000);
         transition: width 0.2s ease;
         display: flex;
         flex-direction: column;
@@ -64,12 +64,12 @@
                         text-decoration: none;
                         font-size: 14px;
                         font-weight: {{ $item['active'] ? '600' : '400' }};
-                        background: {{ $item['active'] ? 'var(--surface-sidebar-active, #094B26)' : 'transparent' }};
-                        border-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: {{ $item['active'] ? '3px solid var(--color-brand-300, #5FC588)' : '3px solid transparent' }};
+                        background: {{ $item['active'] ? 'var(--surface-sidebar-active, #440000)' : 'transparent' }};
+                        border-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: {{ $item['active'] ? '3px solid var(--color-brand-300, #E07070)' : '3px solid transparent' }};
                         transition: background 0.15s ease;
                     "
                     title="{{ $collapsed ? $item['label'] : '' }}"
-                    onmouseover="if(!{{ $item['active'] ? 'true' : 'false' }}) this.style.background='var(--surface-sidebar-hover, #052015)'"
+                    onmouseover="if(!{{ $item['active'] ? 'true' : 'false' }}) this.style.background='var(--surface-sidebar-hover, #260000)'"
                     onmouseout="if(!{{ $item['active'] ? 'true' : 'false' }}) this.style.background='transparent'"
                 >
                     <span style="flex-shrink: 0; display: flex; align-items: center;">
@@ -100,7 +100,7 @@
                 border-radius: 6px;
             "
             title="{{ $collapsed ? __('shell.expand_sidebar') : __('shell.collapse_sidebar') }}"
-            onmouseover="this.style.background='var(--surface-sidebar-hover, #052015)'"
+            onmouseover="this.style.background='var(--surface-sidebar-hover, #260000)'"
             onmouseout="this.style.background='transparent'"
         >
             @if ($collapsed)

@@ -36,7 +36,7 @@ class PlatformAdminPanelProvider extends PanelProvider
             ->brandLogoHeight('32px')
             ->favicon(asset('img/brand/efirm-favicon.svg'))
             ->colors([
-                'primary' => Color::hex('#0D5C2E'),
+                'primary' => Color::hex('#520000'),
             ])
             ->renderHook(
                 PanelsRenderHook::HEAD_END,

@@ -119,7 +119,7 @@ test('dashboard uses brand tokens in layout', function () {
     $html = $response->getContent();
 
     // Theme color
-    expect($html)->toContain('#072E17');
+    expect($html)->toContain('#330000');
     // Font preloads
     expect($html)->toContain('source-sans-pro');
     expect($html)->toContain('ibm-plex-sans-arabic');
