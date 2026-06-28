@@ -19,10 +19,8 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip for public marketing routes — SetPublicLocale handles those
-        $path = $request->path();
-        $publicPaths = ['/', 'ar', 'terms', 'privacy', 'dpa', 'ai-disclaimer', 'demo-request', 'sitemap.xml', 'robots.txt'];
-        if (in_array($path, $publicPaths) || str_starts_with($path, 'ar/') || $request->is('demo-request/*')) {
+        // Skip if SetPublicLocale already handled this request
+        if ($request->attributes->get('public_locale_handled')) {
             return $next($request);
         }
 

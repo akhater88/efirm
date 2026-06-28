@@ -21,6 +21,9 @@ class SetPublicLocale
 
         app()->setLocale($locale);
 
+        // Flag so SetLocale middleware doesn't override
+        $request->attributes->set('public_locale_handled', true);
+
         $response = $next($request);
 
         $response->cookie(
