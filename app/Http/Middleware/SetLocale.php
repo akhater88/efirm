@@ -20,7 +20,9 @@ class SetLocale
     public function handle(Request $request, Closure $next): Response
     {
         // Skip for public marketing routes — SetPublicLocale handles those
-        if ($request->routeIs('landing*') || $request->routeIs('legal.*') || $request->routeIs('demo-request*') || $request->routeIs('sitemap') || $request->routeIs('robots') || $request->is('ar') || $request->is('ar/*')) {
+        $path = $request->path();
+        $publicPaths = ['/', 'ar', 'terms', 'privacy', 'dpa', 'ai-disclaimer', 'demo-request', 'sitemap.xml', 'robots.txt'];
+        if (in_array($path, $publicPaths) || str_starts_with($path, 'ar/') || $request->is('demo-request/*')) {
             return $next($request);
         }
 
