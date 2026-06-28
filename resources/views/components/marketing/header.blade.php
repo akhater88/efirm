@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between h-[72px]">
             {{-- Logo --}}
             <a href="{{ app()->getLocale() === 'ar' ? '/ar' : '/' }}" class="flex-shrink-0">
-                <img src="{{ asset('img/brand/efirm-favicon.svg') }}" alt="eFirm" class="h-8 w-auto">
+                <img src="{{ asset('img/brand/efirm-horizontal-compact.svg') }}" alt="eFirm" class="h-12 w-auto">
             </a>
 
             {{-- Desktop Nav Links (centre) --}}

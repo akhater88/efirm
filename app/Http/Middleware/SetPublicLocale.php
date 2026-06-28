@@ -8,37 +8,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetPublicLocale
 {
-    /**
-     * Locale detection:
-     * - /ar/* path → Arabic
-     * - / path → English
-     * - First visit to / with cookie=ar → redirect to /ar
-     * - First visit to / with Accept-Language: ar → redirect to /ar
-     *
-     * URL path is the source of truth once the user is on a page.
-     * Cookie remembers their choice for the NEXT visit.
-     */
     public function handle(Request $request, Closure $next): Response
     {
         $isArPrefix = $request->segment(1) === 'ar';
 
-        // If on /ar/*, locale is Arabic
         if ($isArPrefix) {
             app()->setLocale('ar');
 
             return $this->withLocaleCookie($next($request), 'ar', $request);
         }
 
-        // If on root / — check if we should redirect to /ar
-        if ($request->path() === '/' && ! $request->has('lang')) {
+        // On non-/ar paths: always English.
+        // Only redirect to /ar on very first visit (no cookie at all)
+        // based on Accept-Language header.
+        if ($request->path() === '/') {
             $cookieLocale = $request->cookie('efirm_locale');
 
-            if ($cookieLocale === 'ar') {
-                return redirect('/ar');
-            }
-
-            // Check Accept-Language for first-time visitors (no cookie)
-            if (! $cookieLocale) {
+            // No cookie at all — check Accept-Language for first-time visitors
+            if ($cookieLocale === null) {
                 $acceptLang = $request->header('Accept-Language', '');
                 if (preg_match('/^ar/i', $acceptLang)) {
                     return redirect('/ar');
@@ -46,7 +33,6 @@ class SetPublicLocale
             }
         }
 
-        // Everything else: English
         app()->setLocale('en');
 
         return $this->withLocaleCookie($next($request), 'en', $request);
