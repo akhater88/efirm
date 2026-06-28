@@ -14,5 +14,11 @@ export default defineConfig({
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },
+        proxy: {
+            '/fonts': {
+                target: 'http://localhost:8000',
+                changeOrigin: true,
+            },
+        },
     },
 });
