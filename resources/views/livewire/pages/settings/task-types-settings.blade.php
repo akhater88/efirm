@@ -1,7 +1,7 @@
 <div>
     {{-- Page Header --}}
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-        <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0;">
+        <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #2D0A0A); margin: 0;">
             {{ __('shell.task_types_title') }}
         </h1>
         <button wire:click="openCreate"
@@ -42,10 +42,10 @@
                             </svg>
                         </div>
                         <div style="flex: 1; min-width: 0;">
-                            <div style="font-size: 16px; font-weight: 600; color: var(--text-primary, #1C1917); margin-bottom: 2px;">
+                            <div style="font-size: 16px; font-weight: 600; color: var(--text-primary, #2D0A0A); margin-bottom: 2px;">
                                 {{ $taskType->localizedName() }}
                             </div>
-                            <div style="font-size: 12px; color: var(--text-muted, #A8A29E);">
+                            <div style="font-size: 12px; color: var(--text-muted, #A89090);">
                                 {{ $taskType->slug }}
                             </div>
                         </div>
@@ -58,14 +58,14 @@
                                 {{ __('shell.task_type_active') }}
                             </span>
                         @else
-                            <span style="display: inline-flex; align-items: center; padding: 2px 8px; background: var(--surface-subtle, #F5F5F4); color: var(--text-muted, #A8A29E); font-size: 12px; border-radius: 9999px; font-weight: 500;">
+                            <span style="display: inline-flex; align-items: center; padding: 2px 8px; background: var(--surface-subtle, #F5F5F4); color: var(--text-muted, #A89090); font-size: 12px; border-radius: 9999px; font-weight: 500;">
                                 {{ __('common.inactive') }}
                             </span>
                         @endif
 
                         {{-- Custom fields count --}}
                         @if (is_array($taskType->custom_fields) && count($taskType->custom_fields) > 0)
-                            <span style="display: inline-flex; align-items: center; padding: 2px 8px; background: var(--surface-subtle, #F5F5F4); color: var(--text-secondary, #57534E); font-size: 12px; border-radius: 9999px;">
+                            <span style="display: inline-flex; align-items: center; padding: 2px 8px; background: var(--surface-subtle, #F5F5F4); color: var(--text-secondary, #5C3535); font-size: 12px; border-radius: 9999px;">
                                 {{ trans_choice('shell.task_type_custom_field_count', count($taskType->custom_fields), ['count' => count($taskType->custom_fields)]) }}
                             </span>
                         @endif
@@ -76,10 +76,10 @@
     @else
         {{-- Empty State --}}
         <div style="text-align: center; padding: 64px 24px; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #D6D3D1); border-radius: 12px;">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted, #A8A29E)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 16px;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted, #A89090)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 16px;">
                 <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
             </svg>
-            <h3 style="font-size: 16px; font-weight: 600; color: var(--text-primary, #1C1917); margin: 0 0 8px;">
+            <h3 style="font-size: 16px; font-weight: 600; color: var(--text-primary, #2D0A0A); margin: 0 0 8px;">
                 {{ __('shell.task_type_no_types') }}
             </h3>
             <button wire:click="openCreate"
@@ -102,21 +102,21 @@
             <form wire:submit="save">
                 {{-- Name EN --}}
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.task_type_name_en') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.task_type_name_en') }}</label>
                     <input type="text" wire:model.live.debounce.300ms="formNameEn" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                     @error('formNameEn') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
 
                 {{-- Name AR --}}
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.task_type_name_ar') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.task_type_name_ar') }}</label>
                     <input type="text" wire:model="formNameAr" dir="rtl" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                     @error('formNameAr') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
 
                 {{-- Slug --}}
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.task_type_slug') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.task_type_slug') }}</label>
                     <input type="text" wire:model="formSlug" dir="ltr" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                     @error('formSlug') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
@@ -124,12 +124,12 @@
                 {{-- Icon + Color row --}}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
                     <div>
-                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.task_type_icon') }}</label>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.task_type_icon') }}</label>
                         <input type="text" wire:model="formIcon" dir="ltr" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                         @error('formIcon') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.task_type_color') }}</label>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.task_type_color') }}</label>
                         <div style="display: flex; gap: 8px; align-items: center;">
                             <input type="color" wire:model="formColor" style="width: 40px; height: 36px; padding: 2px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; cursor: pointer;" />
                             <input type="text" wire:model="formColor" dir="ltr" style="flex: 1; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
@@ -140,7 +140,7 @@
 
                 {{-- Default Workflow --}}
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.task_type_workflow') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.task_type_workflow') }}</label>
                     <select wire:model="formDefaultWorkflowId" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
                         <option value="">{{ __('shell.label_select') }}</option>
                         @foreach ($workflows as $workflow)
@@ -153,13 +153,13 @@
                 {{-- Active + Sort Order row --}}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
                     <div>
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); cursor: pointer;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); cursor: pointer;">
                             <input type="checkbox" wire:model="formIsActive" style="width: 16px; height: 16px; accent-color: var(--color-brand-500, #520000);" />
                             {{ __('shell.task_type_active') }}
                         </label>
                     </div>
                     <div>
-                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.task_type_sort') }}</label>
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.task_type_sort') }}</label>
                         <input type="number" wire:model="formSortOrder" min="0" dir="ltr" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                         @error('formSortOrder') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                     </div>
@@ -168,9 +168,9 @@
                 {{-- Custom Fields Builder --}}
                 <div style="margin-bottom: 14px; padding-top: 16px; border-top: 1px solid var(--border-default, #E7E5E4);">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <label style="font-size: 14px; font-weight: 600; color: var(--text-primary, #1C1917);">{{ __('shell.task_type_custom_fields') }}</label>
+                        <label style="font-size: 14px; font-weight: 600; color: var(--text-primary, #2D0A0A);">{{ __('shell.task_type_custom_fields') }}</label>
                         <button type="button" wire:click="addCustomField"
-                            style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; background: var(--surface-subtle, #F5F5F4); border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; cursor: pointer; color: var(--text-secondary, #57534E);">
+                            style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; background: var(--surface-subtle, #F5F5F4); border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 13px; cursor: pointer; color: var(--text-secondary, #5C3535);">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                             {{ __('shell.task_type_add_field') }}
                         </button>
@@ -180,21 +180,21 @@
                         <div style="background: var(--surface-subtle, #F5F5F4); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; padding: 12px; margin-bottom: 8px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
                                 <div>
-                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A8A29E); margin-bottom: 2px;">{{ __('shell.task_type_field_key') }}</label>
+                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A89090); margin-bottom: 2px;">{{ __('shell.task_type_field_key') }}</label>
                                     <input type="text" wire:model="formCustomFields.{{ $index }}.key" dir="ltr" style="width: 100%; padding: 6px 8px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; font-size: 13px; box-sizing: border-box;" />
                                 </div>
                                 <div>
-                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A8A29E); margin-bottom: 2px;">{{ __('shell.task_type_field_label_en') }}</label>
+                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A89090); margin-bottom: 2px;">{{ __('shell.task_type_field_label_en') }}</label>
                                     <input type="text" wire:model="formCustomFields.{{ $index }}.label_en" style="width: 100%; padding: 6px 8px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; font-size: 13px; box-sizing: border-box;" />
                                 </div>
                                 <div>
-                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A8A29E); margin-bottom: 2px;">{{ __('shell.task_type_field_label_ar') }}</label>
+                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A89090); margin-bottom: 2px;">{{ __('shell.task_type_field_label_ar') }}</label>
                                     <input type="text" wire:model="formCustomFields.{{ $index }}.label_ar" dir="rtl" style="width: 100%; padding: 6px 8px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; font-size: 13px; box-sizing: border-box;" />
                                 </div>
                             </div>
                             <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: end;">
                                 <div>
-                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A8A29E); margin-bottom: 2px;">{{ __('shell.task_type_field_type') }}</label>
+                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A89090); margin-bottom: 2px;">{{ __('shell.task_type_field_type') }}</label>
                                     <select wire:model="formCustomFields.{{ $index }}.type" style="width: 100%; padding: 6px 8px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; font-size: 13px; box-sizing: border-box;">
                                         <option value="text">Text</option>
                                         <option value="number">Number</option>
@@ -205,11 +205,11 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A8A29E); margin-bottom: 2px;">{{ __('shell.task_type_field_options') }}</label>
+                                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted, #A89090); margin-bottom: 2px;">{{ __('shell.task_type_field_options') }}</label>
                                     <input type="text" wire:model="formCustomFields.{{ $index }}.options" placeholder="Option1, Option2, ..." dir="ltr" style="width: 100%; padding: 6px 8px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 4px; font-size: 13px; box-sizing: border-box;" />
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px; padding-bottom: 2px;">
-                                    <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-secondary, #57534E); cursor: pointer;">
+                                    <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-secondary, #5C3535); cursor: pointer;">
                                         <input type="checkbox" wire:model="formCustomFields.{{ $index }}.required" style="accent-color: var(--color-brand-500, #520000);" />
                                         {{ __('shell.task_type_field_required') }}
                                     </label>
@@ -221,7 +221,7 @@
                             </div>
                         </div>
                     @empty
-                        <p style="font-size: 13px; color: var(--text-muted, #A8A29E); text-align: center; padding: 12px 0;">
+                        <p style="font-size: 13px; color: var(--text-muted, #A89090); text-align: center; padding: 12px 0;">
                             {{ __('shell.task_type_no_types') }}
                         </p>
                     @endforelse

@@ -1,7 +1,7 @@
 <div>
     {{-- Page Header --}}
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-        <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #1C1917); margin: 0;">
+        <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary, #2D0A0A); margin: 0;">
             {{ __('shell.tasks_list_title') }}
         </h1>
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -9,12 +9,12 @@
             <div style="display: flex; border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; overflow: hidden;">
                 <button wire:click="setViewMode('list')"
                     style="padding: 6px 12px; font-size: 13px; font-weight: 500; border: none; cursor: pointer;
-                        {{ $viewMode === 'list' ? 'background: var(--color-brand-500, #520000); color: #FFFFFF;' : 'background: var(--surface-card, #FFFFFF); color: var(--text-secondary, #44403C);' }}">
+                        {{ $viewMode === 'list' ? 'background: var(--color-brand-500, #520000); color: #FFFFFF;' : 'background: var(--surface-card, #FFFFFF); color: var(--text-secondary, #4A2020);' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
                 </button>
                 <button wire:click="setViewMode('board')"
                     style="padding: 6px 12px; font-size: 13px; font-weight: 500; border: none; border-inline-start: 1px solid var(--border-default, #E7E5E4); cursor: pointer;
-                        {{ $viewMode === 'board' ? 'background: var(--color-brand-500, #520000); color: #FFFFFF;' : 'background: var(--surface-card, #FFFFFF); color: var(--text-secondary, #44403C);' }}">
+                        {{ $viewMode === 'board' ? 'background: var(--color-brand-500, #520000); color: #FFFFFF;' : 'background: var(--surface-card, #FFFFFF); color: var(--text-secondary, #4A2020);' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><rect width="7" height="18" x="3" y="3" rx="1"/><rect width="7" height="10" x="14" y="3" rx="1"/><rect width="7" height="5" x="14" y="16" rx="1"/></svg>
                 </button>
             </div>
@@ -34,13 +34,13 @@
                 type="text"
                 wire:model.live.debounce.300ms="search"
                 placeholder="{{ __('shell.tasks_search_placeholder') }}"
-                style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #1C1917); outline: none; box-sizing: border-box;"
+                style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #2D0A0A); outline: none; box-sizing: border-box;"
             />
         </div>
         <div>
             <select
                 wire:model.live="priorityFilter"
-                style="padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #1C1917); outline: none; cursor: pointer;"
+                style="padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #2D0A0A); outline: none; cursor: pointer;"
             >
                 <option value="">{{ __('shell.filter_all_priorities') }}</option>
                 @foreach ($priorities as $priority)
@@ -51,7 +51,7 @@
         <div>
             <select
                 wire:model.live="statusFilter"
-                style="padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #1C1917); outline: none; cursor: pointer;"
+                style="padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #2D0A0A); outline: none; cursor: pointer;"
             >
                 <option value="">{{ __('shell.filter_all_statuses') }}</option>
                 @foreach ($statuses as $status)
@@ -62,7 +62,7 @@
         <div>
             <select
                 wire:model.live="taskTypeFilter"
-                style="padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #1C1917); outline: none; cursor: pointer;"
+                style="padding: 8px 12px; border: 1px solid var(--border-default, #D6D3D1); border-radius: 8px; font-size: 14px; background: var(--surface-card, #FFFFFF); color: var(--text-primary, #2D0A0A); outline: none; cursor: pointer;"
             >
                 <option value="">{{ __('shell.tasks_all_types') }}</option>
                 @foreach ($taskTypes as $type)
@@ -89,8 +89,8 @@
                 <div style="min-width: 260px; max-width: 300px; flex: 1; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; display: flex; flex-direction: column;">
                     {{-- Column header --}}
                     <div style="padding: 12px 14px; border-bottom: 2px solid {{ $column['color'] ?? '#E7E5E4' }}; display: flex; align-items: center; justify-content: space-between;">
-                        <span style="font-size: 13px; font-weight: 600; color: var(--text-primary, #1C1917);">{{ $column['name'] }}</span>
-                        <span style="font-size: 11px; font-weight: 600; color: var(--text-tertiary, #78716C); background: var(--surface-page, #FAFAF9); padding: 2px 8px; border-radius: 9999px;">{{ $column['count'] }}</span>
+                        <span style="font-size: 13px; font-weight: 600; color: var(--text-primary, #2D0A0A);">{{ $column['name'] }}</span>
+                        <span style="font-size: 11px; font-weight: 600; color: var(--text-tertiary, #7A5050); background: var(--surface-page, #FAFAF9); padding: 2px 8px; border-radius: 9999px;">{{ $column['count'] }}</span>
                     </div>
 
                     {{-- Column tasks (droppable) --}}
@@ -102,7 +102,7 @@
                                  style="padding: 10px 12px; background: var(--surface-page, #FAFAF9); border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; cursor: grab; border-inline-start: 3px solid {{ $task['priority_color'] }};"
                                  onmouseover="this.style.background='#F5F5F4'"
                                  onmouseout="this.style.background='var(--surface-page, #FAFAF9)'">
-                                <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #1C1917); margin-bottom: 6px; line-height: 1.3;">
+                                <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #2D0A0A); margin-bottom: 6px; line-height: 1.3;">
                                     {{ $task['title'] }}
                                 </div>
                                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
@@ -113,13 +113,13 @@
                                             </span>
                                         @endif
                                         @if ($task['due_date'])
-                                            <span style="font-size: 11px; color: var(--text-tertiary, #78716C);">
+                                            <span style="font-size: 11px; color: var(--text-tertiary, #7A5050);">
                                                 {{ $task['due_date'] }}
                                             </span>
                                         @endif
                                     </div>
                                     @if ($task['assignee'])
-                                        <span style="font-size: 10px; font-weight: 500; color: var(--text-tertiary, #78716C); background: var(--surface-card, #FFFFFF); padding: 2px 6px; border-radius: 9999px; border: 1px solid var(--border-default, #E7E5E4);">
+                                        <span style="font-size: 10px; font-weight: 500; color: var(--text-tertiary, #7A5050); background: var(--surface-card, #FFFFFF); padding: 2px 6px; border-radius: 9999px; border: 1px solid var(--border-default, #E7E5E4);">
                                             {{ mb_substr($task['assignee'], 0, 2) }}
                                         </span>
                                     @endif
@@ -128,7 +128,7 @@
                         @endforeach
 
                         @if (empty($column['tasks']))
-                            <div style="padding: 20px; text-align: center; color: var(--text-tertiary, #78716C); font-size: 12px;">
+                            <div style="padding: 20px; text-align: center; color: var(--text-tertiary, #7A5050); font-size: 12px;">
                                 {{ __('shell.tasks_column_empty') }}
                             </div>
                         @endif
@@ -137,7 +137,7 @@
             @endforeach
         </div>
     @else
-        <div style="text-align: center; padding: 48px; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; color: var(--text-tertiary, #78716C); font-size: 14px;">
+        <div style="text-align: center; padding: 48px; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px; color: var(--text-tertiary, #7A5050); font-size: 14px;">
             {{ __('shell.tasks_no_workflow') }}
         </div>
     @endif
@@ -200,13 +200,13 @@
             <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
                 <thead>
                     <tr style="background: var(--surface-subtle, #F5F5F4); border-bottom: 1px solid var(--border-default, #D6D3D1);">
-                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_title') }}</th>
-                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.tasks_task_type') }}</th>
-                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_priority') }}</th>
-                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_status') }}</th>
-                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_assigned_to') }}</th>
-                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_due_date') }}</th>
-                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #57534E);">{{ __('shell.col_updated') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #5C3535);">{{ __('shell.col_title') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #5C3535);">{{ __('shell.tasks_task_type') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #5C3535);">{{ __('shell.col_priority') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #5C3535);">{{ __('shell.col_status') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #5C3535);">{{ __('shell.col_assigned_to') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #5C3535);">{{ __('shell.col_due_date') }}</th>
+                        <th style="padding: 12px 16px; text-align: start; font-weight: 600; color: var(--text-secondary, #5C3535);">{{ __('shell.col_updated') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -216,8 +216,8 @@
                                 \App\Enums\TaskPriority::Urgent => '#DC2626',
                                 \App\Enums\TaskPriority::High => '#F59E0B',
                                 \App\Enums\TaskPriority::Normal => '#2563EB',
-                                \App\Enums\TaskPriority::Low => '#78716C',
-                                default => '#78716C',
+                                \App\Enums\TaskPriority::Low => '#7A5050',
+                                default => '#7A5050',
                             };
                         @endphp
                         <tr
@@ -226,35 +226,35 @@
                             onmouseover="this.style.background='var(--surface-subtle, #F5F5F4)'"
                             onmouseout="this.style.background='transparent'"
                         >
-                            <td style="padding: 12px 16px; color: var(--text-primary, #1C1917); font-weight: 500;">
+                            <td style="padding: 12px 16px; color: var(--text-primary, #2D0A0A); font-weight: 500;">
                                 {{ $task->title }}
                             </td>
-                            <td style="padding: 12px 16px; color: var(--text-secondary, #57534E);">
+                            <td style="padding: 12px 16px; color: var(--text-secondary, #5C3535);">
                                 @if ($task->taskType)
                                     <span style="display: inline-flex; align-items: center; gap: 4px;">
                                         <span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: {{ $task->taskType->color }};"></span>
                                         {{ $task->taskType->localizedName() }}
                                     </span>
                                 @else
-                                    <span style="color: var(--text-muted, #A8A29E);">{{ __('shell.task_type_none') }}</span>
+                                    <span style="color: var(--text-muted, #A89090);">{{ __('shell.task_type_none') }}</span>
                                 @endif
                             </td>
                             <td style="padding: 12px 16px;">
-                                <span style="display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary, #57534E);">
+                                <span style="display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary, #5C3535);">
                                     <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: {{ $priorityDotColor }};"></span>
                                     {{ $task->priority?->label() ?? '—' }}
                                 </span>
                             </td>
-                            <td style="padding: 12px 16px; color: var(--text-secondary, #57534E);">
+                            <td style="padding: 12px 16px; color: var(--text-secondary, #5C3535);">
                                 {{ $task->status?->label() ?? '—' }}
                             </td>
-                            <td style="padding: 12px 16px; color: var(--text-secondary, #57534E);">
+                            <td style="padding: 12px 16px; color: var(--text-secondary, #5C3535);">
                                 {{ $task->assignedTo?->name ?? '—' }}
                             </td>
-                            <td style="padding: 12px 16px; color: var(--text-secondary, #57534E);">
+                            <td style="padding: 12px 16px; color: var(--text-secondary, #5C3535);">
                                 {{ $task->due_date?->format('Y-m-d') ?? '—' }}
                             </td>
-                            <td style="padding: 12px 16px; color: var(--text-muted, #A8A29E); font-size: 13px;">
+                            <td style="padding: 12px 16px; color: var(--text-muted, #A89090); font-size: 13px;">
                                 {{ $task->updated_at?->diffForHumans() ?? '—' }}
                             </td>
                         </tr>
@@ -270,13 +270,13 @@
     @else
         {{-- Empty State --}}
         <div style="text-align: center; padding: 64px 24px; background: var(--surface-card, #FFFFFF); border: 1px solid var(--border-default, #D6D3D1); border-radius: 12px;">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted, #A8A29E)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 16px;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted, #A89090)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 16px;">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
             </svg>
-            <h3 style="font-size: 16px; font-weight: 600; color: var(--text-primary, #1C1917); margin: 0 0 8px;">
+            <h3 style="font-size: 16px; font-weight: 600; color: var(--text-primary, #2D0A0A); margin: 0 0 8px;">
                 {{ __('shell.tasks_empty_title') }}
             </h3>
-            <p style="font-size: 14px; color: var(--text-secondary, #57534E); margin: 0 0 24px;">
+            <p style="font-size: 14px; color: var(--text-secondary, #5C3535); margin: 0 0 24px;">
                 {{ __('shell.tasks_empty_description') }}
             </p>
             <button wire:click="openCreate"
@@ -299,17 +299,17 @@
             </h2>
             <form wire:submit="save">
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.label_title') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.label_title') }}</label>
                     <input type="text" wire:model="formTitle" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                     @error('formTitle') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.label_description') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.label_description') }}</label>
                     <textarea wire:model="formDescription" rows="3" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box; resize: vertical;"></textarea>
                     @error('formDescription') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.label_priority') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.label_priority') }}</label>
                     <select wire:model="formPriority" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
                         <option value="">{{ __('shell.label_select') }}</option>
                         @foreach ($priorities as $priority)
@@ -319,7 +319,7 @@
                     @error('formPriority') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.label_status') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.label_status') }}</label>
                     <select wire:model="formStatus" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
                         <option value="">{{ __('shell.label_select') }}</option>
                         @foreach ($statuses as $status)
@@ -329,12 +329,12 @@
                     @error('formStatus') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.label_due_date') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.label_due_date') }}</label>
                     <input type="date" wire:model="formDueDate" dir="ltr" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;" />
                     @error('formDueDate') <span style="font-size: 12px; color: var(--color-danger-500);">{{ $message }}</span> @enderror
                 </div>
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.tasks_task_type') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.tasks_task_type') }}</label>
                     <select wire:model.live="formTaskTypeId" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
                         <option value="">{{ __('shell.task_type_none') }}</option>
                         @foreach ($taskTypes as $type)
@@ -345,10 +345,10 @@
 
                 @if ($selectedTaskType && is_array($selectedTaskType->custom_fields) && count($selectedTaskType->custom_fields) > 0)
                     <div style="margin-bottom: 14px; padding: 12px; background: var(--surface-subtle, #F5F5F4); border: 1px solid var(--border-default, #E7E5E4); border-radius: 8px;">
-                        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-primary, #1C1917); margin-bottom: 8px;">{{ __('shell.tasks_custom_fields') }}</label>
+                        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-primary, #2D0A0A); margin-bottom: 8px;">{{ __('shell.tasks_custom_fields') }}</label>
                         @foreach ($selectedTaskType->custom_fields as $field)
                             <div style="margin-bottom: 10px;">
-                                <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 3px;">
+                                <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 3px;">
                                     {{ app()->getLocale() === 'ar' ? $field['label_ar'] : $field['label_en'] }}
                                     @if ($field['required'] ?? false)
                                         <span style="color: var(--color-danger-500);">*</span>
@@ -380,7 +380,7 @@
                 @endif
 
                 <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #44403C); margin-bottom: 4px;">{{ __('shell.label_assigned_to') }}</label>
+                    <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary, #4A2020); margin-bottom: 4px;">{{ __('shell.label_assigned_to') }}</label>
                     <select wire:model="formAssignedToUserId" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-default, #E7E5E4); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
                         <option value="">{{ __('shell.label_select') }}</option>
                         @foreach ($workspaceMembers as $member)

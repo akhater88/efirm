@@ -30,11 +30,11 @@
                 </div>
 
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #1C1917); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary, #2D0A0A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         {{ $event->title }}
                     </div>
                     @if ($event->document)
-                        <div style="font-size: 12px; color: var(--text-tertiary, #78716C); margin-top: 1px;">
+                        <div style="font-size: 12px; color: var(--text-tertiary, #7A5050); margin-top: 1px;">
                             {{ $event->document->title }}
                         </div>
                     @endif
@@ -46,7 +46,7 @@
                     flex-shrink: 0;
                     font-size: 11px;
                     font-weight: 500;
-                    color: {{ $daysLeft <= 3 ? 'var(--color-danger-500, #DC2626)' : 'var(--text-tertiary, #78716C)' }};
+                    color: {{ $daysLeft <= 3 ? 'var(--color-danger-500, #DC2626)' : 'var(--text-tertiary, #7A5050)' }};
                 ">
                     {{ trans_choice('dashboard.days_left', $daysLeft, ['count' => $daysLeft]) }}
                 </span>

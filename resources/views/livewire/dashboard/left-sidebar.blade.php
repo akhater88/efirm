@@ -34,7 +34,7 @@
         @if ($collapsed)
             <img src="{{ asset('img/brand/efirm-mark-reversed.svg') }}" alt="{{ __('brand.mark_alt') }}" style="width: 36px; height: 36px; padding: 4px;">
         @else
-            <img src="{{ asset('img/brand/efirm-horizontal-compact-reversed.svg') }}" alt="{{ __('brand.logo_alt_dark') }}" style="height: 40px; width: auto; padding: 4px 8px;">
+            <img src="{{ asset('img/brand/efirm-mark-reversed.svg') }}" alt="{{ __('brand.mark_alt') }}" style="height: 56px; width: auto; padding: 8px;">
         @endif
     </div>
 

@@ -32,19 +32,19 @@ function contrastRatio(string $fg, string $bg): float
 
 // Body text (4.5:1 minimum)
 test('text-primary on surface-card meets WCAG AA body', function () {
-    expect(contrastRatio('#1C1917', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#2D0A0A', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('text-secondary on surface-card meets WCAG AA body', function () {
-    expect(contrastRatio('#44403C', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#4A2020', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('text-tertiary on surface-card meets WCAG AA body', function () {
-    expect(contrastRatio('#78716C', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#7A5050', '#FFFFFF'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('text-primary on surface-page meets WCAG AA body', function () {
-    expect(contrastRatio('#1C1917', '#FAFAF9'))->toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#2D0A0A', '#FAFAF9'))->toBeGreaterThanOrEqual(4.5);
 });
 
 test('text-on-dark on surface-sidebar meets WCAG AA body', function () {

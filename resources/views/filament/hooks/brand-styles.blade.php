@@ -19,11 +19,11 @@
     /* Sidebar text: white/light */
     .fi-sidebar-group-label,
     .fi-sidebar-item-label {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-sidebar-item-button {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-sidebar-item-button:hover {
@@ -47,7 +47,7 @@
 
     /* Sidebar icons */
     .fi-sidebar-item-icon {
-        color: #A8A29E !important;
+        color: #A89090 !important;
     }
 
     .fi-sidebar-item-button:hover .fi-sidebar-item-icon {
@@ -56,7 +56,7 @@
 
     /* Sidebar group labels */
     .fi-sidebar-group-label {
-        color: #78716C !important;
+        color: #7A5050 !important;
     }
 
     /* Sidebar dividers */
@@ -67,7 +67,7 @@
     /* Sidebar collapse button */
     .fi-sidebar-close-btn,
     .fi-sidebar-open-btn {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-sidebar-close-btn:hover,
@@ -89,7 +89,7 @@
     .fi-topbar-item-label,
     .fi-topbar button,
     .fi-topbar a {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-topbar button:hover,
@@ -101,12 +101,12 @@
     .fi-topbar .fi-breadcrumbs ol li,
     .fi-topbar .fi-breadcrumbs a,
     .fi-topbar .fi-breadcrumbs span {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     /* Topbar icons */
     .fi-topbar svg {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-topbar button:hover svg,
@@ -122,14 +122,14 @@
     }
 
     .fi-global-search-field input::placeholder {
-        color: #A8A29E !important;
+        color: #A89090 !important;
     }
 
     /* Brand logo — reversed (white) SVG used directly via panel brandLogo config */
 
     /* Tenant menu in sidebar */
     .fi-tenant-menu-trigger {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-tenant-menu-trigger:hover {
@@ -144,7 +144,7 @@
     }
 
     .fi-tenant-menu-trigger svg {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-tenant-menu-trigger:hover svg {
@@ -177,7 +177,7 @@
 
     /* User menu button text in topbar */
     .fi-topbar .fi-user-menu button span {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-topbar .fi-user-menu button:hover span {
@@ -187,12 +187,12 @@
     /* Footer in sidebar */
     .fi-sidebar-footer {
         border-top-color: rgba(255, 255, 255, 0.1) !important;
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-sidebar-footer button,
     .fi-sidebar-footer a {
-        color: #D6D3D1 !important;
+        color: #D6CDCD !important;
     }
 
     .fi-sidebar-footer button:hover,
