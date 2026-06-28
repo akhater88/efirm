@@ -1,25 +1,25 @@
 {
-    "name": "Legal Workspace",
-    "short_name": "LegalWS",
-    "description": "AI-native commercial-contracts workspace for law firms",
+    "name": "eFirm",
+    "short_name": "eFirm",
+    "description": "AI-native legal practice management",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#2563eb",
+    "background_color": "#FAF8F8",
+    "theme_color": "#330000",
     "orientation": "any",
     "icons": [
         {
-            "src": "/images/icon-192.png",
+            "src": "/img/brand/efirm-favicon-192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/images/icon-512.png",
+            "src": "/img/brand/efirm-favicon-512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
     ],
     "categories": ["business", "productivity"],
-    "lang": "ar",
+    "lang": "en",
     "dir": "auto"
 }
