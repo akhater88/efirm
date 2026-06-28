@@ -43,18 +43,6 @@ Route::middleware('public.locale')->group(function () {
             return redirect()->route('dashboard');
         }
 
-        // If cookie says 'ar', redirect to /ar
-        $cookieLocale = $request->cookie('efirm_locale');
-        if ($cookieLocale === 'ar') {
-            return redirect('/ar');
-        }
-
-        // If Accept-Language prefers Arabic, redirect
-        $acceptLanguage = $request->header('Accept-Language', '');
-        if (! $cookieLocale && preg_match('/^ar/i', $acceptLanguage)) {
-            return redirect('/ar');
-        }
-
         return app(LandingController::class)->index($request);
     })->name('landing');
 
