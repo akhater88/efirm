@@ -43,13 +43,13 @@ test('quick links rail does not contain forbidden items', function () {
 test('quick links rail has correct link URLs', function () {
     $html = Livewire::test(QuickLinksRail::class)->html();
 
-    expect($html)->toContain('/app/matters');
-    expect($html)->toContain('/app/contacts');
-    expect($html)->toContain('/app/documents');
-    expect($html)->toContain('/app/tasks');
-    expect($html)->toContain('/app/obligations');
-    expect($html)->toContain('/app/library-clauses');
-    expect($html)->toContain('/app/time-entries');
+    expect($html)->toContain('/matters');
+    expect($html)->toContain('/contacts');
+    expect($html)->toContain('/documents');
+    expect($html)->toContain('/tasks');
+    expect($html)->toContain('/obligations');
+    expect($html)->toContain('/library-clauses');
+    expect($html)->toContain('/time-entries');
 });
 
 test('quick links rail hides below 1280px via CSS', function () {
